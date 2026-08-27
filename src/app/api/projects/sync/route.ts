@@ -1,15 +1,14 @@
-import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { NextRequest, NextResponse } from "next/server";
+import { isAuthenticated } from "@/lib/auth";
 import {
   getMemoryProjects,
   slugify,
   upsertMemoryProject,
 } from "@/lib/projectStore";
 
-export async function POST() {
-  const session = await getServerSession(authOptions);
-  if (!session) {
+export async function POST(req: NextRequest) {
+  const authed = await isAuthenticated(req);
+  if (!authed) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { isAuthenticated } from "@/lib/auth";
 import {
   deleteMemoryProject,
   getMemoryProjects,
@@ -72,8 +71,8 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
+  const authed = await isAuthenticated(req);
+  if (!authed) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -148,8 +147,8 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
+  const authed = await isAuthenticated(req);
+  if (!authed) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -201,8 +200,8 @@ export async function PUT(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
+  const authed = await isAuthenticated(req);
+  if (!authed) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

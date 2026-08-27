@@ -1,0 +1,791 @@
+"use client";
+
+import { useCallback, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import Modal from "@/components/Modal";
+import AdminLogoutButton from "@/components/AdminLogoutButton";
+
+type Project = {
+  id: number;
+  slug: string;
+  title: string | null;
+  number: string | null;
+  category: string | null;
+  dateRange: string | null;
+  shortDescription: string | null;
+  longDescription: string | null;
+  tags: string[];
+  githubUrl: string | null;
+  liveUrl: string | null;
+  videoUrl: string | null;
+  thumbnailUrl: string | null;
+  galleryUrls: string[];
+  certificateUrls: string[];
+  visible: boolean;
+  displayOrder: number;
+  githubRepoName?: string | null;
+};
+
+const emptyProject = (): Project => ({
+  id: 0,
+  slug: "",
+  title: "",
+  number: "",
+  category: "",
+  dateRange: "",
+  shortDescription: "",
+  longDescription: "",
+  tags: [],
+  githubUrl: "",
+  liveUrl: "",
+  videoUrl: "",
+  thumbnailUrl: "",
+  galleryUrls: [],
+  certificateUrls: [],
+  visible: false,
+  displayOrder: 0,
+});
+
+export default function AdminProjectsPage() {
+  const [items, setItems] = useState<Project[]>(
+    [] as Project[]
+  );
+  const [loading, setLoading] = useState(true);
+  const [editing, setEditing] = useState<Project | null>(null);
+  const [isNew, setIsNew] = useState(false);
+  const [preview, setPreview] = useState<Project | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState("");
+  const [filter, setFilter] = useState<"all" | "visible" | "hidden">("all");
+  const [query, setQuery] = useState("");
+
+  const load = useCallback(async () => {
+    try {
+      const res = await fetch("/api/projects?all=1", { cache: "no-store" });
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length) setItems(data);
+      }
+    } catch {
+      /* keep seed */
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  const filtered = useMemo(() => {
+    let list = [...items].sort((a, b) => a.displayOrder - b.displayOrder);
+    if (filter === "visible") list = list.filter((p) => p.visible);
+    if (filter === "hidden") list = list.filter((p) => !p.visible);
+    if (query.trim()) {
+      const q = query.toLowerCase();
+      list = list.filter(
+        (p) =>
+          (p.title || "").toLowerCase().includes(q) ||
+          (p.slug || "").toLowerCase().includes(q) ||
+          (p.category || "").toLowerCase().includes(q) ||
+          (p.tags || []).some((t) => t.toLowerCase().includes(q))
+      );
+    }
+    return list;
+  }, [items, filter, query]);
+
+  const startEdit = (p: Project) => {
+    setIsNew(false);
+    setEditing({
+      ...p,
+      galleryUrls: [...(p.galleryUrls || [])],
+      certificateUrls: [...(p.certificateUrls || [])],
+      tags: [...(p.tags || [])],
+    });
+    setMessage("");
+  };
+
+  const startCreate = () => {
+    setIsNew(true);
+    setEditing({
+      ...emptyProject(),
+      displayOrder: items.length + 1,
+      number: String(items.length + 1).padStart(2, "0"),
+    });
+    setMessage("");
+  };
+
+  const save = async () => {
+    if (!editing) return;
+    if (!(editing.title || "").trim()) {
+      setMessage("Title is required.");
+      return;
+    }
+    setSaving(true);
+    setMessage("");
+    try {
+      const res = await fetch("/api/projects", {
+        method: isNew ? "POST" : "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(editing),
+      });
+      const data = await res.json().catch(() => null);
+      if (res.ok && data) {
+        if (isNew) {
+          setItems((prev) => [...prev, data]);
+          setMessage("Project created.");
+        } else {
+          setItems((prev) =>
+            prev.map((p) =>
+              p.id === data.id || p.slug === data.slug ? { ...p, ...data } : p
+            )
+          );
+          setMessage("Saved.");
+        }
+        setEditing(null);
+        setIsNew(false);
+      } else {
+        setMessage(data?.error || "Could not save. Try again.");
+      }
+    } catch {
+      setMessage("Network error. Try again.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const remove = async (p: Project) => {
+    if (!confirm(`Delete “${p.title || p.slug}”? This cannot be undone.`))
+      return;
+    try {
+      const res = await fetch("/api/projects", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: p.id, slug: p.slug }),
+      });
+      if (res.ok) {
+        setItems((prev) =>
+          prev.filter((x) => x.id !== p.id && x.slug !== p.slug)
+        );
+        setMessage("Deleted.");
+        if (editing && (editing.id === p.id || editing.slug === p.slug)) {
+          setEditing(null);
+        }
+      } else {
+        setMessage("Could not delete.");
+      }
+    } catch {
+      setMessage("Network error.");
+    }
+  };
+
+  const toggleVisible = async (p: Project) => {
+    const next = { ...p, visible: !p.visible };
+    setItems((prev) =>
+      prev.map((x) => (x.id === p.id || x.slug === p.slug ? next : x))
+    );
+    try {
+      await fetch("/api/projects", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(next),
+      });
+    } catch {
+      setItems((prev) =>
+        prev.map((x) => (x.id === p.id || x.slug === p.slug ? p : x))
+      );
+    }
+  };
+
+  return (
+    <main className="min-h-screen bg-bg text-primary">
+      <div className="container-main py-12 md:py-16">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+          <div>
+            <h1 className="text-2xl font-semibold tracking-tight">Projects</h1>
+            <p className="text-sm text-secondary mt-1">
+              {items.length} total · {items.filter((p) => p.visible).length}{" "}
+              visible
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <Link
+              href="/admin"
+              className="text-sm text-secondary hover:text-primary transition-colors"
+            >
+              ← Admin
+            </Link>
+            <AdminLogoutButton />
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-3 mb-6">
+          <input
+            type="search"
+            placeholder="Search title, slug, tag…"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="flex-1 min-w-[180px] bg-transparent border border-border px-3 py-2 text-sm focus:outline-none focus:border-strong-border"
+          />
+          <div className="flex border border-border text-xs">
+            {(["all", "visible", "hidden"] as const).map((f) => (
+              <button
+                key={f}
+                type="button"
+                onClick={() => setFilter(f)}
+                className={`px-3 py-2 capitalize cursor-pointer ${
+                  filter === f
+                    ? "bg-[var(--color-text)] text-[var(--color-bg)]"
+                    : "text-secondary hover:text-primary"
+                }`}
+              >
+                {f}
+              </button>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={startCreate}
+            className="text-sm font-semibold border border-strong-border px-5 py-2.5 hover:bg-[var(--color-text)] hover:text-[var(--color-bg)] transition-colors cursor-pointer"
+          >
+            + Add project
+          </button>
+        </div>
+
+        {message && (
+          <p className="text-sm text-secondary border border-border px-4 py-3 mb-6">
+            {message}
+          </p>
+        )}
+
+        {loading ? (
+          <p className="text-sm text-secondary">Loading…</p>
+        ) : filtered.length === 0 ? (
+          <p className="text-sm text-secondary border border-border p-8 text-center">
+            No projects match. Add one or clear filters.
+          </p>
+        ) : (
+          <div className="space-y-3">
+            {filtered.map((p) => (
+              <div
+                key={`${p.id}-${p.slug}`}
+                className="border border-border p-4 md:p-5 flex flex-col sm:flex-row gap-4"
+              >
+                <div className="w-full sm:w-28 h-20 shrink-0 bg-secondary/10 border border-border overflow-hidden relative">
+                  {p.thumbnailUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={p.thumbnailUrl}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-[10px] uppercase tracking-wider text-muted">
+                      No image
+                    </div>
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-wrap items-baseline gap-2">
+                    <span className="text-xs text-muted">
+                      {p.number || String(p.displayOrder).padStart(2, "0")}
+                    </span>
+                    <h2 className="font-semibold truncate">
+                      {p.title || p.slug}
+                    </h2>
+                    <span
+                      className={`text-[10px] uppercase tracking-wider px-2 py-0.5 border ${
+                        p.visible
+                          ? "border-strong-border text-primary"
+                          : "border-border text-muted"
+                      }`}
+                    >
+                      {p.visible ? "Visible" : "Hidden"}
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted mt-1 truncate">
+                    {p.category || "—"} · {p.slug}
+                  </p>
+                  <p className="text-sm text-secondary mt-2 line-clamp-2">
+                    {p.shortDescription || "No description"}
+                  </p>
+                </div>
+                <div className="flex flex-wrap sm:flex-col gap-2 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => setPreview(p)}
+                    className="text-xs font-semibold border border-border px-3 py-2 hover:border-strong-border cursor-pointer"
+                  >
+                    Preview
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => startEdit(p)}
+                    className="text-xs font-semibold border border-strong-border px-3 py-2 hover:bg-[var(--color-text)] hover:text-[var(--color-bg)] cursor-pointer"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => toggleVisible(p)}
+                    className="text-xs text-secondary hover:text-primary cursor-pointer px-3 py-1"
+                  >
+                    {p.visible ? "Hide" : "Show"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => remove(p)}
+                    className="text-xs text-secondary hover:text-red-500 cursor-pointer px-3 py-1"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Edit / Create modal */}
+      {editing && (
+        <Modal
+          isOpen={!!editing}
+          onClose={() => {
+            setEditing(null);
+            setIsNew(false);
+          }}
+          title={isNew ? "New project" : `Edit: ${editing.title || editing.slug}`}
+          maxWidth="max-w-3xl"
+        >
+          <div className="space-y-4 max-h-[65vh] overflow-y-auto pr-1">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Field
+                label="Title *"
+                value={editing.title || ""}
+                onChange={(v) => setEditing({ ...editing, title: v })}
+              />
+              <Field
+                label="Slug"
+                value={editing.slug || ""}
+                onChange={(v) => setEditing({ ...editing, slug: v })}
+                hint={isNew ? "Leave blank to auto-generate from title" : undefined}
+              />
+              <Field
+                label="Number"
+                value={editing.number || ""}
+                onChange={(v) => setEditing({ ...editing, number: v })}
+              />
+              <Field
+                label="Display order"
+                value={String(editing.displayOrder ?? 0)}
+                onChange={(v) =>
+                  setEditing({
+                    ...editing,
+                    displayOrder: parseInt(v, 10) || 0,
+                  })
+                }
+              />
+              <Field
+                label="Category"
+                value={editing.category || ""}
+                onChange={(v) => setEditing({ ...editing, category: v })}
+              />
+              <Field
+                label="Date range"
+                value={editing.dateRange || ""}
+                onChange={(v) => setEditing({ ...editing, dateRange: v })}
+              />
+            </div>
+            <Field
+              label="Short description"
+              value={editing.shortDescription || ""}
+              onChange={(v) =>
+                setEditing({ ...editing, shortDescription: v })
+              }
+              multiline
+            />
+            <Field
+              label="Long description"
+              value={editing.longDescription || ""}
+              onChange={(v) => setEditing({ ...editing, longDescription: v })}
+              multiline
+            />
+            <Field
+              label="Tags (comma-separated)"
+              value={(editing.tags || []).join(", ")}
+              onChange={(v) =>
+                setEditing({
+                  ...editing,
+                  tags: v
+                    .split(",")
+                    .map((t) => t.trim())
+                    .filter(Boolean),
+                })
+              }
+            />
+            <Field
+              label="Thumbnail URL"
+              value={editing.thumbnailUrl || ""}
+              onChange={(v) =>
+                setEditing({ ...editing, thumbnailUrl: v || null })
+              }
+            />
+            <UploadButton
+              label="Upload thumbnail"
+              onUploaded={(url) =>
+                setEditing((prev) =>
+                  prev ? { ...prev, thumbnailUrl: url } : prev
+                )
+              }
+            />
+            {editing.thumbnailUrl ? (
+              <div className="h-28 border border-border overflow-hidden bg-secondary/10">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={editing.thumbnailUrl}
+                  alt=""
+                  className="h-full w-auto object-cover"
+                />
+              </div>
+            ) : null}
+            <Field
+              label="Gallery URLs (comma-separated)"
+              value={(editing.galleryUrls || []).join(", ")}
+              onChange={(v) =>
+                setEditing({
+                  ...editing,
+                  galleryUrls: v
+                    .split(",")
+                    .map((t) => t.trim())
+                    .filter(Boolean),
+                })
+              }
+            />
+            <UploadButton
+              label="Upload gallery image"
+              onUploaded={(url) =>
+                setEditing((prev) =>
+                  prev
+                    ? {
+                        ...prev,
+                        galleryUrls: [...(prev.galleryUrls || []), url],
+                      }
+                    : prev
+                )
+              }
+            />
+            <Field
+              label="Video URL (or upload below)"
+              value={editing.videoUrl || ""}
+              onChange={(v) =>
+                setEditing({ ...editing, videoUrl: v || null })
+              }
+            />
+            <UploadButton
+              label="Upload video (mp4 / webm)"
+              accept="video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov"
+              folder="projects/videos"
+              onUploaded={(url) =>
+                setEditing((prev) =>
+                  prev ? { ...prev, videoUrl: url } : prev
+                )
+              }
+            />
+            {editing.videoUrl ? (
+              <p className="text-xs text-muted break-all">
+                Video:{" "}
+                <a
+                  href={editing.videoUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-primary underline"
+                >
+                  {editing.videoUrl}
+                </a>
+              </p>
+            ) : null}
+            <Field
+              label="Live URL"
+              value={editing.liveUrl || ""}
+              onChange={(v) =>
+                setEditing({ ...editing, liveUrl: v || null })
+              }
+            />
+            <Field
+              label="GitHub URL"
+              value={editing.githubUrl || ""}
+              onChange={(v) =>
+                setEditing({ ...editing, githubUrl: v || null })
+              }
+            />
+            <label className="flex items-center gap-3 text-sm cursor-pointer">
+              <input
+                type="checkbox"
+                checked={!!editing.visible}
+                onChange={(e) =>
+                  setEditing({ ...editing, visible: e.target.checked })
+                }
+                className="accent-current"
+              />
+              Visible on public site
+            </label>
+          </div>
+
+          <div className="flex flex-wrap gap-3 mt-6 pt-4 border-t border-border">
+            <button
+              type="button"
+              onClick={save}
+              disabled={saving}
+              className="text-sm font-semibold border border-strong-border px-6 py-2.5 hover:bg-[var(--color-text)] hover:text-[var(--color-bg)] transition-colors disabled:opacity-50 cursor-pointer"
+            >
+              {saving ? "Saving…" : isNew ? "Create" : "Save"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setPreview(editing)}
+              className="text-sm border border-border px-5 py-2.5 hover:border-strong-border cursor-pointer"
+            >
+              Preview
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setEditing(null);
+                setIsNew(false);
+              }}
+              className="text-sm text-secondary hover:text-primary cursor-pointer px-3"
+            >
+              Cancel
+            </button>
+          </div>
+        </Modal>
+      )}
+
+      {/* Preview modal */}
+      {preview && (
+        <Modal
+          isOpen={!!preview}
+          onClose={() => setPreview(null)}
+          title="Preview"
+          maxWidth="max-w-3xl"
+        >
+          <article className="space-y-5">
+            {preview.thumbnailUrl && (
+              <div className="aspect-video border border-border overflow-hidden bg-secondary/10">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={preview.thumbnailUrl}
+                  alt=""
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
+            <div className="flex flex-wrap items-baseline gap-3">
+              <span className="text-xs text-muted tracking-wider">
+                {preview.number ||
+                  String(preview.displayOrder).padStart(2, "0")}
+              </span>
+              <span className="text-xs uppercase tracking-[0.12em] text-muted">
+                {preview.dateRange || "—"}
+              </span>
+              <span
+                className={`text-[10px] uppercase tracking-wider px-2 py-0.5 border ${
+                  preview.visible
+                    ? "border-strong-border"
+                    : "border-border text-muted"
+                }`}
+              >
+                {preview.visible ? "Visible" : "Hidden"}
+              </span>
+            </div>
+            <h2 className="text-2xl font-semibold tracking-tight">
+              {preview.title || preview.slug}
+            </h2>
+            <p className="text-sm text-secondary">{preview.category}</p>
+            <p className="text-sm leading-relaxed text-secondary">
+              {preview.shortDescription}
+            </p>
+            {preview.longDescription && (
+              <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                {preview.longDescription}
+              </p>
+            )}
+            {(preview.tags || []).length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {(preview.tags || []).map((t: string) => (
+                  <span
+                    key={t}
+                    className="text-[11px] border border-border px-2.5 py-1 text-secondary"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            )}
+            <div className="flex flex-wrap gap-4 text-sm">
+              {preview.liveUrl && (
+                <a
+                  href={preview.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-4 hover:text-primary text-secondary"
+                >
+                  Live site
+                </a>
+              )}
+              {preview.githubUrl && (
+                <a
+                  href={preview.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-4 hover:text-primary text-secondary"
+                >
+                  GitHub
+                </a>
+              )}
+              {preview.videoUrl && (
+                <a
+                  href={preview.videoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-4 hover:text-primary text-secondary"
+                >
+                  Video
+                </a>
+              )}
+            </div>
+            {(preview.galleryUrls || []).length > 0 && (
+              <div className="grid grid-cols-2 gap-2">
+                {preview.galleryUrls.map((url) => (
+                  <div
+                    key={url}
+                    className="aspect-video border border-border overflow-hidden bg-secondary/10"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={url}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="flex gap-3 pt-2 border-t border-border">
+              <button
+                type="button"
+                onClick={() => {
+                  setPreview(null);
+                  startEdit(preview);
+                }}
+                className="text-sm font-semibold border border-strong-border px-5 py-2.5 hover:bg-[var(--color-text)] hover:text-[var(--color-bg)] cursor-pointer"
+              >
+                Edit this project
+              </button>
+              <button
+                type="button"
+                onClick={() => setPreview(null)}
+                className="text-sm text-secondary hover:text-primary cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </article>
+        </Modal>
+      )}
+    </main>
+  );
+}
+
+
+async function uploadFile(file: File, folder = "projects"): Promise<string> {
+  const fd = new FormData();
+  fd.append("file", file);
+  fd.append("folder", folder);
+  const res = await fetch("/api/upload", { method: "POST", body: fd });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || "Upload failed");
+  return data.url as string;
+}
+
+function UploadButton({
+  label,
+  onUploaded,
+  accept = "image/*,video/mp4,video/webm",
+  folder = "projects",
+}: {
+  label: string;
+  onUploaded: (url: string) => void;
+  accept?: string;
+  folder?: string;
+}) {
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <label className="text-xs font-semibold border border-border px-3 py-2 cursor-pointer hover:border-strong-border">
+        {busy ? "Uploading…" : label}
+        <input
+          type="file"
+          accept={accept}
+          className="hidden"
+          disabled={busy}
+          onChange={async (e) => {
+            const file = e.target.files?.[0];
+            e.target.value = "";
+            if (!file) return;
+            setBusy(true);
+            setErr("");
+            try {
+              const url = await uploadFile(file, folder);
+              onUploaded(url);
+            } catch (ex) {
+              setErr(ex instanceof Error ? ex.message : "Upload failed");
+            } finally {
+              setBusy(false);
+            }
+          }}
+        />
+      </label>
+      {err && <span className="text-[11px] text-red-500">{err}</span>}
+    </div>
+  );
+}
+
+function Field({
+  label,
+  value,
+  onChange,
+  multiline,
+  hint,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  multiline?: boolean;
+  hint?: string;
+}) {
+  return (
+    <div>
+      <label className="text-xs uppercase tracking-[0.12em] text-muted block mb-1.5">
+        {label}
+      </label>
+      {multiline ? (
+        <textarea
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          rows={4}
+          className="w-full bg-transparent border border-border px-3 py-2 text-sm text-primary focus:outline-none focus:border-strong-border resize-y"
+        />
+      ) : (
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-full bg-transparent border border-border px-3 py-2 text-sm text-primary focus:outline-none focus:border-strong-border"
+        />
+      )}
+      {hint && <p className="text-[11px] text-muted mt-1">{hint}</p>}
+    </div>
+  );
+}

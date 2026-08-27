@@ -1,0 +1,198 @@
+generator client {
+  provider = "prisma-client"
+  output   = "./generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Projects ───────────────────────────────────────────
+model Project {
+  id              Int       @id @default(autoincrement())
+  slug            String    @unique
+  title           String?
+  number          String?
+  category        String?
+  dateRange       String?   @map("date_range")
+  shortDescription String?  @map("short_description") @db.Text
+  longDescription String?   @map("long_description") @db.Text
+  tags            String[]  @default([])
+  githubUrl       String?   @map("github_url")
+  liveUrl         String?   @map("live_url")
+  videoUrl        String?   @map("video_url")
+  thumbnailUrl    String?   @map("thumbnail_url")
+  galleryUrls     String[]  @default([]) @map("gallery_urls")
+  certificateUrls String[]  @default([]) @map("certificate_urls")
+  visible         Boolean   @default(false)
+  displayOrder    Int       @default(0) @map("display_order")
+  githubRepoName  String?   @map("github_repo_name")
+  syncedAt        DateTime? @map("synced_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  challenges EngineeringChallenge[]
+
+  @@map("projects")
+}
+
+// ─── Achievements / Recognition ─────────────────────────
+model Achievement {
+  id              Int      @id @default(autoincrement())
+  placement       String
+  title           String
+  subtitle        String?
+  year            String?
+  description     String?  @db.Text
+  story           String?  @db.Text
+  certificateUrl  String?  @map("certificate_url")
+  galleryUrls     String[] @default([]) @map("gallery_urls")
+  visible         Boolean  @default(true)
+  displayOrder    Int      @default(0) @map("display_order")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@map("achievements")
+}
+
+// ─── Experience ─────────────────────────────────────────
+model Experience {
+  id           Int      @id @default(autoincrement())
+  role         String
+  company      String
+  location     String?
+  dateRange    String?  @map("date_range")
+  points       String[] @default([])
+  visible      Boolean  @default(true)
+  displayOrder Int      @default(0) @map("display_order")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("experiences")
+}
+
+// ─── Education ──────────────────────────────────────────
+model Education {
+  id           Int      @id @default(autoincrement())
+  degree       String
+  field        String?
+  school       String?
+  dateRange    String?  @map("date_range")
+  gpa          String?
+  visible      Boolean  @default(true)
+  displayOrder Int      @default(0) @map("display_order")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("educations")
+}
+
+// ─── Course certifications ──────────────────────────────
+model Certification {
+  id             Int      @id @default(autoincrement())
+  title          String
+  provider       String?
+  date           String?
+  topics         String[] @default([]) // what I learned
+  description    String?  @db.Text     // what I did
+  story          String?  @db.Text     // my story
+  certificateUrl String?  @map("certificate_url")
+  visible        Boolean  @default(true)
+  displayOrder   Int      @default(0) @map("display_order")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@map("certifications")
+}
+
+// ─── Skills ─────────────────────────────────────────────
+model Skill {
+  id           Int      @id @default(autoincrement())
+  category     String   // languages | frameworks | tools | soft
+  name         String
+  visible      Boolean  @default(true)
+  displayOrder Int      @default(0) @map("display_order")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("skills")
+}
+
+// ─── Engineering challenges ─────────────────────────────
+model EngineeringChallenge {
+  id           Int      @id @default(autoincrement())
+  projectSlug  String   @map("project_slug")
+  projectTitle String?  @map("project_title")
+  title        String
+  problem      String   @db.Text
+  architecture String   @db.Text
+  solution     String   @db.Text
+  result       String   @db.Text
+  visible      Boolean  @default(true)
+  displayOrder Int      @default(0) @map("display_order")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  project Project? @relation(fields: [projectSlug], references: [slug], onDelete: SetNull, onUpdate: Cascade)
+
+  @@map("engineering_challenges")
+}
+
+// ─── Tech notes / case studies ──────────────────────────
+model TechNote {
+  id           Int      @id @default(autoincrement())
+  slug         String   @unique
+  title        String
+  category     String?
+  summary      String?  @db.Text
+  body         String?  @db.Text
+  visible      Boolean  @default(true)
+  displayOrder Int      @default(0) @map("display_order")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("tech_notes")
+}
+
+// ─── Testimonials (only real quotes) ────────────────────
+model Testimonial {
+  id           Int      @id @default(autoincrement())
+  quote        String   @db.Text
+  name         String
+  role         String?
+  organization String?
+  imageUrl     String?  @map("image_url")
+  visible      Boolean  @default(false)
+  displayOrder Int      @default(0) @map("display_order")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("testimonials")
+}
+
+// ─── Site settings (single row, id = 1) ─────────────────
+model SiteSettings {
+  id              Int      @id @default(1)
+  name            String?
+  firstName       String?  @map("first_name")
+  lastName        String?  @map("last_name")
+  role            String?
+  secondaryRole   String?  @map("secondary_role")
+  tagline         String?  @db.Text
+  aboutStatement  String?  @map("about_statement") @db.Text
+  aboutBody       String?  @map("about_body") @db.Text
+  aboutFocus      String[] @default([]) @map("about_focus")
+  email           String?
+  phone           String?
+  whatsapp        String?
+  location        String?
+  linkedin        String?
+  github          String?
+  facebook        String?
+  instagram       String?
+  resumePath      String?  @map("resume_path")
+  profileImage    String?  @map("profile_image")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@map("site_settings")
+}

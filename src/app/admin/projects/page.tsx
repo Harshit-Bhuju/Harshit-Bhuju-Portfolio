@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Modal from "@/components/Modal";
 import AdminLogoutButton from "@/components/AdminLogoutButton";
+import { uploadClientFile } from "@/lib/uploadClient";
 
 type Project = {
   id: number;
@@ -699,13 +700,7 @@ export default function AdminProjectsPage() {
 
 
 async function uploadFile(file: File, folder = "projects"): Promise<string> {
-  const fd = new FormData();
-  fd.append("file", file);
-  fd.append("folder", folder);
-  const res = await fetch("/api/upload", { method: "POST", body: fd });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.error || "Upload failed");
-  return data.url as string;
+  return uploadClientFile(file, folder);
 }
 
 function UploadButton({

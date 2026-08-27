@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import AdminLogoutButton from "@/components/AdminLogoutButton";
+import { uploadClientFile } from "@/lib/uploadClient";
 
 type Tab =
   | "settings"
@@ -118,7 +119,7 @@ export default function AdminContentPage() {
     }
   }, [tab, status, loadSettings, loadList]);
 
-  // Upload handler for Supabase Storage
+  // Upload handler for Supabase Storage (Direct-to-Supabase, bypassing Vercel 4.5MB limit)
   const handleUpload = async (
     file: File,
     folder: string,
@@ -127,25 +128,14 @@ export default function AdminContentPage() {
   ) => {
     setUploadingField(fieldKey);
     try {
-      const fd = new FormData();
-      fd.append("file", file);
-      fd.append("folder", folder);
-
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: fd,
-      });
-
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        addToast(data.error || "Upload failed. Check file size & type.", "error");
-        return;
-      }
-
-      onSuccess(data.url);
-      addToast("File uploaded successfully!", "success");
-    } catch {
-      addToast("Network error during file upload.", "error");
+      const publicUrl = await uploadClientFile(file, folder);
+      onSuccess(publicUrl);
+      addToast("File uploaded successfully to Supabase!", "success");
+    } catch (err: unknown) {
+      addToast(
+        err instanceof Error ? err.message : "Upload failed",
+        "error"
+      );
     } finally {
       setUploadingField(null);
     }

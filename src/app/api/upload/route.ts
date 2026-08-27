@@ -38,12 +38,58 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         {
           error:
-            "Supabase not configured. Please set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in your Vercel Environment Variables.",
+            "Supabase not configured. Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.",
         },
         { status: 503 }
       );
     }
 
+    const bucket = getStorageBucket();
+    const contentTypeHeader = req.headers.get("content-type") || "";
+
+    // ─── Direct Signed URL Generation (JSON payload) ───
+    // This allows the browser to upload directly to Supabase, bypassing Vercel's 4.5MB limit
+    if (contentTypeHeader.includes("application/json")) {
+      const body = await req.json().catch(() => ({}));
+      const filename = String(body.filename || `file-${Date.now()}`);
+      const folder = String(body.folder || "projects");
+
+      const ext =
+        filename.split(".").pop()?.toLowerCase().replace(/[^a-z0-9]/g, "") ||
+        "bin";
+
+      let contentType =
+        body.contentType || MIME_MAP[ext] || "application/octet-stream";
+      if (contentType === "image/jpg") contentType = "image/jpeg";
+
+      const safeFolder =
+        folder.replace(/[^a-zA-Z0-9/_-]/g, "").slice(0, 60) || "projects";
+      const path = `${safeFolder}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+
+      const { data, error } = await supabase.storage
+        .from(bucket)
+        .createSignedUploadUrl(path);
+
+      if (error || !data?.signedUrl) {
+        console.error("Supabase createSignedUploadUrl error:", error);
+        return NextResponse.json(
+          { error: error?.message || "Failed to create signed upload URL" },
+          { status: 500 }
+        );
+      }
+
+      const publicUrl = publicObjectUrl(path);
+
+      return NextResponse.json({
+        signedUrl: data.signedUrl,
+        publicUrl,
+        path,
+        bucket,
+        contentType,
+      });
+    }
+
+    // ─── Standard FormData Fallback (For small files) ───
     const form = await req.formData();
     const file = form.get("file");
     const folder = String(form.get("folder") || "projects");
@@ -52,7 +98,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
-    // 50MB limit (compatible with Supabase storage)
+    // 50MB max file size
     const maxBytes = 50 * 1024 * 1024;
     if (file.size > maxBytes) {
       return NextResponse.json(
@@ -65,37 +111,14 @@ export async function POST(req: NextRequest) {
       file.name.split(".").pop()?.toLowerCase().replace(/[^a-z0-9]/g, "") ||
       "bin";
 
-    // Normalize MIME type
     let contentType = MIME_MAP[ext] || file.type || "application/octet-stream";
     if (contentType === "image/jpg") contentType = "image/jpeg";
-
-    const allowedMimes = [
-      "image/jpeg",
-      "image/jpg",
-      "image/png",
-      "image/webp",
-      "image/gif",
-      "image/avif",
-      "image/svg+xml",
-      "video/mp4",
-      "video/webm",
-      "video/quicktime",
-      "application/pdf",
-    ];
-
-    if (!allowedMimes.includes(contentType) && !allowedMimes.includes(file.type)) {
-      return NextResponse.json(
-        { error: `Unsupported file format: .${ext} (${file.type || contentType})` },
-        { status: 400 }
-      );
-    }
 
     const safeFolder =
       folder.replace(/[^a-zA-Z0-9/_-]/g, "").slice(0, 60) || "projects";
     const path = `${safeFolder}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
 
     const buffer = Buffer.from(await file.arrayBuffer());
-    const bucket = getStorageBucket();
 
     const { error } = await supabase.storage.from(bucket).upload(path, buffer, {
       contentType,

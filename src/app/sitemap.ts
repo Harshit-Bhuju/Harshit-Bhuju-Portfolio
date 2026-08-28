@@ -3,8 +3,7 @@ import type { MetadataRoute } from "next";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = (
     process.env.NEXT_PUBLIC_SITE_URL ||
-    process.env.NEXTAUTH_URL ||
-    "http://localhost:3000"
+    "https://www.harshitbhuju.com.np"
   ).replace(/\/$/, "");
 
   let projectEntries: MetadataRoute.Sitemap = [];

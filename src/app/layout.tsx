@@ -16,7 +16,7 @@ const geist = Geist({
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-  "https://harshitbhuju.com";
+  "https://www.harshitbhuju.com.np";
 
 export const viewport: Viewport = {
   themeColor: [

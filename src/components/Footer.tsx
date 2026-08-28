@@ -40,7 +40,7 @@ export default function Footer() {
             HARSHIT BHUJU
           </p>
           <p className="text-xs text-muted">
-            Frontend &amp; Full-Stack Developer · Banepa, Nepal
+            Frontend · Banepa, Nepal
           </p>
         </address>
 

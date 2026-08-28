@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     }
 
     const fromAddress =
-      process.env.RESEND_FROM_EMAIL || "Harshit Bhuju <onboarding@resend.dev>";
+      process.env.RESEND_FROM_EMAIL || "Harshit Bhuju <contact@harshitbhuju.com.np>";
 
     // 1. Send notification email to Harshit's personal inbox
     await resend.emails.send({

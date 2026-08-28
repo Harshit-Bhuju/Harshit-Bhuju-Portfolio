@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     template: "%s | Harshit Bhuju",
   },
   description:
-    "Harshit Bhuju is a frontend and full-stack developer from Banepa, Nepal, specializing in React, Next.js, TypeScript, PostgreSQL, and Prisma. Studying AI at Kathmandu University and building modern, accessible web experiences.",
+    "Harshit Bhuju is a frontend and full-stack developer from Banepa, Nepal, specializing in React, Next.js, TypeScript, PostgreSQL, and Prisma. First year BTech AI student at Kathmandu University, building modern, accessible web experiences.",
   keywords: [
     "Harshit Bhuju",
     "Harshit Bhuju developer",
@@ -107,7 +107,7 @@ const jsonLd = [
     image: `${siteUrl}/profile.jpg`,
     jobTitle: "Frontend & Full-Stack Developer",
     description:
-      "Harshit Bhuju is a frontend and full-stack developer from Banepa, Nepal, specializing in React, Next.js, TypeScript, PostgreSQL, and Prisma. He is studying Artificial Intelligence at Kathmandu University.",
+      "Harshit Bhuju is a frontend and full-stack developer from Banepa, Nepal, specializing in React, Next.js, TypeScript, PostgreSQL, and Prisma. He is a first year, first semester BTech in Artificial Intelligence student at Kathmandu University.",
     email: "harshitbhuju123@gmail.com",
     telephone: "+977-9869372811",
     address: {
@@ -116,10 +116,11 @@ const jsonLd = [
       addressRegion: "Kavrepalanchowk",
       addressCountry: "NP",
     },
-    alumniOf: {
+    affiliation: {
       "@type": "CollegeOrUniversity",
       name: "Kathmandu University",
       url: "https://ku.edu.np",
+      description: "BTech in Artificial Intelligence — First Year, First Semester",
     },
     hasOccupation: {
       "@type": "Occupation",

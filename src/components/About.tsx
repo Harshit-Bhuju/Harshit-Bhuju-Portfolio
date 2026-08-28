@@ -148,8 +148,9 @@ export default function About() {
             <p>
               Harshit Bhuju is a frontend and full-stack developer from Banepa, Nepal.
               He specializes in building modern, accessible web applications using React,
-              Next.js, TypeScript, PostgreSQL, Prisma, and Tailwind CSS. Harshit is
-              currently studying Artificial Intelligence at Kathmandu University.
+              Next.js, TypeScript, PostgreSQL, Prisma, and Tailwind CSS. Harshit is a
+              first year, first semester BTech in Artificial Intelligence student at
+              Kathmandu University.
             </p>
           </div>
           <p className="text-sm text-muted">Loading about…</p>
@@ -175,9 +176,9 @@ export default function About() {
           <p>
             Harshit Bhuju is a frontend and full-stack developer from Banepa, Kavrepalanchowk, Nepal.
             He builds web applications using React, Next.js, TypeScript, JavaScript, PostgreSQL,
-            Prisma, Tailwind CSS, and Node.js. Harshit is studying Artificial Intelligence at
-            Kathmandu University and has a background in competitive programming and hackathons.
-            He is based in Banepa, Nepal and creates clean, scalable digital experiences.
+            Prisma, Tailwind CSS, and Node.js. Harshit is a first year, first semester BTech in
+            Artificial Intelligence student at Kathmandu University, with a background in
+            competitive programming and hackathons. He is based in Banepa, Nepal.
           </p>
         </div>
 

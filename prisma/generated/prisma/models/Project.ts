@@ -45,6 +45,8 @@ export type ProjectMinAggregateOutputType = {
   dateRange: string | null
   shortDescription: string | null
   longDescription: string | null
+  challenges: string | null
+  solutions: string | null
   githubUrl: string | null
   liveUrl: string | null
   videoUrl: string | null
@@ -66,6 +68,8 @@ export type ProjectMaxAggregateOutputType = {
   dateRange: string | null
   shortDescription: string | null
   longDescription: string | null
+  challenges: string | null
+  solutions: string | null
   githubUrl: string | null
   liveUrl: string | null
   videoUrl: string | null
@@ -87,6 +91,8 @@ export type ProjectCountAggregateOutputType = {
   dateRange: number
   shortDescription: number
   longDescription: number
+  challenges: number
+  solutions: number
   tags: number
   githubUrl: number
   liveUrl: number
@@ -123,6 +129,8 @@ export type ProjectMinAggregateInputType = {
   dateRange?: true
   shortDescription?: true
   longDescription?: true
+  challenges?: true
+  solutions?: true
   githubUrl?: true
   liveUrl?: true
   videoUrl?: true
@@ -144,6 +152,8 @@ export type ProjectMaxAggregateInputType = {
   dateRange?: true
   shortDescription?: true
   longDescription?: true
+  challenges?: true
+  solutions?: true
   githubUrl?: true
   liveUrl?: true
   videoUrl?: true
@@ -165,6 +175,8 @@ export type ProjectCountAggregateInputType = {
   dateRange?: true
   shortDescription?: true
   longDescription?: true
+  challenges?: true
+  solutions?: true
   tags?: true
   githubUrl?: true
   liveUrl?: true
@@ -276,6 +288,8 @@ export type ProjectGroupByOutputType = {
   dateRange: string | null
   shortDescription: string | null
   longDescription: string | null
+  challenges: string | null
+  solutions: string | null
   tags: string[]
   githubUrl: string | null
   liveUrl: string | null
@@ -323,6 +337,8 @@ export type ProjectWhereInput = {
   dateRange?: Prisma.StringNullableFilter<"Project"> | string | null
   shortDescription?: Prisma.StringNullableFilter<"Project"> | string | null
   longDescription?: Prisma.StringNullableFilter<"Project"> | string | null
+  challenges?: Prisma.StringNullableFilter<"Project"> | string | null
+  solutions?: Prisma.StringNullableFilter<"Project"> | string | null
   tags?: Prisma.StringNullableListFilter<"Project">
   githubUrl?: Prisma.StringNullableFilter<"Project"> | string | null
   liveUrl?: Prisma.StringNullableFilter<"Project"> | string | null
@@ -336,7 +352,7 @@ export type ProjectWhereInput = {
   syncedAt?: Prisma.DateTimeNullableFilter<"Project"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Project"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Project"> | Date | string
-  challenges?: Prisma.EngineeringChallengeListRelationFilter
+  engineeringChallenges?: Prisma.EngineeringChallengeListRelationFilter
 }
 
 export type ProjectOrderByWithRelationInput = {
@@ -348,6 +364,8 @@ export type ProjectOrderByWithRelationInput = {
   dateRange?: Prisma.SortOrderInput | Prisma.SortOrder
   shortDescription?: Prisma.SortOrderInput | Prisma.SortOrder
   longDescription?: Prisma.SortOrderInput | Prisma.SortOrder
+  challenges?: Prisma.SortOrderInput | Prisma.SortOrder
+  solutions?: Prisma.SortOrderInput | Prisma.SortOrder
   tags?: Prisma.SortOrder
   githubUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   liveUrl?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -361,7 +379,7 @@ export type ProjectOrderByWithRelationInput = {
   syncedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  challenges?: Prisma.EngineeringChallengeOrderByRelationAggregateInput
+  engineeringChallenges?: Prisma.EngineeringChallengeOrderByRelationAggregateInput
 }
 
 export type ProjectWhereUniqueInput = Prisma.AtLeast<{
@@ -376,6 +394,8 @@ export type ProjectWhereUniqueInput = Prisma.AtLeast<{
   dateRange?: Prisma.StringNullableFilter<"Project"> | string | null
   shortDescription?: Prisma.StringNullableFilter<"Project"> | string | null
   longDescription?: Prisma.StringNullableFilter<"Project"> | string | null
+  challenges?: Prisma.StringNullableFilter<"Project"> | string | null
+  solutions?: Prisma.StringNullableFilter<"Project"> | string | null
   tags?: Prisma.StringNullableListFilter<"Project">
   githubUrl?: Prisma.StringNullableFilter<"Project"> | string | null
   liveUrl?: Prisma.StringNullableFilter<"Project"> | string | null
@@ -389,7 +409,7 @@ export type ProjectWhereUniqueInput = Prisma.AtLeast<{
   syncedAt?: Prisma.DateTimeNullableFilter<"Project"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Project"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Project"> | Date | string
-  challenges?: Prisma.EngineeringChallengeListRelationFilter
+  engineeringChallenges?: Prisma.EngineeringChallengeListRelationFilter
 }, "id" | "slug">
 
 export type ProjectOrderByWithAggregationInput = {
@@ -401,6 +421,8 @@ export type ProjectOrderByWithAggregationInput = {
   dateRange?: Prisma.SortOrderInput | Prisma.SortOrder
   shortDescription?: Prisma.SortOrderInput | Prisma.SortOrder
   longDescription?: Prisma.SortOrderInput | Prisma.SortOrder
+  challenges?: Prisma.SortOrderInput | Prisma.SortOrder
+  solutions?: Prisma.SortOrderInput | Prisma.SortOrder
   tags?: Prisma.SortOrder
   githubUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   liveUrl?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -433,6 +455,8 @@ export type ProjectScalarWhereWithAggregatesInput = {
   dateRange?: Prisma.StringNullableWithAggregatesFilter<"Project"> | string | null
   shortDescription?: Prisma.StringNullableWithAggregatesFilter<"Project"> | string | null
   longDescription?: Prisma.StringNullableWithAggregatesFilter<"Project"> | string | null
+  challenges?: Prisma.StringNullableWithAggregatesFilter<"Project"> | string | null
+  solutions?: Prisma.StringNullableWithAggregatesFilter<"Project"> | string | null
   tags?: Prisma.StringNullableListFilter<"Project">
   githubUrl?: Prisma.StringNullableWithAggregatesFilter<"Project"> | string | null
   liveUrl?: Prisma.StringNullableWithAggregatesFilter<"Project"> | string | null
@@ -456,6 +480,8 @@ export type ProjectCreateInput = {
   dateRange?: string | null
   shortDescription?: string | null
   longDescription?: string | null
+  challenges?: string | null
+  solutions?: string | null
   tags?: Prisma.ProjectCreatetagsInput | string[]
   githubUrl?: string | null
   liveUrl?: string | null
@@ -469,7 +495,7 @@ export type ProjectCreateInput = {
   syncedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  challenges?: Prisma.EngineeringChallengeCreateNestedManyWithoutProjectInput
+  engineeringChallenges?: Prisma.EngineeringChallengeCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectUncheckedCreateInput = {
@@ -481,6 +507,8 @@ export type ProjectUncheckedCreateInput = {
   dateRange?: string | null
   shortDescription?: string | null
   longDescription?: string | null
+  challenges?: string | null
+  solutions?: string | null
   tags?: Prisma.ProjectCreatetagsInput | string[]
   githubUrl?: string | null
   liveUrl?: string | null
@@ -494,7 +522,7 @@ export type ProjectUncheckedCreateInput = {
   syncedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  challenges?: Prisma.EngineeringChallengeUncheckedCreateNestedManyWithoutProjectInput
+  engineeringChallenges?: Prisma.EngineeringChallengeUncheckedCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectUpdateInput = {
@@ -505,6 +533,8 @@ export type ProjectUpdateInput = {
   dateRange?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   longDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  challenges?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  solutions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.ProjectUpdatetagsInput | string[]
   githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   liveUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -518,7 +548,7 @@ export type ProjectUpdateInput = {
   syncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  challenges?: Prisma.EngineeringChallengeUpdateManyWithoutProjectNestedInput
+  engineeringChallenges?: Prisma.EngineeringChallengeUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectUncheckedUpdateInput = {
@@ -530,6 +560,8 @@ export type ProjectUncheckedUpdateInput = {
   dateRange?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   longDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  challenges?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  solutions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.ProjectUpdatetagsInput | string[]
   githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   liveUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -543,7 +575,7 @@ export type ProjectUncheckedUpdateInput = {
   syncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  challenges?: Prisma.EngineeringChallengeUncheckedUpdateManyWithoutProjectNestedInput
+  engineeringChallenges?: Prisma.EngineeringChallengeUncheckedUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectCreateManyInput = {
@@ -555,6 +587,8 @@ export type ProjectCreateManyInput = {
   dateRange?: string | null
   shortDescription?: string | null
   longDescription?: string | null
+  challenges?: string | null
+  solutions?: string | null
   tags?: Prisma.ProjectCreatetagsInput | string[]
   githubUrl?: string | null
   liveUrl?: string | null
@@ -578,6 +612,8 @@ export type ProjectUpdateManyMutationInput = {
   dateRange?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   longDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  challenges?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  solutions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.ProjectUpdatetagsInput | string[]
   githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   liveUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -602,6 +638,8 @@ export type ProjectUncheckedUpdateManyInput = {
   dateRange?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   longDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  challenges?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  solutions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.ProjectUpdatetagsInput | string[]
   githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   liveUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -634,6 +672,8 @@ export type ProjectCountOrderByAggregateInput = {
   dateRange?: Prisma.SortOrder
   shortDescription?: Prisma.SortOrder
   longDescription?: Prisma.SortOrder
+  challenges?: Prisma.SortOrder
+  solutions?: Prisma.SortOrder
   tags?: Prisma.SortOrder
   githubUrl?: Prisma.SortOrder
   liveUrl?: Prisma.SortOrder
@@ -663,6 +703,8 @@ export type ProjectMaxOrderByAggregateInput = {
   dateRange?: Prisma.SortOrder
   shortDescription?: Prisma.SortOrder
   longDescription?: Prisma.SortOrder
+  challenges?: Prisma.SortOrder
+  solutions?: Prisma.SortOrder
   githubUrl?: Prisma.SortOrder
   liveUrl?: Prisma.SortOrder
   videoUrl?: Prisma.SortOrder
@@ -684,6 +726,8 @@ export type ProjectMinOrderByAggregateInput = {
   dateRange?: Prisma.SortOrder
   shortDescription?: Prisma.SortOrder
   longDescription?: Prisma.SortOrder
+  challenges?: Prisma.SortOrder
+  solutions?: Prisma.SortOrder
   githubUrl?: Prisma.SortOrder
   liveUrl?: Prisma.SortOrder
   videoUrl?: Prisma.SortOrder
@@ -761,23 +805,23 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
-export type ProjectCreateNestedOneWithoutChallengesInput = {
-  create?: Prisma.XOR<Prisma.ProjectCreateWithoutChallengesInput, Prisma.ProjectUncheckedCreateWithoutChallengesInput>
-  connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutChallengesInput
+export type ProjectCreateNestedOneWithoutEngineeringChallengesInput = {
+  create?: Prisma.XOR<Prisma.ProjectCreateWithoutEngineeringChallengesInput, Prisma.ProjectUncheckedCreateWithoutEngineeringChallengesInput>
+  connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutEngineeringChallengesInput
   connect?: Prisma.ProjectWhereUniqueInput
 }
 
-export type ProjectUpdateOneWithoutChallengesNestedInput = {
-  create?: Prisma.XOR<Prisma.ProjectCreateWithoutChallengesInput, Prisma.ProjectUncheckedCreateWithoutChallengesInput>
-  connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutChallengesInput
-  upsert?: Prisma.ProjectUpsertWithoutChallengesInput
+export type ProjectUpdateOneWithoutEngineeringChallengesNestedInput = {
+  create?: Prisma.XOR<Prisma.ProjectCreateWithoutEngineeringChallengesInput, Prisma.ProjectUncheckedCreateWithoutEngineeringChallengesInput>
+  connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutEngineeringChallengesInput
+  upsert?: Prisma.ProjectUpsertWithoutEngineeringChallengesInput
   disconnect?: Prisma.ProjectWhereInput | boolean
   delete?: Prisma.ProjectWhereInput | boolean
   connect?: Prisma.ProjectWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ProjectUpdateToOneWithWhereWithoutChallengesInput, Prisma.ProjectUpdateWithoutChallengesInput>, Prisma.ProjectUncheckedUpdateWithoutChallengesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProjectUpdateToOneWithWhereWithoutEngineeringChallengesInput, Prisma.ProjectUpdateWithoutEngineeringChallengesInput>, Prisma.ProjectUncheckedUpdateWithoutEngineeringChallengesInput>
 }
 
-export type ProjectCreateWithoutChallengesInput = {
+export type ProjectCreateWithoutEngineeringChallengesInput = {
   slug: string
   title?: string | null
   number?: string | null
@@ -785,6 +829,8 @@ export type ProjectCreateWithoutChallengesInput = {
   dateRange?: string | null
   shortDescription?: string | null
   longDescription?: string | null
+  challenges?: string | null
+  solutions?: string | null
   tags?: Prisma.ProjectCreatetagsInput | string[]
   githubUrl?: string | null
   liveUrl?: string | null
@@ -800,7 +846,7 @@ export type ProjectCreateWithoutChallengesInput = {
   updatedAt?: Date | string
 }
 
-export type ProjectUncheckedCreateWithoutChallengesInput = {
+export type ProjectUncheckedCreateWithoutEngineeringChallengesInput = {
   id?: number
   slug: string
   title?: string | null
@@ -809,6 +855,8 @@ export type ProjectUncheckedCreateWithoutChallengesInput = {
   dateRange?: string | null
   shortDescription?: string | null
   longDescription?: string | null
+  challenges?: string | null
+  solutions?: string | null
   tags?: Prisma.ProjectCreatetagsInput | string[]
   githubUrl?: string | null
   liveUrl?: string | null
@@ -824,23 +872,23 @@ export type ProjectUncheckedCreateWithoutChallengesInput = {
   updatedAt?: Date | string
 }
 
-export type ProjectCreateOrConnectWithoutChallengesInput = {
+export type ProjectCreateOrConnectWithoutEngineeringChallengesInput = {
   where: Prisma.ProjectWhereUniqueInput
-  create: Prisma.XOR<Prisma.ProjectCreateWithoutChallengesInput, Prisma.ProjectUncheckedCreateWithoutChallengesInput>
+  create: Prisma.XOR<Prisma.ProjectCreateWithoutEngineeringChallengesInput, Prisma.ProjectUncheckedCreateWithoutEngineeringChallengesInput>
 }
 
-export type ProjectUpsertWithoutChallengesInput = {
-  update: Prisma.XOR<Prisma.ProjectUpdateWithoutChallengesInput, Prisma.ProjectUncheckedUpdateWithoutChallengesInput>
-  create: Prisma.XOR<Prisma.ProjectCreateWithoutChallengesInput, Prisma.ProjectUncheckedCreateWithoutChallengesInput>
+export type ProjectUpsertWithoutEngineeringChallengesInput = {
+  update: Prisma.XOR<Prisma.ProjectUpdateWithoutEngineeringChallengesInput, Prisma.ProjectUncheckedUpdateWithoutEngineeringChallengesInput>
+  create: Prisma.XOR<Prisma.ProjectCreateWithoutEngineeringChallengesInput, Prisma.ProjectUncheckedCreateWithoutEngineeringChallengesInput>
   where?: Prisma.ProjectWhereInput
 }
 
-export type ProjectUpdateToOneWithWhereWithoutChallengesInput = {
+export type ProjectUpdateToOneWithWhereWithoutEngineeringChallengesInput = {
   where?: Prisma.ProjectWhereInput
-  data: Prisma.XOR<Prisma.ProjectUpdateWithoutChallengesInput, Prisma.ProjectUncheckedUpdateWithoutChallengesInput>
+  data: Prisma.XOR<Prisma.ProjectUpdateWithoutEngineeringChallengesInput, Prisma.ProjectUncheckedUpdateWithoutEngineeringChallengesInput>
 }
 
-export type ProjectUpdateWithoutChallengesInput = {
+export type ProjectUpdateWithoutEngineeringChallengesInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   number?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -848,6 +896,8 @@ export type ProjectUpdateWithoutChallengesInput = {
   dateRange?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   longDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  challenges?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  solutions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.ProjectUpdatetagsInput | string[]
   githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   liveUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -863,7 +913,7 @@ export type ProjectUpdateWithoutChallengesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type ProjectUncheckedUpdateWithoutChallengesInput = {
+export type ProjectUncheckedUpdateWithoutEngineeringChallengesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -872,6 +922,8 @@ export type ProjectUncheckedUpdateWithoutChallengesInput = {
   dateRange?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   longDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  challenges?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  solutions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.ProjectUpdatetagsInput | string[]
   githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   liveUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -893,11 +945,11 @@ export type ProjectUncheckedUpdateWithoutChallengesInput = {
  */
 
 export type ProjectCountOutputType = {
-  challenges: number
+  engineeringChallenges: number
 }
 
 export type ProjectCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  challenges?: boolean | ProjectCountOutputTypeCountChallengesArgs
+  engineeringChallenges?: boolean | ProjectCountOutputTypeCountEngineeringChallengesArgs
 }
 
 /**
@@ -913,7 +965,7 @@ export type ProjectCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exte
 /**
  * ProjectCountOutputType without action
  */
-export type ProjectCountOutputTypeCountChallengesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type ProjectCountOutputTypeCountEngineeringChallengesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.EngineeringChallengeWhereInput
 }
 
@@ -927,6 +979,8 @@ export type ProjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   dateRange?: boolean
   shortDescription?: boolean
   longDescription?: boolean
+  challenges?: boolean
+  solutions?: boolean
   tags?: boolean
   githubUrl?: boolean
   liveUrl?: boolean
@@ -940,7 +994,7 @@ export type ProjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   syncedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  challenges?: boolean | Prisma.Project$challengesArgs<ExtArgs>
+  engineeringChallenges?: boolean | Prisma.Project$engineeringChallengesArgs<ExtArgs>
   _count?: boolean | Prisma.ProjectCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["project"]>
 
@@ -953,6 +1007,8 @@ export type ProjectSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   dateRange?: boolean
   shortDescription?: boolean
   longDescription?: boolean
+  challenges?: boolean
+  solutions?: boolean
   tags?: boolean
   githubUrl?: boolean
   liveUrl?: boolean
@@ -977,6 +1033,8 @@ export type ProjectSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   dateRange?: boolean
   shortDescription?: boolean
   longDescription?: boolean
+  challenges?: boolean
+  solutions?: boolean
   tags?: boolean
   githubUrl?: boolean
   liveUrl?: boolean
@@ -1001,6 +1059,8 @@ export type ProjectSelectScalar = {
   dateRange?: boolean
   shortDescription?: boolean
   longDescription?: boolean
+  challenges?: boolean
+  solutions?: boolean
   tags?: boolean
   githubUrl?: boolean
   liveUrl?: boolean
@@ -1016,9 +1076,9 @@ export type ProjectSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ProjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "title" | "number" | "category" | "dateRange" | "shortDescription" | "longDescription" | "tags" | "githubUrl" | "liveUrl" | "videoUrl" | "thumbnailUrl" | "galleryUrls" | "certificateUrls" | "visible" | "displayOrder" | "githubRepoName" | "syncedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
+export type ProjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "title" | "number" | "category" | "dateRange" | "shortDescription" | "longDescription" | "challenges" | "solutions" | "tags" | "githubUrl" | "liveUrl" | "videoUrl" | "thumbnailUrl" | "galleryUrls" | "certificateUrls" | "visible" | "displayOrder" | "githubRepoName" | "syncedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
 export type ProjectInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  challenges?: boolean | Prisma.Project$challengesArgs<ExtArgs>
+  engineeringChallenges?: boolean | Prisma.Project$engineeringChallengesArgs<ExtArgs>
   _count?: boolean | Prisma.ProjectCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProjectIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1027,7 +1087,7 @@ export type ProjectIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type $ProjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Project"
   objects: {
-    challenges: Prisma.$EngineeringChallengePayload<ExtArgs>[]
+    engineeringChallenges: Prisma.$EngineeringChallengePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1038,6 +1098,8 @@ export type $ProjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     dateRange: string | null
     shortDescription: string | null
     longDescription: string | null
+    challenges: string | null
+    solutions: string | null
     tags: string[]
     githubUrl: string | null
     liveUrl: string | null
@@ -1445,7 +1507,7 @@ readonly fields: ProjectFieldRefs;
  */
 export interface Prisma__ProjectClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  challenges<T extends Prisma.Project$challengesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Project$challengesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EngineeringChallengePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  engineeringChallenges<T extends Prisma.Project$engineeringChallengesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Project$engineeringChallengesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EngineeringChallengePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1483,6 +1545,8 @@ export interface ProjectFieldRefs {
   readonly dateRange: Prisma.FieldRef<"Project", 'String'>
   readonly shortDescription: Prisma.FieldRef<"Project", 'String'>
   readonly longDescription: Prisma.FieldRef<"Project", 'String'>
+  readonly challenges: Prisma.FieldRef<"Project", 'String'>
+  readonly solutions: Prisma.FieldRef<"Project", 'String'>
   readonly tags: Prisma.FieldRef<"Project", 'String[]'>
   readonly githubUrl: Prisma.FieldRef<"Project", 'String'>
   readonly liveUrl: Prisma.FieldRef<"Project", 'String'>
@@ -1889,9 +1953,9 @@ export type ProjectDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * Project.challenges
+ * Project.engineeringChallenges
  */
-export type Project$challengesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Project$engineeringChallengesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the EngineeringChallenge
    */

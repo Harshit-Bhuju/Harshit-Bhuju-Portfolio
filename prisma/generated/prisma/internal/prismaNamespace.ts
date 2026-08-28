@@ -1214,6 +1214,8 @@ export const ProjectScalarFieldEnum = {
   dateRange: 'dateRange',
   shortDescription: 'shortDescription',
   longDescription: 'longDescription',
+  challenges: 'challenges',
+  solutions: 'solutions',
   tags: 'tags',
   githubUrl: 'githubUrl',
   liveUrl: 'liveUrl',

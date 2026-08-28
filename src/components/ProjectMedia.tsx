@@ -11,6 +11,8 @@ interface Props {
   title: string;
   number: string;
   certificateUrls?: string[];
+  /** When true (default), the video block is hidden — use this when the parent renders the video separately */
+  hideVideo?: boolean;
 }
 
 /** Convert Google Drive share/view links to embeddable preview */
@@ -58,6 +60,7 @@ export default function ProjectMedia({
   title,
   number,
   certificateUrls = [],
+  hideVideo = false,
 }: Props) {
   const [playing, setPlaying] = useState(false);
   const [lightbox, setLightbox] = useState<string | null>(null);
@@ -239,75 +242,89 @@ export default function ProjectMedia({
         </div>
       )}
 
-      {/* Video — uploaded file or external embed */}
-      {videoUrl && (
-        <div className="border border-border overflow-hidden">
-          <p className="text-xs uppercase tracking-[0.15em] text-muted px-4 pt-3 pb-2">
-            Video
-          </p>
-          {(() => {
-            const isFile =
-              /\.(mp4|webm|mov)(\?|$)/i.test(videoUrl) ||
-              videoUrl.includes("/storage/") ||
-              videoUrl.includes("supabase");
-            if (isFile) {
-              return (
-                <video
-                  className="w-full aspect-video bg-black"
-                  controls
-                  playsInline
-                  preload="metadata"
-                  poster={thumbnailUrl || undefined}
-                >
-                  <source
-                    src={videoUrl}
-                    type={
-                      videoUrl.includes(".webm")
-                        ? "video/webm"
-                        : videoUrl.includes(".mov")
-                          ? "video/quicktime"
-                          : "video/mp4"
-                    }
-                  />
-                  Your browser does not support the video tag.
-                </video>
-              );
-            }
-            if (embed && !playing) {
-              return (
-                <button
-                  type="button"
-                  onClick={() => setPlaying(true)}
-                  className="w-full aspect-video bg-surface flex items-center justify-center text-sm text-secondary hover:text-primary transition-colors"
-                >
-                  Play video ▶
-                </button>
-              );
-            }
-            if (embed && playing) {
-              return (
-                <div className="aspect-video relative">
-                  <iframe
-                    src={embed}
-                    title={`${title} video`}
-                    className="absolute inset-0 w-full h-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                </div>
-              );
-            }
-            return (
-              <a
-                href={videoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block w-full py-4 text-center text-sm text-secondary hover:text-primary"
-              >
-                Open video ↗
-              </a>
-            );
-          })()}
+      {/* Video — only shown here if not hidden by parent (parent renders it separately below overview) */}
+      {videoUrl && !hideVideo && (
+        <div className="pt-2">
+          <div className="max-w-xl md:max-w-2xl border border-border bg-surface/40 overflow-hidden">
+            <div className="flex items-center justify-between px-4 py-2.5 border-b border-border/80 bg-surface/80">
+              <span className="text-[11px] uppercase tracking-[0.15em] text-muted font-medium flex items-center gap-2">
+                <span className="inline-block w-1.5 h-1.5 rounded-full bg-primary/60" />
+                Walkthrough / Demo Video
+              </span>
+              <span className="text-[10px] font-mono text-muted tracking-wider">
+                16:9
+              </span>
+            </div>
+
+            <div className="p-2 sm:p-3">
+              {(() => {
+                const isFile =
+                  /\.(mp4|webm|mov)(\?|$)/i.test(videoUrl) ||
+                  videoUrl.includes("/storage/") ||
+                  videoUrl.includes("supabase");
+                if (isFile) {
+                  return (
+                    <video
+                      className="w-full aspect-video bg-black border border-border/60"
+                      controls
+                      playsInline
+                      preload="metadata"
+                      poster={thumbnailUrl || undefined}
+                    >
+                      <source
+                        src={videoUrl}
+                        type={
+                          videoUrl.includes(".webm")
+                            ? "video/webm"
+                            : videoUrl.includes(".mov")
+                              ? "video/quicktime"
+                              : "video/mp4"
+                        }
+                      />
+                      Your browser does not support the video tag.
+                    </video>
+                  );
+                }
+                if (embed && !playing) {
+                  return (
+                    <button
+                      type="button"
+                      onClick={() => setPlaying(true)}
+                      className="w-full aspect-video bg-surface border border-border/60 flex flex-col items-center justify-center gap-2 text-sm text-secondary hover:text-primary transition-all group cursor-pointer"
+                    >
+                      <div className="w-11 h-11 rounded-full border border-border group-hover:border-strong-border group-hover:scale-105 transition-all flex items-center justify-center text-primary bg-bg/80">
+                        ▶
+                      </div>
+                      <span className="text-xs font-medium tracking-wide">Play Walkthrough Video</span>
+                    </button>
+                  );
+                }
+                if (embed && playing) {
+                  return (
+                    <div className="aspect-video relative border border-border/60">
+                      <iframe
+                        src={embed}
+                        title={`${title} video`}
+                        className="absolute inset-0 w-full h-full"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    </div>
+                  );
+                }
+                return (
+                  <a
+                    href={videoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full py-4 text-center text-sm text-secondary hover:text-primary"
+                  >
+                    Open video ↗
+                  </a>
+                );
+              })()}
+            </div>
+          </div>
         </div>
       )}
 

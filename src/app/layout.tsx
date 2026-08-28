@@ -92,38 +92,65 @@ export const metadata: Metadata = {
   category: "technology",
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: "Harshit Bhuju",
-  url: siteUrl,
-  image: `${siteUrl}/profile.jpg`,
-  jobTitle: "Frontend Developer",
-  description:
-    "Frontend Developer and Competitive Tech Builder based in Nepal.",
-  email: "mailto:harshitbhuju123@gmail.com",
-  telephone: "+977-9869372811",
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: "Banepa",
-    addressRegion: "Kavrepalanchowk",
-    addressCountry: "NP",
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Harshit Bhuju",
+    url: siteUrl,
+    image: `${siteUrl}/profile.jpg`,
+    jobTitle: "Frontend Developer",
+    description:
+      "Frontend Developer and Competitive Tech Builder based in Nepal.",
+    email: "mailto:harshitbhuju123@gmail.com",
+    telephone: "+977-9869372811",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Banepa",
+      addressRegion: "Kavrepalanchowk",
+      addressCountry: "NP",
+    },
+    sameAs: [
+      "https://github.com/Harshit-Bhuju",
+      "https://www.linkedin.com/in/harshit-bhuju/",
+      "https://www.instagram.com/bhujuharshit_5/",
+      "https://www.facebook.com/harshit.bhuju.2025",
+    ],
+    knowsAbout: [
+      "Frontend Development",
+      "React",
+      "Next.js",
+      "TypeScript",
+      "UI/UX",
+      "Accessibility",
+    ],
   },
-  sameAs: [
-    "https://github.com/Harshit-Bhuju",
-    "https://www.linkedin.com/in/harshit-bhuju/",
-    "https://www.instagram.com/bhujuharshit_5/",
-    "https://www.facebook.com/harshit.bhuju.2025",
-  ],
-  knowsAbout: [
-    "Frontend Development",
-    "React",
-    "Next.js",
-    "TypeScript",
-    "UI/UX",
-    "Accessibility",
-  ],
-};
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Harshit Bhuju",
+    url: siteUrl,
+    description:
+      "Portfolio of Harshit Bhuju — Frontend Developer & Competitive Tech Builder based in Nepal.",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: `${siteUrl}/projects/{search_term_string}`,
+      "query-input": "required name=search_term_string",
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    name: "Harshit Bhuju — Frontend Developer Portfolio",
+    url: siteUrl,
+    mainEntity: {
+      "@type": "Person",
+      name: "Harshit Bhuju",
+      jobTitle: "Frontend Developer",
+      url: siteUrl,
+    },
+  },
+];
 
 export default function RootLayout({
   children,
@@ -133,10 +160,24 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geist.variable} dark`} suppressHydrationWarning>
       <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        {/* Preconnect to Google Fonts CDN for font loading speed */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Preload the LCP hero image — browser starts fetching before JS runs */}
+        <link
+          rel="preload"
+          as="image"
+          href="/profile.jpg"
+          // @ts-expect-error fetchpriority is valid but not yet in TS types
+          fetchpriority="high"
         />
+        {jsonLd.map((schema, i) => (
+          <script
+            key={i}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          />
+        ))}
       </head>
       <body className="font-sans antialiased bg-bg text-primary min-h-screen">
         <a

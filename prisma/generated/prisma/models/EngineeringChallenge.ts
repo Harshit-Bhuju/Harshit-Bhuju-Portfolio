@@ -363,7 +363,7 @@ export type EngineeringChallengeCreateInput = {
   displayOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  project?: Prisma.ProjectCreateNestedOneWithoutChallengesInput
+  project?: Prisma.ProjectCreateNestedOneWithoutEngineeringChallengesInput
 }
 
 export type EngineeringChallengeUncheckedCreateInput = {
@@ -392,7 +392,7 @@ export type EngineeringChallengeUpdateInput = {
   displayOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  project?: Prisma.ProjectUpdateOneWithoutChallengesNestedInput
+  project?: Prisma.ProjectUpdateOneWithoutEngineeringChallengesNestedInput
 }
 
 export type EngineeringChallengeUncheckedUpdateInput = {

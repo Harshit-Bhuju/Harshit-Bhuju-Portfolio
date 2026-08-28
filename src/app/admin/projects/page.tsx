@@ -15,6 +15,8 @@ type Project = {
   dateRange: string | null;
   shortDescription: string | null;
   longDescription: string | null;
+  challenges: string | null;
+  solutions: string | null;
   tags: string[];
   githubUrl: string | null;
   liveUrl: string | null;
@@ -36,6 +38,8 @@ const emptyProject = (): Project => ({
   dateRange: "",
   shortDescription: "",
   longDescription: "",
+  challenges: "",
+  solutions: "",
   tags: [],
   githubUrl: "",
   liveUrl: "",
@@ -412,6 +416,20 @@ export default function AdminProjectsPage() {
               multiline
             />
             <Field
+              label="Challenges (Key Problems, Bottlenecks & Constraints)"
+              value={editing.challenges || ""}
+              onChange={(v) => setEditing({ ...editing, challenges: v })}
+              multiline
+              hint="Describe technical hurdles, scalability, architectural challenges faced"
+            />
+            <Field
+              label="Solutions (Engineering Approach & Technical Implementation)"
+              value={editing.solutions || ""}
+              onChange={(v) => setEditing({ ...editing, solutions: v })}
+              multiline
+              hint="Describe how the challenges were solved, architectural decisions, results"
+            />
+            <Field
               label="Tags (comma-separated)"
               value={(editing.tags || []).join(", ")}
               onChange={(v) =>
@@ -610,6 +628,30 @@ export default function AdminProjectsPage() {
               <p className="text-sm leading-relaxed whitespace-pre-wrap">
                 {preview.longDescription}
               </p>
+            )}
+            {(preview.challenges || preview.solutions) && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 border-t border-border">
+                {preview.challenges && (
+                  <div className="p-3 border border-border bg-surface/50 text-xs">
+                    <span className="font-semibold text-primary block mb-1">
+                      ⚡ Challenges & Constraints
+                    </span>
+                    <p className="text-secondary whitespace-pre-wrap">
+                      {preview.challenges}
+                    </p>
+                  </div>
+                )}
+                {preview.solutions && (
+                  <div className="p-3 border border-border bg-surface/50 text-xs">
+                    <span className="font-semibold text-primary block mb-1">
+                      💡 Solutions & Architecture
+                    </span>
+                    <p className="text-secondary whitespace-pre-wrap">
+                      {preview.solutions}
+                    </p>
+                  </div>
+                )}
+              </div>
             )}
             {(preview.tags || []).length > 0 && (
               <div className="flex flex-wrap gap-2">

@@ -8,6 +8,8 @@ export type ProjectRecord = {
   dateRange: string | null;
   shortDescription: string | null;
   longDescription: string | null;
+  challenges?: string | null;
+  solutions?: string | null;
   tags: string[];
   githubUrl: string | null;
   liveUrl: string | null;
@@ -53,6 +55,8 @@ export function upsertMemoryProject(
     dateRange: body.dateRange ?? null,
     shortDescription: body.shortDescription ?? null,
     longDescription: body.longDescription ?? null,
+    challenges: body.challenges ?? null,
+    solutions: body.solutions ?? null,
     tags: body.tags || [],
     githubUrl: body.githubUrl ?? null,
     liveUrl: body.liveUrl ?? null,

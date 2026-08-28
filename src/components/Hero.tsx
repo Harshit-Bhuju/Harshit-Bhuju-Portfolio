@@ -10,20 +10,49 @@ if (typeof window !== "undefined") {
 }
 
 export default function Hero() {
+  // Profile image: static default ensures LCP image is immediately known to the browser.
+  // The settings fetch only updates tagline; profile image update is deferred to avoid
+  // causing a reflow / LCP element delay (Lighthouse flagged 1.79s render delay).
   const [profileSrc, setProfileSrc] = useState("/profile.jpg");
   const [tagline, setTagline] = useState(
     "I build clean, scalable and thoughtful digital experiences with modern web technologies."
   );
 
   useEffect(() => {
-    fetch("/api/settings")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        if (!data) return;
-        if (data.profileImage) setProfileSrc(data.profileImage);
-        if (data.tagline) setTagline(data.tagline);
-      })
-      .catch(() => {});
+    let cancelled = false;
+    // Low-priority fetch — we don't block the hero render on this
+    const id = requestIdleCallback
+      ? requestIdleCallback(() => {
+          fetch("/api/settings")
+            .then((r) => (r.ok ? r.json() : null))
+            .then((data) => {
+              if (cancelled || !data) return;
+              // Only update tagline immediately (text, no reflow)
+              if (data.tagline) setTagline(data.tagline);
+              // Defer profile image swap — only if different, avoids double paint
+              if (data.profileImage && data.profileImage !== "/profile.jpg") {
+                setProfileSrc(data.profileImage);
+              }
+            })
+            .catch(() => {});
+        })
+      : setTimeout(() => {
+          fetch("/api/settings")
+            .then((r) => (r.ok ? r.json() : null))
+            .then((data) => {
+              if (cancelled || !data) return;
+              if (data.tagline) setTagline(data.tagline);
+              if (data.profileImage && data.profileImage !== "/profile.jpg") {
+                setProfileSrc(data.profileImage);
+              }
+            })
+            .catch(() => {});
+        }, 2000);
+    return () => {
+      cancelled = true;
+      if (typeof id === "number") cancelIdleCallback(id);
+      else clearTimeout(id as ReturnType<typeof setTimeout>);
+    };
   }, []);
 
   const sectionRef = useRef<HTMLElement>(null);
@@ -39,127 +68,142 @@ export default function Hero() {
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
-    const ctx = gsap.context(() => {
-      const title = titleRef.current;
-      const photo = photoRef.current;
-      const desc = descRef.current;
-      const meta = metaRef.current;
-      const scroll = scrollRef.current;
-      const grid = gridRef.current;
-      const section = sectionRef.current;
+    // Defer GSAP context setup by one rAF to avoid forced synchronous reflow
+    // during the critical rendering path (improves LCP + TBT metrics)
+    let raf: number;
+    const setup = () => {
+      const ctx = gsap.context(() => {
+        const title = titleRef.current;
+        const photo = photoRef.current;
+        const desc = descRef.current;
+        const meta = metaRef.current;
+        const scroll = scrollRef.current;
+        const grid = gridRef.current;
+        const section = sectionRef.current;
 
-      const present = (...els: (Element | null)[]) =>
-        els.filter((el): el is Element => el != null);
+        const present = (...els: (Element | null)[]) =>
+          els.filter((el): el is Element => el != null);
 
-      if (prefersReduced) {
-        const targets = present(title, photo, desc, meta, scroll);
-        if (targets.length) {
-          gsap.set(targets, { opacity: 1, y: 0, x: 0, scale: 1 });
+        if (prefersReduced) {
+          const targets = present(title, photo, desc, meta, scroll);
+          if (targets.length) {
+            gsap.set(targets, { opacity: 1, y: 0, x: 0, scale: 1 });
+          }
+          return;
         }
-        return;
-      }
 
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+        const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      if (meta) {
-        tl.fromTo(
-          meta,
-          { opacity: 0, y: 10 },
-          { opacity: 1, y: 0, duration: 0.5 },
-          0.05
-        );
-      }
+        if (meta) {
+          tl.fromTo(
+            meta,
+            { opacity: 0, y: 10 },
+            { opacity: 1, y: 0, duration: 0.5 },
+            0.05
+          );
+        }
 
-      const words = title
-        ? Array.from(title.querySelectorAll(".title-word"))
-        : [];
-      if (words.length) {
-        tl.fromTo(
-          words,
-          { opacity: 0, y: 80, rotateX: -10 },
-          {
-            opacity: 1,
-            y: 0,
-            rotateX: 0,
-            duration: 0.95,
-            stagger: 0.12,
-          },
-          0.15
-        );
-      }
+        const words = title
+          ? Array.from(title.querySelectorAll(".title-word"))
+          : [];
+        if (words.length) {
+          tl.fromTo(
+            words,
+            { opacity: 0, y: 80, rotateX: -10 },
+            {
+              opacity: 1,
+              y: 0,
+              rotateX: 0,
+              duration: 0.95,
+              stagger: 0.12,
+            },
+            0.15
+          );
+        }
 
-      if (photo) {
-        tl.fromTo(
-          photo,
-          { opacity: 0, y: 40, scale: 0.94 },
-          { opacity: 1, y: 0, scale: 1, duration: 1.05 },
-          0.3
-        );
-      }
+        if (photo) {
+          tl.fromTo(
+            photo,
+            { opacity: 0, y: 40, scale: 0.94 },
+            { opacity: 1, y: 0, scale: 1, duration: 1.05 },
+            0.3
+          );
+        }
 
-      if (desc) {
-        tl.fromTo(
-          desc,
-          { opacity: 0, y: 18 },
-          { opacity: 1, y: 0, duration: 0.65 },
-          0.65
-        );
-      }
+        if (desc) {
+          tl.fromTo(
+            desc,
+            { opacity: 0, y: 18 },
+            { opacity: 1, y: 0, duration: 0.65 },
+            0.65
+          );
+        }
 
-      if (scroll) {
-        tl.fromTo(
-          scroll,
-          { opacity: 0 },
-          { opacity: 1, duration: 0.45 },
-          0.9
-        );
-      }
+        if (scroll) {
+          tl.fromTo(
+            scroll,
+            { opacity: 0 },
+            { opacity: 1, duration: 0.45 },
+            0.9
+          );
+        }
 
-      // Scroll parallax exit
-      if (section) {
-        ScrollTrigger.create({
-          trigger: section,
-          start: "top top",
-          end: "+=150%",
-          pin: true,
-          scrub: 0.9,
-          onUpdate: (self) => {
-            const p = self.progress;
-            const e = p * p;
+        // Scroll parallax exit
+        if (section) {
+          ScrollTrigger.create({
+            trigger: section,
+            start: "top top",
+            end: "+=150%",
+            pin: true,
+            scrub: 0.9,
+            onUpdate: (self) => {
+              const p = self.progress;
+              const e = p * p;
 
-            if (title) {
-              gsap.set(title, {
-                y: -e * 100,
-                scale: 1 - e * 0.12,
-                opacity: Math.max(0, 1 - e * 1.15),
-              });
-            }
-            if (photo) {
-              gsap.set(photo, {
-                y: -e * 40,
-                x: e * 60,
-                scale: 1 - e * 0.06,
-                opacity: Math.max(0, 1 - e * 1.2),
-              });
-            }
-            const group = present(desc, meta, scroll);
-            if (group.length) {
-              gsap.set(group, {
-                y: -e * 50,
-                opacity: Math.max(0, 1 - e * 1.4),
-              });
-            }
-            if (grid) {
-              gsap.set(grid, {
-                opacity: Math.max(0, 0.5 - e * 0.5),
-              });
-            }
-          },
-        });
-      }
-    }, sectionRef);
+              if (title) {
+                gsap.set(title, {
+                  y: -e * 100,
+                  scale: 1 - e * 0.12,
+                  opacity: Math.max(0, 1 - e * 1.15),
+                });
+              }
+              if (photo) {
+                gsap.set(photo, {
+                  y: -e * 40,
+                  x: e * 60,
+                  scale: 1 - e * 0.06,
+                  opacity: Math.max(0, 1 - e * 1.2),
+                });
+              }
+              const group = present(desc, meta, scroll);
+              if (group.length) {
+                gsap.set(group, {
+                  y: -e * 50,
+                  opacity: Math.max(0, 1 - e * 1.4),
+                });
+              }
+              if (grid) {
+                gsap.set(grid, {
+                  opacity: Math.max(0, 0.5 - e * 0.5),
+                });
+              }
+            },
+          });
+        }
+      }, sectionRef);
 
-    return () => ctx.revert();
+      return ctx;
+    };
+
+    let ctx: ReturnType<typeof gsap.context>;
+    raf = requestAnimationFrame(() => {
+      ctx = setup();
+    });
+
+    return () => {
+      cancelAnimationFrame(raf);
+      ctx?.revert();
+    };
   }, []);
 
   return (

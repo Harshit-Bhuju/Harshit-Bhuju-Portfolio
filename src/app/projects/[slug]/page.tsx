@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import ProjectMedia from "@/components/ProjectMedia";
+import VideoPlayer from "@/components/VideoPlayer";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -17,6 +18,8 @@ type ProjectRow = {
   dateRange: string | null;
   shortDescription: string | null;
   longDescription: string | null;
+  challenges: string | null;
+  solutions: string | null;
   tags: string[];
   githubUrl: string | null;
   liveUrl: string | null;
@@ -43,6 +46,8 @@ async function getProject(slug: string): Promise<ProjectRow | null> {
       dateRange: row.dateRange,
       shortDescription: row.shortDescription,
       longDescription: row.longDescription,
+      challenges: row.challenges,
+      solutions: row.solutions,
       tags: row.tags || [],
       githubUrl: row.githubUrl,
       liveUrl: row.liveUrl,
@@ -150,6 +155,7 @@ export default async function ProjectPage({ params }: Props) {
           title={project.title || "Project"}
           number={project.number || ""}
           certificateUrls={project.certificateUrls || []}
+          hideVideo={true}
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 mt-16">
@@ -162,6 +168,20 @@ export default async function ProjectPage({ params }: Props) {
                 {project.longDescription || project.shortDescription}
               </p>
             </div>
+
+            {/* Video below overview */}
+            {project.videoUrl && (
+              <div>
+                <h2 className="text-xs uppercase tracking-[0.15em] text-muted mb-4">
+                  Walkthrough
+                </h2>
+                <VideoPlayer
+                  videoUrl={project.videoUrl}
+                  thumbnailUrl={project.thumbnailUrl}
+                  title={project.title || "Project"}
+                />
+              </div>
+            )}
           </div>
 
           <aside className="lg:col-span-4 space-y-8">
@@ -201,12 +221,60 @@ export default async function ProjectPage({ params }: Props) {
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 px-5 py-3 border border-border text-sm font-medium hover:border-strong-border transition-colors"
                 >
-                  Source code ↗
+                  GitHub ↗
                 </a>
               )}
             </div>
           </aside>
         </div>
+
+        {/* Challenges & Solutions Deep-Dive Section */}
+        {(project.challenges || project.solutions) && (
+          <section className="mt-16 pt-12 border-t border-border">
+            <div className="mb-8">
+              <span className="text-xs uppercase tracking-[0.2em] text-muted block mb-2">
+                Engineering Deep-Dive
+              </span>
+              <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">
+                Challenges & Solutions
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+              {project.challenges && (
+                <div className="p-6 md:p-8 border border-border bg-surface/40 hover:border-strong transition-colors relative">
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className="flex h-7 w-7 items-center justify-center border border-border text-xs font-mono text-primary bg-bg">
+                      01
+                    </span>
+                    <h3 className="text-sm font-semibold tracking-wide uppercase text-primary">
+                      Key Challenges & Constraints
+                    </h3>
+                  </div>
+                  <p className="text-sm md:text-base leading-relaxed text-secondary whitespace-pre-line">
+                    {project.challenges}
+                  </p>
+                </div>
+              )}
+
+              {project.solutions && (
+                <div className="p-6 md:p-8 border border-border bg-surface/40 hover:border-strong transition-colors relative">
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className="flex h-7 w-7 items-center justify-center border border-border text-xs font-mono text-primary bg-bg">
+                      02
+                    </span>
+                    <h3 className="text-sm font-semibold tracking-wide uppercase text-primary">
+                      Engineering Approach & Solutions
+                    </h3>
+                  </div>
+                  <p className="text-sm md:text-base leading-relaxed text-secondary whitespace-pre-line">
+                    {project.solutions}
+                  </p>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
 
         <nav className="mt-20 pt-10 border-t border-border flex flex-wrap justify-between gap-6">
           {prev ? (

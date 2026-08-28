@@ -23,11 +23,6 @@ function ProjectBlock({
   const numberRef = useRef<HTMLSpanElement>(null);
 
   const [challengeExpanded, setChallengeExpanded] = useState(false);
-  const [challenge, setChallenge] = useState<any>(null);
-  useEffect(() => {
-    // optional: load challenges from API later
-    setChallenge(null);
-  }, [project.slug]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -154,7 +149,7 @@ function ProjectBlock({
             </div>
 
             {/* Embedded Engineering Challenge Deep-Dive */}
-            {challenge && (
+            {(project.challenges || project.solutions) && (
               <div className="mb-8 border border-border bg-surface p-4 sm:p-5 transition-colors hover:border-strong">
                 <button
                   type="button"
@@ -167,7 +162,7 @@ function ProjectBlock({
                       Engineering Deep-Dive
                     </span>
                     <p className="text-sm font-semibold text-primary group-hover:opacity-75 transition-opacity">
-                      {challenge.title}
+                      Challenges & Technical Solutions
                     </p>
                   </div>
                   <span className="text-xs font-mono text-muted border border-border px-2 py-1 group-hover:border-strong group-hover:text-primary transition-colors shrink-0">
@@ -177,24 +172,22 @@ function ProjectBlock({
 
                 {challengeExpanded && (
                   <div className="mt-4 pt-4 border-t border-border/60 space-y-3 text-xs leading-relaxed animate-in fade-in duration-200">
-                    <div>
-                      <span className="font-semibold text-primary block mb-0.5">
-                        The Problem:
-                      </span>
-                      <p className="text-secondary">{challenge.problem}</p>
-                    </div>
-                    <div>
-                      <span className="font-semibold text-primary block mb-0.5">
-                        Architectural Solution:
-                      </span>
-                      <p className="text-secondary">{challenge.solution}</p>
-                    </div>
-                    <div>
-                      <span className="font-semibold text-primary block mb-0.5">
-                        Key Impact / Result:
-                      </span>
-                      <p className="text-secondary">{challenge.result}</p>
-                    </div>
+                    {project.challenges && (
+                      <div>
+                        <span className="font-semibold text-primary block mb-0.5">
+                          The Challenge:
+                        </span>
+                        <p className="text-secondary whitespace-pre-line">{project.challenges}</p>
+                      </div>
+                    )}
+                    {project.solutions && (
+                      <div>
+                        <span className="font-semibold text-primary block mb-0.5">
+                          Architectural Solution:
+                        </span>
+                        <p className="text-secondary whitespace-pre-line">{project.solutions}</p>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -272,6 +265,7 @@ function ProjectBlock({
 export default function Projects() {
   const headerRef = useRef<HTMLDivElement>(null);
   const [list, setList] = useState<any[]>([]);
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     fetch("/api/projects")
@@ -315,20 +309,55 @@ export default function Projects() {
     );
   }, []);
 
+  const visibleProjects = showAll ? list : list.slice(0, 3);
+
   return (
     <section id="work" className="section-padding border-t border-border">
       <div ref={headerRef} className="container-main mb-12 md:mb-16">
         <p className="text-xs uppercase tracking-[0.2em] text-muted mb-4">
           Selected Work & Engineering
         </p>
-        <h2 className="heading-section">Featured Projects</h2>
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <h2 className="heading-section">Featured Projects</h2>
+          {list.length > 3 && (
+            <span className="text-xs font-mono text-muted tracking-wider">
+              Showing {visibleProjects.length} of {list.length}
+            </span>
+          )}
+        </div>
       </div>
 
       <div>
-        {list.map((project, i) => (
+        {visibleProjects.map((project, i) => (
           <ProjectBlock key={project.id ?? project.slug} project={project} index={i} />
         ))}
       </div>
+
+      {list.length > 3 && (
+        <div className="container-main mt-12 md:mt-16 text-center">
+          <button
+            type="button"
+            onClick={() => {
+              const next = !showAll;
+              setShowAll(next);
+              if (!next) {
+                const el = document.getElementById("work");
+                if (el) el.scrollIntoView({ behavior: "smooth" });
+              }
+            }}
+            className="inline-flex items-center gap-3 px-8 py-3.5 border border-strong-border bg-surface/60 hover:bg-surface text-primary text-sm font-semibold tracking-wide transition-all duration-200 hover:border-text group cursor-pointer"
+          >
+            <span>
+              {showAll
+                ? "Show Fewer Projects ↑"
+                : `Show More Projects (${list.length - 3} more) ↓`}
+            </span>
+            <span className="text-xs text-muted font-mono group-hover:text-primary transition-colors">
+              {showAll ? `[ 1 - ${list.length} ]` : `[ 3 / ${list.length} ]`}
+            </span>
+          </button>
+        </div>
+      )}
     </section>
   );
 }

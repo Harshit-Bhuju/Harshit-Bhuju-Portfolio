@@ -186,7 +186,7 @@ export default function Hero() {
           ref={metaRef}
           className="text-[10px] md:text-xs uppercase tracking-[0.3em] text-muted mb-8 md:mb-10"
         >
-          Banepa, Nepal · Est. 2024
+          Banepa, Nepal
         </p>
 
         {/* Main composition: Big title + portrait side by side */}

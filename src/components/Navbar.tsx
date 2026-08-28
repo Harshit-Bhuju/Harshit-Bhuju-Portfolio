@@ -61,12 +61,6 @@ export default function Navbar() {
           </a>
 
           <div className="flex items-center gap-5 sm:gap-8">
-            <a
-              href="#work"
-              className="text-xs font-semibold tracking-[0.15em] uppercase text-secondary hover:text-primary transition-colors"
-            >
-              WORK
-            </a>
 
             {profile.resumePath ? (
               <a

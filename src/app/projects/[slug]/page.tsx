@@ -214,7 +214,7 @@ export default async function ProjectPage({ params }: Props) {
                   Live site ↗
                 </a>
               )}
-              {project.githubUrl && (
+              {project.githubUrl && project.githubUrl.trim() && project.githubUrl !== "null" && (
                 <a
                   href={project.githubUrl}
                   target="_blank"

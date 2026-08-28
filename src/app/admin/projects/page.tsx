@@ -402,18 +402,17 @@ export default function AdminProjectsPage() {
               />
             </div>
             <Field
-              label="Short description"
-              value={editing.shortDescription || ""}
+              label="Overview (Project Description)"
+              value={editing.longDescription || editing.shortDescription || ""}
               onChange={(v) =>
-                setEditing({ ...editing, shortDescription: v })
+                setEditing({
+                  ...editing,
+                  shortDescription: v,
+                  longDescription: v,
+                })
               }
               multiline
-            />
-            <Field
-              label="Long description"
-              value={editing.longDescription || ""}
-              onChange={(v) => setEditing({ ...editing, longDescription: v })}
-              multiline
+              hint="Write the project overview, background details, and architecture here."
             />
             <Field
               label="Challenges (Key Problems, Bottlenecks & Constraints)"
@@ -450,7 +449,7 @@ export default function AdminProjectsPage() {
               }
             />
             <UploadButton
-              label="Upload thumbnail"
+              label="Upload thumbnail photo"
               onUploaded={(url) =>
                 setEditing((prev) =>
                   prev ? { ...prev, thumbnailUrl: url } : prev
@@ -458,41 +457,89 @@ export default function AdminProjectsPage() {
               }
             />
             {editing.thumbnailUrl ? (
-              <div className="h-28 border border-border overflow-hidden bg-secondary/10">
+              <div className="h-32 border border-border overflow-hidden bg-black/40 flex items-center justify-center p-2 rounded">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={editing.thumbnailUrl}
-                  alt=""
-                  className="h-full w-auto object-cover"
+                  alt="Thumbnail"
+                  className="h-full w-auto object-contain"
                 />
               </div>
             ) : null}
-            <Field
-              label="Gallery URLs (comma-separated)"
-              value={(editing.galleryUrls || []).join(", ")}
-              onChange={(v) =>
-                setEditing({
-                  ...editing,
-                  galleryUrls: v
-                    .split(",")
-                    .map((t) => t.trim())
-                    .filter(Boolean),
-                })
-              }
-            />
-            <UploadButton
-              label="Upload gallery image"
-              onUploaded={(url) =>
-                setEditing((prev) =>
-                  prev
-                    ? {
-                        ...prev,
-                        galleryUrls: [...(prev.galleryUrls || []), url],
-                      }
-                    : prev
-                )
-              }
-            />
+
+            {/* Gallery Upload Section */}
+            <div className="space-y-2 pt-2 border-t border-border/60">
+              <div className="flex items-center justify-between">
+                <label className="text-xs uppercase tracking-[0.12em] text-muted block">
+                  Project Gallery Photos ({(editing.galleryUrls || []).length} attached)
+                </label>
+              </div>
+
+              <MultiUploadButton
+                label="Select & Upload Multiple Photos at Once"
+                folder="projects/gallery"
+                onUploadedMany={(newUrls) =>
+                  setEditing((prev) =>
+                    prev
+                      ? {
+                          ...prev,
+                          galleryUrls: [...(prev.galleryUrls || []), ...newUrls],
+                        }
+                      : prev
+                  )
+                }
+              />
+
+              {/* Gallery Grid Preview & Individual Delete */}
+              {(editing.galleryUrls || []).length > 0 && (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5 pt-2">
+                  {editing.galleryUrls?.map((url, idx) => (
+                    <div
+                      key={idx}
+                      className="group relative aspect-video rounded border border-border overflow-hidden bg-black/40 flex items-center justify-center"
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={url}
+                        alt={`Gallery ${idx + 1}`}
+                        className="w-full h-full object-contain"
+                      />
+                      <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-1">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const next = [...(editing.galleryUrls || [])];
+                            next.splice(idx, 1);
+                            setEditing({ ...editing, galleryUrls: next });
+                          }}
+                          className="px-2 py-1 rounded bg-red-600 hover:bg-red-700 text-white text-[11px] font-semibold cursor-pointer"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                      <span className="absolute bottom-1 left-1 px-1 py-0.2 rounded bg-black/80 text-[9px] font-mono text-white pointer-events-none">
+                        #{idx + 1}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <Field
+                label="Gallery URLs (raw text edit)"
+                value={(editing.galleryUrls || []).join(", ")}
+                onChange={(v) =>
+                  setEditing({
+                    ...editing,
+                    galleryUrls: v
+                      .split(",")
+                      .map((t) => t.trim())
+                      .filter(Boolean),
+                  })
+                }
+              />
+            </div>
+
             <Field
               label="Video URL (or upload below)"
               value={editing.videoUrl || ""}
@@ -698,17 +745,17 @@ export default function AdminProjectsPage() {
               )}
             </div>
             {(preview.galleryUrls || []).length > 0 && (
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 {preview.galleryUrls.map((url) => (
                   <div
                     key={url}
-                    className="aspect-video border border-border overflow-hidden bg-secondary/10"
+                    className="aspect-video border border-border overflow-hidden bg-black/40 flex items-center justify-center rounded"
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={url}
                       alt=""
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-contain"
                     />
                   </div>
                 ))}
@@ -743,6 +790,79 @@ export default function AdminProjectsPage() {
 
 async function uploadFile(file: File, folder = "projects"): Promise<string> {
   return uploadClientFile(file, folder);
+}
+
+function MultiUploadButton({
+  label,
+  onUploadedMany,
+  accept = "image/*",
+  folder = "projects/gallery",
+}: {
+  label: string;
+  onUploadedMany: (urls: string[]) => void;
+  accept?: string;
+  folder?: string;
+}) {
+  const [progress, setProgress] = useState<{ current: number; total: number } | null>(null);
+  const [err, setErr] = useState("");
+
+  const handleFiles = async (fileList: FileList | File[]) => {
+    const files = Array.from(fileList);
+    if (!files.length) return;
+    setProgress({ current: 0, total: files.length });
+    setErr("");
+    const uploadedUrls: string[] = [];
+
+    for (let i = 0; i < files.length; i++) {
+      try {
+        const url = await uploadFile(files[i], folder);
+        uploadedUrls.push(url);
+      } catch (ex) {
+        console.error("Upload error for file", files[i].name, ex);
+      }
+      setProgress({ current: i + 1, total: files.length });
+    }
+
+    if (uploadedUrls.length > 0) {
+      onUploadedMany(uploadedUrls);
+    }
+    if (uploadedUrls.length < files.length) {
+      setErr(`Uploaded ${uploadedUrls.length} of ${files.length} photos.`);
+    }
+    setProgress(null);
+  };
+
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <label className="text-xs font-semibold border border-dashed border-border px-4 py-2.5 cursor-pointer hover:border-strong-border bg-surface/50 hover:bg-surface flex items-center gap-2 transition-colors">
+        {progress ? (
+          <span className="flex items-center gap-2 text-primary">
+            <span className="w-3 h-3 rounded-full border-2 border-primary/20 border-t-primary animate-spin" />
+            Uploading {progress.current} of {progress.total} photos…
+          </span>
+        ) : (
+          <>
+            <span>📁</span>
+            <span>{label}</span>
+          </>
+        )}
+        <input
+          type="file"
+          accept={accept}
+          multiple
+          className="hidden"
+          disabled={progress !== null}
+          onChange={(e) => {
+            if (e.target.files && e.target.files.length > 0) {
+              handleFiles(e.target.files);
+            }
+            e.target.value = "";
+          }}
+        />
+      </label>
+      {err && <span className="text-[11px] text-red-400">{err}</span>}
+    </div>
+  );
 }
 
 function UploadButton({

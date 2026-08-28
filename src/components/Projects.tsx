@@ -201,7 +201,7 @@ function ProjectBlock({
               >
                 Case Study & Media →
               </Link>
-              {project.githubUrl && (
+              {project.githubUrl && project.githubUrl.trim() && project.githubUrl !== "null" && (
                 <a
                   href={project.githubUrl}
                   target="_blank"
@@ -211,7 +211,7 @@ function ProjectBlock({
                   GitHub
                 </a>
               )}
-              {project.liveUrl && (
+              {project.liveUrl && project.liveUrl.trim() && project.liveUrl !== "null" && (
                 <a
                   href={project.liveUrl}
                   target="_blank"
@@ -226,13 +226,13 @@ function ProjectBlock({
 
           {/* Visual Column */}
           <div ref={visualRef} className="lg:col-span-6 order-1 lg:order-2 relative">
-            <div className="aspect-[16/10] bg-surface border border-border flex items-center justify-center overflow-hidden relative group">
+            <div className="aspect-[16/10] bg-black/60 border border-border flex items-center justify-center overflow-hidden relative group">
               {project.thumbnailUrl ? (
                 <Image
                   src={project.thumbnailUrl}
                   alt={project.title}
                   fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                  className="object-contain transition-transform duration-500 group-hover:scale-[1.02] p-2"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
               ) : (

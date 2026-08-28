@@ -130,7 +130,7 @@ export default function ProjectMedia({
     <div className="space-y-6">
       {/* Main carousel */}
       <div
-        className="aspect-[16/9] bg-surface border border-border relative overflow-hidden group"
+        className="aspect-[16/10] md:aspect-[16/9] bg-black/95 border border-border relative overflow-hidden group flex items-center justify-center"
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
         role="region"
@@ -141,7 +141,7 @@ export default function ProjectMedia({
           <>
             <button
               type="button"
-              className="absolute inset-0 z-0 cursor-zoom-in"
+              className="absolute inset-0 z-0 cursor-zoom-in flex items-center justify-center"
               onClick={() => setLightbox(current)}
               aria-label="Open full size"
             >
@@ -150,7 +150,7 @@ export default function ProjectMedia({
                 src={current}
                 alt={`${title} — image ${index + 1} of ${count}`}
                 fill
-                className="object-cover transition-opacity duration-300"
+                className="object-contain transition-opacity duration-300"
                 sizes="(max-width: 1200px) 100vw, 1100px"
                 priority={index === 0}
               />

@@ -31,11 +31,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Harshit Bhuju | Frontend & Full-Stack Developer from Nepal",
+    default: "Harshit Bhuju | Frontend Developer from Nepal",
     template: "%s | Harshit Bhuju",
   },
   description:
-    "Harshit Bhuju is a frontend and full-stack developer from Banepa, Nepal, specializing in React, Next.js, TypeScript, PostgreSQL, and Prisma. First year BTech AI student at Kathmandu University, building modern, accessible web experiences.",
+    "Harshit Bhuju is a frontend developer from Banepa, Nepal, specializing in React, Next.js, TypeScript, PostgreSQL, and Prisma. First year BTech AI student at Kathmandu University, building modern, accessible web experiences.",
   keywords: [
     "Harshit Bhuju",
     "Harshit Bhuju developer",
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     "Web Developer Banepa",
     "Next.js Developer Nepal",
     "React Developer Nepal",
-    "Full Stack Developer Nepal",
+    "Frontend Engineer Nepal",
     "TypeScript",
     "Kathmandu University developer",
     "Nepal web developer",
@@ -63,21 +63,21 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: siteUrl,
     siteName: "Harshit Bhuju",
-    title: "Harshit Bhuju | Frontend & Full-Stack Developer from Nepal",
+    title: "Harshit Bhuju | Frontend Developer from Nepal",
     description:
-      "Harshit Bhuju is a frontend and full-stack developer from Banepa, Nepal. Building modern web applications with React, Next.js, TypeScript, PostgreSQL, and Prisma.",
+      "Harshit Bhuju is a frontend developer from Banepa, Nepal. Building modern web applications with React, Next.js, TypeScript, PostgreSQL, and Prisma.",
     images: [
       {
         url: "/profile.jpg",
         width: 800,
         height: 1000,
-        alt: "Harshit Bhuju — Frontend & Full-Stack Developer from Banepa, Nepal",
+        alt: "Harshit Bhuju — Frontend Developer from Banepa, Nepal",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Harshit Bhuju | Frontend & Full-Stack Developer from Nepal",
+    title: "Harshit Bhuju | Frontend Developer from Nepal",
     description:
       "Developer from Banepa, Nepal. React, Next.js, TypeScript, PostgreSQL, Prisma.",
     images: ["/profile.jpg"],
@@ -105,9 +105,9 @@ const jsonLd = [
     familyName: "Bhuju",
     url: siteUrl,
     image: `${siteUrl}/profile.jpg`,
-    jobTitle: "Frontend & Full-Stack Developer",
+    jobTitle: "Frontend Developer",
     description:
-      "Harshit Bhuju is a frontend and full-stack developer from Banepa, Nepal, specializing in React, Next.js, TypeScript, PostgreSQL, and Prisma. He is a first year, first semester BTech in Artificial Intelligence student at Kathmandu University.",
+      "Harshit Bhuju is a frontend developer from Banepa, Nepal, specializing in React, Next.js, TypeScript, PostgreSQL, and Prisma. He is a first year, first semester BTech in Artificial Intelligence student at Kathmandu University.",
     email: "harshitbhuju123@gmail.com",
     telephone: "+977-9869372811",
     address: {
@@ -140,7 +140,7 @@ const jsonLd = [
     ],
     knowsAbout: [
       "Frontend Development",
-      "Full-Stack Web Development",
+      "Web Development",
       "React",
       "Next.js",
       "TypeScript",
@@ -162,7 +162,7 @@ const jsonLd = [
     name: "Harshit Bhuju — Portfolio",
     url: siteUrl,
     description:
-      "Portfolio of Harshit Bhuju, a frontend and full-stack developer from Banepa, Nepal.",
+      "Portfolio of Harshit Bhuju, a frontend developer from Banepa, Nepal.",
     author: {
       "@type": "Person",
       name: "Harshit Bhuju",
@@ -176,14 +176,14 @@ const jsonLd = [
   {
     "@context": "https://schema.org",
     "@type": "ProfilePage",
-    name: "Harshit Bhuju — Frontend & Full-Stack Developer from Nepal",
+    name: "Harshit Bhuju — Frontend Developer from Nepal",
     url: siteUrl,
     description:
       "Official portfolio of Harshit Bhuju, a developer from Banepa, Nepal.",
     mainEntity: {
       "@type": "Person",
       name: "Harshit Bhuju",
-      jobTitle: "Frontend & Full-Stack Developer",
+      jobTitle: "Frontend Developer",
       url: siteUrl,
       address: {
         "@type": "PostalAddress",

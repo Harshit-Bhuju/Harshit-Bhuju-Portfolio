@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
         to: email,
         replyTo: "harshitbhuju123@gmail.com",
         subject: `Thank you for reaching out, ${name}!`,
-        text: `Hi ${name},\n\nThank you for reaching out through my portfolio (https://www.harshitbhuju.com.np)!\n\nI have received your message and wanted to let you know that I truly appreciate your note. I will review it carefully and get back to you as soon as possible.\n\nFor your reference, here is a copy of what you wrote:\n--------------------------------------------------\n${message}\n--------------------------------------------------\n\nWarm regards,\n\nHarshit Bhuju\nFrontend & Full-Stack Developer\nBanepa, Nepal\nPortfolio: https://www.harshitbhuju.com.np\nGitHub: https://github.com/Harshit-Bhuju\nLinkedIn: https://www.linkedin.com/in/harshit-bhuju/`,
+        text: `Hi ${name},\n\nThank you for reaching out through my portfolio (https://www.harshitbhuju.com.np)!\n\nI have received your message and wanted to let you know that I truly appreciate your note. I will review it carefully and get back to you as soon as possible.\n\nFor your reference, here is a copy of what you wrote:\n--------------------------------------------------\n${message}\n--------------------------------------------------\n\nWarm regards,\n\nHarshit Bhuju\nFrontend Developer\nBanepa, Nepal\nPortfolio: https://www.harshitbhuju.com.np\nGitHub: https://github.com/Harshit-Bhuju\nLinkedIn: https://www.linkedin.com/in/harshit-bhuju/`,
       });
     } catch (autoReplyErr) {
       // In development / unverified domain test mode on Resend, sending to arbitrary emails may be restricted

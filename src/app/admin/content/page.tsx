@@ -523,7 +523,7 @@ export default function AdminContentPage() {
                       label="Primary Role"
                       value={String(settings.role ?? "")}
                       onChange={(v) => setSettings((s) => ({ ...s, role: v }))}
-                      placeholder="e.g. Full Stack Engineer"
+                      placeholder="e.g. Frontend Developer"
                     />
                     <Field
                       label="Secondary Role / Subtitle"

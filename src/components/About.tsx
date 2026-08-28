@@ -146,7 +146,7 @@ export default function About() {
           <div className="sr-only">
             <h2>About Harshit Bhuju</h2>
             <p>
-              Harshit Bhuju is a frontend and full-stack developer from Banepa, Nepal.
+              Harshit Bhuju is a frontend developer from Banepa, Nepal.
               He specializes in building modern, accessible web applications using React,
               Next.js, TypeScript, PostgreSQL, Prisma, and Tailwind CSS. Harshit is a
               first year, first semester BTech in Artificial Intelligence student at
@@ -174,7 +174,7 @@ export default function About() {
         */}
         <div className="sr-only" aria-hidden="true">
           <p>
-            Harshit Bhuju is a frontend and full-stack developer from Banepa, Kavrepalanchowk, Nepal.
+            Harshit Bhuju is a frontend developer from Banepa, Kavrepalanchowk, Nepal.
             He builds web applications using React, Next.js, TypeScript, JavaScript, PostgreSQL,
             Prisma, Tailwind CSS, and Node.js. Harshit is a first year, first semester BTech in
             Artificial Intelligence student at Kathmandu University, with a background in

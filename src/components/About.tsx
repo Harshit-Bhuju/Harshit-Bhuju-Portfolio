@@ -140,8 +140,18 @@ export default function About() {
 
   if (!about.statement && !about.body) {
     return (
-      <section id="about" className="section-padding border-t border-border">
+      <section id="about" className="section-padding border-t border-border" aria-label="About Harshit Bhuju">
         <div className="container-main">
+          {/* Static SEO entity description — always in DOM for crawlers */}
+          <div className="sr-only">
+            <h2>About Harshit Bhuju</h2>
+            <p>
+              Harshit Bhuju is a frontend and full-stack developer from Banepa, Nepal.
+              He specializes in building modern, accessible web applications using React,
+              Next.js, TypeScript, PostgreSQL, Prisma, and Tailwind CSS. Harshit is
+              currently studying Artificial Intelligence at Kathmandu University.
+            </p>
+          </div>
           <p className="text-sm text-muted">Loading about…</p>
         </div>
       </section>
@@ -152,9 +162,25 @@ export default function About() {
     <section
       ref={sectionRef}
       id="about"
+      aria-label="About Harshit Bhuju"
       className="section-padding border-t border-border"
     >
       <div className="container-main">
+        {/*
+          Static entity description block — visually hidden but always present in the DOM.
+          Gives Google and AI systems (Perplexity, ChatGPT, Gemini) a clear, crawlable
+          natural-language identity of Harshit Bhuju without keyword stuffing.
+        */}
+        <div className="sr-only" aria-hidden="true">
+          <p>
+            Harshit Bhuju is a frontend and full-stack developer from Banepa, Kavrepalanchowk, Nepal.
+            He builds web applications using React, Next.js, TypeScript, JavaScript, PostgreSQL,
+            Prisma, Tailwind CSS, and Node.js. Harshit is studying Artificial Intelligence at
+            Kathmandu University and has a background in competitive programming and hackathons.
+            He is based in Banepa, Nepal and creates clean, scalable digital experiences.
+          </p>
+        </div>
+
         <p className="text-xs uppercase tracking-[0.2em] text-muted mb-8 md:mb-12">
           About
         </p>

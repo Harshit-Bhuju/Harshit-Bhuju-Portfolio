@@ -35,14 +35,14 @@ export default function Footer() {
   return (
     <footer role="contentinfo" className="border-t border-border py-12 md:py-16">
       <div className="container-main flex flex-col md:flex-row md:items-end justify-between gap-8">
-        <div>
+        <address className="not-italic">
           <p className="text-sm font-semibold tracking-wide text-primary mb-1">
             HARSHIT BHUJU
           </p>
           <p className="text-xs text-muted">
-            Frontend Developer · Competitive Tech Builder
+            Frontend &amp; Full-Stack Developer · Banepa, Nepal
           </p>
-        </div>
+        </address>
 
         <div className="flex flex-wrap gap-5 text-xs text-secondary">
           {socials.map((s) => {

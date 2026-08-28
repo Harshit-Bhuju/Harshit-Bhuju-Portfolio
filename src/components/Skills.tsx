@@ -112,8 +112,24 @@ export default function Skills() {
       ref={sectionRef}
       id="skills"
       className="section-padding border-t border-border"
+      aria-label="Skills and technical capabilities of Harshit Bhuju"
     >
       <div className="container-main">
+        {/*
+          Static skills summary — always in DOM for Google/AI crawlers.
+          The dynamic list below is fetched client-side; this ensures skills
+          are always discoverable even without JS execution.
+        */}
+        <div className="sr-only" aria-hidden="true">
+          <h2>Technical Skills of Harshit Bhuju</h2>
+          <p>
+            Harshit Bhuju&apos;s technical skills include: React, Next.js, TypeScript, JavaScript,
+            HTML, CSS, Tailwind CSS (frontend); Node.js, PostgreSQL, Prisma, FastAPI (backend);
+            Python, NumPy, Pandas, Machine Learning (AI/ML); Git, GitHub, Vercel, Supabase,
+            Docker (tools and infrastructure).
+          </p>
+        </div>
+
         <div className="skills-header mb-10 md:mb-14">
           <p className="text-xs uppercase tracking-[0.2em] text-muted mb-3">
             Skills

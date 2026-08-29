@@ -287,41 +287,55 @@ export default function Achievements() {
                     touchStartX.current = null;
                   }}
                 >
-                  {/\.(pdf)(\?|$)/i.test(currentPhoto) ? (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-6 text-center bg-surface">
-                      <div className="w-14 h-14 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 font-bold text-base">
-                        PDF
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold text-primary">
-                          Certificate Document (PDF)
-                        </p>
-                        <p className="text-xs text-muted mt-1">
-                          Click below to open and inspect in full resolution
-                        </p>
-                      </div>
-                      <a
-                        href={currentPhoto}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="px-4 py-2 bg-primary text-bg text-xs font-semibold rounded hover:opacity-90 transition-opacity"
+                  {/* Render all slides hidden — preloads all simultaneously */}
+                  {activePhotos.map((src, i) =>
+                    /\.(pdf)(\?|$)/i.test(src) ? (
+                      <div
+                        key={src}
+                        className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-6 text-center bg-surface"
+                        style={{ display: i === slideIndex ? "flex" : "none" }}
                       >
-                        Open Certificate PDF ↗
-                      </a>
-                    </div>
-                  ) : (
-                    <Image
-                      src={currentPhoto}
-                      alt={`${active.title} photo ${slideIndex + 1}`}
-                      fill
-                      className={`object-contain transition-opacity duration-500 ${
-                        loadedSlides.has(currentPhoto) ? "opacity-100" : "opacity-0"
-                      }`}
-                      sizes="(max-width: 1024px) 100vw, 896px"
-                      priority
-                      onLoad={() => setLoadedSlides((prev) => new Set(prev).add(currentPhoto))}
-                    />
+                        <div className="w-14 h-14 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 font-bold text-base">
+                          PDF
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-primary">
+                            Certificate Document (PDF)
+                          </p>
+                          <p className="text-xs text-muted mt-1">
+                            Click below to open and inspect in full resolution
+                          </p>
+                        </div>
+                        <a
+                          href={src}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="px-4 py-2 bg-primary text-bg text-xs font-semibold rounded hover:opacity-90 transition-opacity"
+                        >
+                          Open Certificate PDF ↗
+                        </a>
+                      </div>
+                    ) : (
+                      <div
+                        key={src}
+                        className="absolute inset-0"
+                        style={{ display: i === slideIndex ? "block" : "none" }}
+                      >
+                        <Image
+                          src={src}
+                          alt={`${active.title} photo ${i + 1}`}
+                          fill
+                          className={`object-contain transition-opacity duration-500 ${
+                            loadedSlides.has(src) ? "opacity-100" : "opacity-0"
+                          }`}
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 896px"
+                          priority={i === 0}
+                          onLoad={() => setLoadedSlides((prev) => new Set(prev).add(src))}
+                        />
+                      </div>
+                    )
                   )}
+
 
                   {/* Carousel Left / Right Navigation Buttons */}
                   {photoCount > 1 && (

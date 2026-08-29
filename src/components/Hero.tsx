@@ -68,6 +68,9 @@ export default function Hero() {
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
+    // Skip all animations on mobile — they don't look good on small screens
+    const isMobile = window.innerWidth < 768;
+
     // Defer GSAP context setup by one rAF to avoid forced synchronous reflow
     // during the critical rendering path (improves LCP + TBT metrics)
     let raf: number;
@@ -84,7 +87,8 @@ export default function Hero() {
         const present = (...els: (Element | null)[]) =>
           els.filter((el): el is Element => el != null);
 
-        if (prefersReduced) {
+        // On mobile or reduced-motion: skip all animations, show everything immediately
+        if (prefersReduced || isMobile) {
           const targets = present(title, photo, desc, meta, scroll);
           if (targets.length) {
             gsap.set(targets, { opacity: 1, y: 0, x: 0, scale: 1 });
@@ -148,7 +152,7 @@ export default function Hero() {
           );
         }
 
-        // Scroll parallax exit
+        // Scroll parallax exit (desktop only)
         if (section) {
           ScrollTrigger.create({
             trigger: section,

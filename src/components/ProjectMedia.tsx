@@ -134,20 +134,26 @@ export default function ProjectMedia({
       >
         {current ? (
           <>
-            <div className="absolute inset-0 z-0 flex items-center justify-center">
-              <Image
-                key={current}
-                src={current}
-                alt={`${title} — image ${index + 1} of ${count}`}
-                fill
-                className={`object-contain transition-opacity duration-500 ${
-                  loadedImages.has(current) ? "opacity-100" : "opacity-0"
-                }`}
-                sizes="(max-width: 1200px) 100vw, 1100px"
-                priority={index === 0}
-                onLoad={() => setLoadedImages((prev) => new Set(prev).add(current))}
-              />
-            </div>
+            {/* Render all slides hidden — browser preloads all images simultaneously */}
+            {slides.map((src, i) => (
+              <div
+                key={src}
+                className="absolute inset-0 z-0 flex items-center justify-center"
+                style={{ display: i === index ? "flex" : "none" }}
+              >
+                <Image
+                  src={src}
+                  alt={`${title} — image ${i + 1} of ${count}`}
+                  fill
+                  className={`object-contain transition-opacity duration-500 ${
+                    loadedImages.has(src) ? "opacity-100" : "opacity-0"
+                  }`}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1506px"
+                  priority={i === 0}
+                  onLoad={() => setLoadedImages((prev) => new Set(prev).add(src))}
+                />
+              </div>
+            ))}
 
             {/* Gradient edges for controls */}
             {count > 1 && (

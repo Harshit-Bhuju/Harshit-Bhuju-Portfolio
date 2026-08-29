@@ -557,19 +557,7 @@ export default function AdminProjectsPage() {
                 )
               }
             />
-            {editing.videoUrl ? (
-              <p className="text-xs text-muted break-all">
-                Video:{" "}
-                <a
-                  href={editing.videoUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="hover:text-primary underline"
-                >
-                  {editing.videoUrl}
-                </a>
-              </p>
-            ) : null}
+            
             <Field
               label="Live URL"
               value={editing.liveUrl || ""}

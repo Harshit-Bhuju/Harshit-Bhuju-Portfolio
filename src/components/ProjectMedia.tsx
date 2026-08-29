@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import { useModalScrollLock } from "@/hooks/useModalScrollLock";
 
 interface Props {
   thumbnailUrl?: string | null;
@@ -63,8 +62,8 @@ export default function ProjectMedia({
   hideVideo = false,
 }: Props) {
   const [playing, setPlaying] = useState(false);
-  const [lightbox, setLightbox] = useState<string | null>(null);
   const [index, setIndex] = useState(0);
+  const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
   const touchStartX = useRef<number | null>(null);
   const embed = videoUrl ? getEmbedUrl(videoUrl) : null;
 
@@ -100,20 +99,14 @@ export default function ProjectMedia({
 
   // Keyboard when carousel focused / on page
   useEffect(() => {
-    if (count < 2 && !lightbox) return;
+    if (count < 2) return;
     const onKey = (e: KeyboardEvent) => {
-      if (lightbox) return; // modal handles esc via lock
       if (e.key === "ArrowLeft") go(-1);
       if (e.key === "ArrowRight") go(1);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [go, count, lightbox]);
-
-  useModalScrollLock(playing || !!lightbox, () => {
-    setPlaying(false);
-    setLightbox(null);
-  });
+  }, [go, count]);
 
   const onTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0]?.clientX ?? null;
@@ -130,7 +123,9 @@ export default function ProjectMedia({
     <div className="space-y-6">
       {/* Main carousel */}
       <div
-        className="aspect-[16/10] md:aspect-[16/9] bg-black/95 border border-border relative overflow-hidden group flex items-center justify-center"
+        className={`aspect-[16/10] md:aspect-[16/9] border border-border relative overflow-hidden group flex items-center justify-center transition-colors ${
+          current ? "bg-black/95" : "img-skeleton"
+        }`}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
         role="region"
@@ -139,22 +134,20 @@ export default function ProjectMedia({
       >
         {current ? (
           <>
-            <button
-              type="button"
-              className="absolute inset-0 z-0 cursor-zoom-in flex items-center justify-center"
-              onClick={() => setLightbox(current)}
-              aria-label="Open full size"
-            >
+            <div className="absolute inset-0 z-0 flex items-center justify-center">
               <Image
                 key={current}
                 src={current}
                 alt={`${title} — image ${index + 1} of ${count}`}
                 fill
-                className="object-contain transition-opacity duration-300"
+                className={`object-contain transition-opacity duration-500 ${
+                  loadedImages.has(current) ? "opacity-100" : "opacity-0"
+                }`}
                 sizes="(max-width: 1200px) 100vw, 1100px"
                 priority={index === 0}
+                onLoad={() => setLoadedImages((prev) => new Set(prev).add(current))}
               />
-            </button>
+            </div>
 
             {/* Gradient edges for controls */}
             {count > 1 && (
@@ -336,11 +329,9 @@ export default function ProjectMedia({
           </p>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {certificateUrls.map((url) => (
-              <button
+              <div
                 key={url}
-                type="button"
-                onClick={() => setLightbox(url)}
-                className="relative aspect-[4/3] border border-border overflow-hidden hover:border-strong-border transition-colors"
+                className="relative aspect-[4/3] border border-border overflow-hidden"
               >
                 <Image
                   src={url}
@@ -349,79 +340,12 @@ export default function ProjectMedia({
                   className="object-cover"
                   sizes="(max-width: 768px) 50vw, 300px"
                 />
-              </button>
+              </div>
             ))}
           </div>
         </div>
       )}
 
-      {/* Lightbox */}
-      {lightbox && (
-        <div
-          className="fixed inset-0 z-[200] bg-bg/95 backdrop-blur-sm flex items-center justify-center p-4 md:p-10"
-          data-lenis-prevent
-          role="dialog"
-          aria-modal="true"
-          aria-label="Full size image"
-          onClick={() => setLightbox(null)}
-        >
-          <button
-            type="button"
-            className="absolute top-5 right-5 text-sm tracking-wider text-secondary hover:text-primary"
-            onClick={() => setLightbox(null)}
-          >
-            CLOSE [ESC]
-          </button>
-
-          {/* Lightbox nav when multiple slides */}
-          {count > 1 && slides.includes(lightbox) && (
-            <>
-              <button
-                type="button"
-                className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 w-11 h-11 border border-border bg-bg/80 text-primary"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  const i = slides.indexOf(lightbox);
-                  const next = (i - 1 + count) % count;
-                  setIndex(next);
-                  setLightbox(slides[next]);
-                }}
-                aria-label="Previous"
-              >
-                ←
-              </button>
-              <button
-                type="button"
-                className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 w-11 h-11 border border-border bg-bg/80 text-primary"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  const i = slides.indexOf(lightbox);
-                  const next = (i + 1) % count;
-                  setIndex(next);
-                  setLightbox(slides[next]);
-                }}
-                aria-label="Next"
-              >
-                →
-              </button>
-            </>
-          )}
-
-          <div
-            className="relative w-full max-w-5xl aspect-[16/10] max-h-[85vh]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Image
-              src={lightbox}
-              alt={title}
-              fill
-              className="object-contain"
-              sizes="100vw"
-              priority
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 }

@@ -26,7 +26,7 @@ export default function Achievements() {
   const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [active, setActive] = useState<Achievement | null>(null);
   const [slideIndex, setSlideIndex] = useState(0);
-  const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
+  const [loadedSlides, setLoadedSlides] = useState<Set<string>>(new Set());
   const sectionRef = useRef<HTMLElement>(null);
   const touchStartX = useRef<number | null>(null);
 
@@ -94,12 +94,11 @@ export default function Achievements() {
   const openModal = (item: Achievement) => {
     setActive(item);
     setSlideIndex(0);
-    setLightboxUrl(null);
+    setLoadedSlides(new Set());
   };
 
   const closeModal = () => {
     setActive(null);
-    setLightboxUrl(null);
   };
 
   // Keyboard navigation for active modal carousel
@@ -267,19 +266,9 @@ export default function Achievements() {
                       ? "Official Award / Certificate"
                       : `Event Photo (${slideIndex + 1} of ${photoCount})`}
                   </span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[11px] font-mono text-muted tracking-wider">
-                      {slideIndex + 1} / {photoCount}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => setLightboxUrl(currentPhoto)}
-                      className="text-[11px] uppercase tracking-wider text-secondary hover:text-primary px-2 py-0.5 border border-border hover:border-strong-border transition-colors cursor-pointer"
-                      title="View full screen photo"
-                    >
-                      Zoom ⤢
-                    </button>
-                  </div>
+                  <span className="text-[11px] font-mono text-muted tracking-wider">
+                    {slideIndex + 1} / {photoCount}
+                  </span>
                 </div>
 
                 {/* Main Carousel Display Box */}
@@ -321,23 +310,17 @@ export default function Achievements() {
                       </a>
                     </div>
                   ) : (
-                    <>
-                      <Image
-                        src={currentPhoto}
-                        alt={`${active.title} photo ${slideIndex + 1}`}
-                        fill
-                        className="object-contain"
-                        sizes="(max-width: 1024px) 100vw, 896px"
-                        priority
-                      />
-                      {/* Click overlay for zoom */}
-                      <button
-                        type="button"
-                        onClick={() => setLightboxUrl(currentPhoto)}
-                        className="absolute inset-0 w-full h-full cursor-zoom-in"
-                        aria-label="Click to enlarge photo"
-                      />
-                    </>
+                    <Image
+                      src={currentPhoto}
+                      alt={`${active.title} photo ${slideIndex + 1}`}
+                      fill
+                      className={`object-contain transition-opacity duration-500 ${
+                        loadedSlides.has(currentPhoto) ? "opacity-100" : "opacity-0"
+                      }`}
+                      sizes="(max-width: 1024px) 100vw, 896px"
+                      priority
+                      onLoad={() => setLoadedSlides((prev) => new Set(prev).add(currentPhoto))}
+                    />
                   )}
 
                   {/* Carousel Left / Right Navigation Buttons */}
@@ -349,7 +332,7 @@ export default function Achievements() {
                           e.stopPropagation();
                           prevSlide();
                         }}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full border border-white/20 bg-black/60 hover:bg-black/90 text-white flex items-center justify-center text-base transition-all opacity-80 hover:opacity-100 hover:scale-110 z-10 cursor-pointer"
+                        className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full border border-white/20 bg-black/60 hover:bg-black/90 text-white flex items-center justify-center text-base transition-all opacity-80 hover:opacity-100 z-10 cursor-pointer"
                         aria-label="Previous photo"
                       >
                         ←
@@ -360,7 +343,7 @@ export default function Achievements() {
                           e.stopPropagation();
                           nextSlide();
                         }}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full border border-white/20 bg-black/60 hover:bg-black/90 text-white flex items-center justify-center text-base transition-all opacity-80 hover:opacity-100 hover:scale-110 z-10 cursor-pointer"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full border border-white/20 bg-black/60 hover:bg-black/90 text-white flex items-center justify-center text-base transition-all opacity-80 hover:opacity-100 z-10 cursor-pointer"
                         aria-label="Next photo"
                       >
                         →
@@ -434,73 +417,6 @@ export default function Achievements() {
         )}
       </Modal>
 
-      {/* Fullscreen High-Resolution Lightbox View */}
-      {lightboxUrl && (
-        <div
-          className="fixed inset-0 z-[200] bg-black/95 backdrop-blur-md flex items-center justify-center p-4 md:p-8"
-          data-lenis-prevent
-          role="dialog"
-          aria-modal="true"
-          aria-label="High resolution photo view"
-          onClick={() => setLightboxUrl(null)}
-        >
-          <button
-            type="button"
-            className="absolute top-5 right-5 text-xs tracking-wider text-secondary hover:text-primary px-3 py-1.5 border border-border bg-bg/80 cursor-pointer"
-            onClick={() => setLightboxUrl(null)}
-          >
-            CLOSE [ESC]
-          </button>
-
-          {photoCount > 1 && (
-            <>
-              <button
-                type="button"
-                className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-white/20 bg-black/70 text-white flex items-center justify-center text-lg hover:scale-110 transition-all cursor-pointer z-10"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  const curIdx = activePhotos.indexOf(lightboxUrl);
-                  const nextIdx = (curIdx - 1 + photoCount) % photoCount;
-                  setSlideIndex(nextIdx);
-                  setLightboxUrl(activePhotos[nextIdx]);
-                }}
-                aria-label="Previous photo"
-              >
-                ←
-              </button>
-              <button
-                type="button"
-                className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-white/20 bg-black/70 text-white flex items-center justify-center text-lg hover:scale-110 transition-all cursor-pointer z-10"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  const curIdx = activePhotos.indexOf(lightboxUrl);
-                  const nextIdx = (curIdx + 1) % photoCount;
-                  setSlideIndex(nextIdx);
-                  setLightboxUrl(activePhotos[nextIdx]);
-                }}
-                aria-label="Next photo"
-              >
-                →
-              </button>
-            </>
-          )}
-
-          <div
-            className="relative w-full max-w-5xl aspect-[16/10] max-h-[85vh]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Image
-              src={lightboxUrl}
-              alt="Achievement full view"
-              fill
-              className="object-contain"
-              sizes="100vw"
-              priority
-            />
-          </div>
-        </div>
-      )}
     </section>
   );
 }
-

@@ -5,14 +5,19 @@ import gsap from "gsap";
 import Menu from "./Menu";
 
 export default function Navbar() {
-  const [profile, setProfile] = useState<{ resumePath?: string }>({});
+  const [resumePath, setResumePath] = useState<string | undefined>(undefined);
+  const [resumeReady, setResumeReady] = useState(false);
+
   useEffect(() => {
     fetch("/api/settings")
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
-        if (data?.resumePath) setProfile({ resumePath: data.resumePath });
+        if (data?.resumePath) {
+          setResumePath(data.resumePath);
+        }
+        setResumeReady(true);
       })
-      .catch(() => {});
+      .catch(() => setResumeReady(true));
   }, []);
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -30,8 +35,8 @@ export default function Navbar() {
     if (!el) return;
     gsap.fromTo(
       el,
-      { opacity: 0, y: -12 },
-      { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", delay: 0.05 }
+      { y: -12 },
+      { y: 0, duration: 0.5, ease: "power2.out", delay: 0.02 }
     );
   }, []);
 
@@ -39,6 +44,7 @@ export default function Navbar() {
     <>
       <header
         ref={navRef}
+        style={{ opacity: 1 }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-md ${
           scrolled
             ? "border-b border-border/80 bg-bg/85 py-3.5 shadow-sm"
@@ -62,9 +68,9 @@ export default function Navbar() {
 
           <div className="flex items-center gap-5 sm:gap-8">
 
-            {profile.resumePath ? (
+            {resumeReady && resumePath ? (
               <a
-                href={profile.resumePath}
+                href={resumePath}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-xs font-semibold tracking-[0.15em] uppercase text-secondary hover:text-primary transition-colors"

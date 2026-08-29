@@ -232,7 +232,7 @@ function ProjectBlock({
                   src={project.thumbnailUrl}
                   alt={project.title}
                   fill
-                  className="object-contain transition-transform duration-500 group-hover:scale-[1.02] p-2"
+                  className="object-contain p-2"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
               ) : (

@@ -258,3 +258,19 @@ body {
   animation: lab-load 1.6s ease-in-out forwards;
   transform-origin: left;
 }
+
+/* Image skeleton shimmer — used while next/image loads */
+@keyframes img-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.img-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-surface) 25%,
+    var(--color-elevated) 50%,
+    var(--color-surface) 75%
+  );
+  background-size: 200% 100%;
+  animation: img-shimmer 1.4s ease-in-out infinite;
+}

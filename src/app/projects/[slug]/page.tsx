@@ -35,6 +35,8 @@ type ProjectRow = {
   certificateUrls: string[];
   visible: boolean;
   displayOrder: number;
+  createdAt?: Date | string | null;
+  updatedAt?: Date | string | null;
 };
 
 async function getProject(slug: string): Promise<ProjectRow | null> {
@@ -63,6 +65,8 @@ async function getProject(slug: string): Promise<ProjectRow | null> {
       certificateUrls: row.certificateUrls || [],
       visible: row.visible,
       displayOrder: row.displayOrder,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
     };
   } catch {
     return null;
@@ -144,6 +148,13 @@ export default async function ProjectPage({ params }: Props) {
 
   const { prev, next } = await getAdjacent(slug);
 
+  const createdDate = project.createdAt
+    ? new Date(project.createdAt).toISOString()
+    : "2024-01-01T00:00:00+05:45";
+  const modifiedDate = project.updatedAt
+    ? new Date(project.updatedAt).toISOString()
+    : new Date().toISOString();
+
   const projectJsonLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
@@ -151,8 +162,9 @@ export default async function ProjectPage({ params }: Props) {
     description: project.shortDescription || project.longDescription || "",
     applicationCategory: project.category || "DeveloperApplication",
     operatingSystem: "Web",
-    datePublished: "2024-01-01T00:00:00+05:45",
-    dateModified: new Date().toISOString(),
+    dateCreated: createdDate,
+    datePublished: createdDate,
+    dateModified: modifiedDate,
     author: {
       "@type": "Person",
       name: "Harshit Bhuju",

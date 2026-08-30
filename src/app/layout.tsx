@@ -123,6 +123,7 @@ const jsonLd = [
     name: pageTitle,
     description: pageDescription,
     url: siteUrl,
+    dateCreated: "2024-01-01T00:00:00+05:45",
     datePublished: "2024-01-01T00:00:00+05:45",
     dateModified: new Date().toISOString(),
   },

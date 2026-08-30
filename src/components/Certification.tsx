@@ -77,6 +77,12 @@ export default function Certification() {
       className="section-padding border-t border-border"
     >
       <div className="container-main">
+        <div className="sr-only" aria-hidden="true">
+          <h2>Certifications of Harshit Bhuju</h2>
+          <p>
+            Harshit Bhuju holds certifications in web development, frontend frameworks, algorithms, and artificial intelligence course completions.
+          </p>
+        </div>
         <p className="text-xs uppercase tracking-[0.2em] text-muted mb-3">
           Certifications
         </p>

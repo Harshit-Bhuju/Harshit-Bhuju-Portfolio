@@ -106,6 +106,12 @@ export default function Experience() {
       className="section-padding border-t border-border"
     >
       <div className="container-main">
+        <div className="sr-only" aria-hidden="true">
+          <h2>Professional Experience of Harshit Bhuju</h2>
+          <p>
+            Harshit Bhuju works as a Frontend Developer and Web Developer building responsive React &amp; Next.js web applications, UI/UX components, and integrating frontend interfaces with APIs and database systems.
+          </p>
+        </div>
         <p className="exp-label text-xs uppercase tracking-[0.2em] text-muted mb-10 md:mb-16">
           Experience
         </p>

@@ -28,8 +28,8 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
-const pageTitle = "Harshit Bhuju | Full Stack & Web Developer from Nepal";
-const pageDescription = "Harshit Bhuju is a web developer from Banepa, Nepal, building modern React and Next.js applications while studying BTech AI at Kathmandu University.";
+const pageTitle = "Harshit Bhuju | Frontend Developer from Nepal";
+const pageDescription = "Harshit Bhuju is a frontend developer from Banepa, Nepal, building modern React and Next.js applications while studying BTech AI at Kathmandu University.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -81,7 +81,7 @@ export const metadata: Metadata = {
         url: "/profile.jpg",
         width: 800,
         height: 1000,
-        alt: "Harshit Bhuju — Web Developer from Banepa, Nepal",
+        alt: "Harshit Bhuju — Frontend Developer from Banepa, Nepal",
       },
     ],
   },
@@ -103,6 +103,15 @@ export const metadata: Metadata = {
     },
   },
   category: "technology",
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    other: {
+      "msvalidate.01":
+        process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION ||
+        process.env.BING_SITE_VERIFICATION ||
+        "",
+    },
+  },
 };
 
 const jsonLd = [
@@ -113,7 +122,7 @@ const jsonLd = [
     description: pageDescription,
     url: siteUrl,
     datePublished: "2024-01-01T00:00:00+05:45",
-    dateModified: "2026-08-30T00:00:00+05:45",
+    dateModified: new Date().toISOString(),
   },
   {
     "@context": "https://schema.org",
@@ -123,7 +132,7 @@ const jsonLd = [
     familyName: "Bhuju",
     url: siteUrl,
     image: `${siteUrl}/profile.jpg`,
-    jobTitle: "Web Developer",
+    jobTitle: "Frontend Developer",
     description: pageDescription,
     email: "harshitbhuju123@gmail.com",
     telephone: "+977-9869372811",

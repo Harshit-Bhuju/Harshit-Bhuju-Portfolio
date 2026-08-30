@@ -56,6 +56,13 @@ export default function Education() {
       className="section-padding border-t border-border"
     >
       <div className="container-main">
+        <div className="sr-only" aria-hidden="true">
+          <h2>Education of Harshit Bhuju</h2>
+          <p>
+            Harshit Bhuju is pursuing a BTech in Artificial Intelligence at Kathmandu University (KU), Dhulikhel, Nepal.
+            He previously completed his high school education (+2 Science / IT) at NIST College, Banepa, Nepal.
+          </p>
+        </div>
         <p className="text-xs uppercase tracking-[0.2em] text-muted mb-3">
           Education
         </p>

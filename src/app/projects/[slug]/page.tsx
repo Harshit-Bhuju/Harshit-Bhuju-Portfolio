@@ -91,19 +91,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const project = await getProject(slug);
   if (!project) return { title: "Project not found" };
   
-  const title = `${project.title || "Project"} | Harshit Bhuju`;
+  const rawTitle = project.title || "Project";
+  const fullTitle = `${rawTitle} | Harshit Bhuju`;
   const description =
     project.shortDescription ||
     (project.longDescription ? project.longDescription.slice(0, 155) + "..." : undefined);
   const ogImages = project.thumbnailUrl
-    ? [{ url: project.thumbnailUrl, alt: project.title || "Project" }]
-    : [{ url: `${siteUrl}/profile.jpg`, alt: "Harshit Bhuju — Web Developer" }];
+    ? [{ url: project.thumbnailUrl, alt: rawTitle }]
+    : [{ url: `${siteUrl}/profile.jpg`, alt: "Harshit Bhuju — Frontend Developer" }];
 
   const projectKeywords = [
-    project.title || "",
-    `${project.title} project`,
-    `${project.title} Harshit Bhuju`,
-    `${project.title} web application`,
+    rawTitle,
+    `${rawTitle} project`,
+    `${rawTitle} Harshit Bhuju`,
+    `${rawTitle} web application`,
     "Harshit Bhuju project",
     "Harshit Bhuju portfolio",
     ...(project.tags || []),
@@ -111,11 +112,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   ].filter(Boolean);
 
   return {
-    title,
+    title: rawTitle,
     description,
     keywords: projectKeywords,
     openGraph: {
-      title,
+      title: fullTitle,
       description,
       type: "article",
       url: `${siteUrl}/projects/${slug}`,
@@ -124,7 +125,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title,
+      title: fullTitle,
       description,
       images: project.thumbnailUrl ? [project.thumbnailUrl] : [`${siteUrl}/profile.jpg`],
     },
@@ -149,15 +150,48 @@ export default async function ProjectPage({ params }: Props) {
     applicationCategory: project.category || "DeveloperApplication",
     operatingSystem: "Web",
     datePublished: "2024-01-01T00:00:00+05:45",
-    dateModified: "2026-08-30T00:00:00+05:45",
+    dateModified: new Date().toISOString(),
     author: {
       "@type": "Person",
       name: "Harshit Bhuju",
       url: siteUrl,
     },
+    contributor: [
+      {
+        "@type": "Person",
+        name: "Harshit Bhuju",
+        url: siteUrl,
+        roleName: "Frontend Developer",
+      },
+    ],
     url: `${siteUrl}/projects/${slug}`,
     ...(project.thumbnailUrl ? { image: project.thumbnailUrl } : {}),
     ...(project.liveUrl ? { sameAs: project.liveUrl } : {}),
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Projects",
+        item: `${siteUrl}/#work`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: project.title || "Project",
+        item: `${siteUrl}/projects/${slug}`,
+      },
+    ],
   };
 
   return (
@@ -165,6 +199,10 @@ export default async function ProjectPage({ params }: Props) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(projectJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <div className="container-main pt-28 pb-20">
         <Link

@@ -137,6 +137,45 @@ export default function FAQ() {
     return () => ctx.revert();
   }, []);
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "What web development services does Harshit Bhuju provide?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Harshit Bhuju specializes in building modern full-stack web applications, interactive user interfaces, and responsive digital products. From database architecture and backend APIs to polished frontend components, he delivers scalable software tailored for businesses and clients worldwide.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "What technology stack and frameworks do you use for web development?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Harshit primarily builds applications using Next.js, React, and TypeScript. For data storage and management, he utilizes PostgreSQL and Prisma ORM along with modern CSS frameworks like Tailwind CSS.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Where is Harshit Bhuju based and how can I collaborate?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Harshit is based in Banepa, Nepal, and is currently pursuing his BTech in Artificial Intelligence at Kathmandu University. He collaborates with remote teams and international clients. You can get in touch via email or through LinkedIn and GitHub.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "How do you ensure performance and web accessibility standards?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "All applications are developed following W3C WCAG 2.1 accessibility guidelines and optimized for Google Web Vitals. This guarantees fast page load speeds, screen reader compatibility, and seamless mobile responsiveness across all devices.",
+        },
+      },
+    ],
+  };
+
   return (
     <section
       ref={sectionRef}
@@ -144,6 +183,10 @@ export default function FAQ() {
       className="section-padding border-t border-border"
       aria-label="Frequently Asked Questions"
     >
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <div className="container-main">
         <p className="text-xs uppercase tracking-[0.2em] text-muted mb-4">
           Questions & Insights

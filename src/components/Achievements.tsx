@@ -110,6 +110,14 @@ export default function Achievements() {
       className="section-padding border-t border-border"
     >
       <div className="container-main">
+        <div className="sr-only" aria-hidden="true">
+          <h2>Achievements & Awards of Harshit Bhuju</h2>
+          <p>
+            Harshit Bhuju&apos;s achievements include: 1st Position at NIST College Hackathon 2.0;
+            1st Position in IT Project Demonstration; 1st Position in UI/UX Competition; Top 10 finalist
+            at Harvard Health Hackathon Nepal National Finals; and participant in IdeaX Hackathon.
+          </p>
+        </div>
         <p className="text-xs uppercase tracking-[0.2em] text-muted mb-3">
           Recognition
         </p>

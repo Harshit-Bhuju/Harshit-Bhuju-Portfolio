@@ -262,9 +262,13 @@ function ProjectBlock({
   );
 }
 
-export default function Projects() {
+export default function Projects({
+  initialProjects,
+}: {
+  initialProjects?: any[];
+} = {}) {
   const headerRef = useRef<HTMLDivElement>(null);
-  const [list, setList] = useState<any[]>([]);
+  const [list, setList] = useState<any[]>(initialProjects || []);
   const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {

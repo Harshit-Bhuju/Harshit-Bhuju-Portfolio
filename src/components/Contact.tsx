@@ -19,7 +19,16 @@ export default function Contact() {
     facebook?: string;
     instagram?: string;
     resumePath?: string;
-  }>({});
+  }>({
+    name: "Harshit Bhuju",
+    email: "harshitbhuju123@gmail.com",
+    phone: "+977-9869372811",
+    location: "Banepa, Nepal",
+    linkedin: "https://www.linkedin.com/in/harshit-bhuju/",
+    github: "https://github.com/Harshit-Bhuju",
+    facebook: "https://www.facebook.com/harshit.bhuju.2025",
+    instagram: "https://www.instagram.com/bhujuharshit_5/",
+  });
   const socials = [
     { label: "LinkedIn", href: profile.linkedin },
     { label: "GitHub", href: profile.github },

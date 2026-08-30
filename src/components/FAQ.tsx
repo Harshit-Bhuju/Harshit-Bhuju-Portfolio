@@ -18,6 +18,14 @@ const faqs = [
     ),
   },
   {
+    question: "What major web applications has Harshit Bhuju built?",
+    answer: (
+      <>
+        Harshit has built major web applications including Antarprerana (an enterprise entrepreneurship incubation platform), RapiReport (an AI-powered healthcare report scanner & health tracking dashboard), and CultureConnect (a cultural e-commerce marketplace & EdTech platform).
+      </>
+    ),
+  },
+  {
     question: "What technology stack and frameworks do you use for web development?",
     answer: (
       <>
@@ -58,6 +66,21 @@ const faqs = [
           PostgreSQL
         </a>{" "}
         and Prisma ORM along with modern CSS frameworks like Tailwind CSS.
+      </>
+    ),
+  },
+  {
+    question: "Is Harshit Bhuju available for freelance, internships, or engineering roles?",
+    answer: (
+      <>
+        Yes, Harshit Bhuju is available for freelance projects, frontend engineering roles, internships, and technical collaborations. You can get in touch directly via email at{" "}
+        <a
+          href="mailto:harshitbhuju123@gmail.com"
+          className="underline text-primary hover:text-secondary transition-colors"
+        >
+          harshitbhuju123@gmail.com
+        </a>
+        .
       </>
     ),
   },
@@ -151,10 +174,26 @@ export default function FAQ() {
       },
       {
         "@type": "Question",
+        name: "What major web applications has Harshit Bhuju built?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Harshit has built major web applications including Antarprerana (an enterprise entrepreneurship incubation platform), RapiReport (an AI-powered healthcare report scanner & health tracking dashboard), and CultureConnect (a cultural e-commerce marketplace & EdTech platform).",
+        },
+      },
+      {
+        "@type": "Question",
         name: "What technology stack and frameworks do you use for web development?",
         acceptedAnswer: {
           "@type": "Answer",
           text: "Harshit primarily builds applications using Next.js, React, and TypeScript. For data storage and management, he utilizes PostgreSQL and Prisma ORM along with modern CSS frameworks like Tailwind CSS.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Is Harshit Bhuju available for freelance, internships, or engineering roles?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Yes, Harshit Bhuju is available for freelance projects, frontend engineering roles, internships, and technical collaborations. You can get in touch directly via email at harshitbhuju123@gmail.com.",
         },
       },
       {

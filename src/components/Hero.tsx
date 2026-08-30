@@ -241,14 +241,15 @@ export default function Hero() {
         <div className="relative mb-12 md:mb-16">
           <h1
             ref={titleRef}
+            aria-label="Frontend Developer"
             className="font-semibold tracking-[-0.04em] leading-[0.88] text-primary"
             style={{
               fontSize: "clamp(3rem, 11vw, 9.5rem)",
               perspective: "900px",
             }}
           >
-            <span className="title-word block">FRONTEND</span>
-            <span className="title-word block">DEVELOPER</span>
+            <span className="title-word block" aria-hidden="true">FRONTEND</span>
+            <span className="title-word block" aria-hidden="true">DEVELOPER</span>
           </h1>
 
           {/* Portrait — anchored to the right, clean border, no label */}

@@ -13,7 +13,7 @@ const faqs = [
     question: "What web development services does Harshit Bhuju provide?",
     answer: (
       <>
-        Harshit Bhuju specializes in building modern full-stack web applications, interactive user interfaces, and responsive digital products. From database architecture and backend APIs to polished frontend components, he delivers scalable software tailored for businesses and clients worldwide.
+        Harshit Bhuju specializes in building modern frontend web applications, interactive user interfaces, and responsive digital products. With core expertise in React, Next.js, and TypeScript alongside full-stack API integration, he delivers scalable software tailored for businesses and clients worldwide.
       </>
     ),
   },
@@ -146,7 +146,7 @@ export default function FAQ() {
         name: "What web development services does Harshit Bhuju provide?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Harshit Bhuju specializes in building modern full-stack web applications, interactive user interfaces, and responsive digital products. From database architecture and backend APIs to polished frontend components, he delivers scalable software tailored for businesses and clients worldwide.",
+          text: "Harshit Bhuju specializes in building modern frontend web applications, interactive user interfaces, and responsive digital products. With core expertise in React, Next.js, and TypeScript alongside full-stack API integration, he delivers scalable software tailored for businesses and clients worldwide.",
         },
       },
       {

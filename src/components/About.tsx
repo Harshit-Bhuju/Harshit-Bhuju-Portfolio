@@ -14,15 +14,23 @@ type AboutData = {
   focus: string[];
 };
 
+const defaultAbout: AboutData = {
+  statement: "I build interfaces where design and engineering meet.",
+  body: "Frontend developer focused on crafting performant, accessible interfaces with modern React and Next.js. I care equally about visual quality, interaction design, and clean engineering — from thoughtful component architecture to efficient data fetching and optimistic UI updates.",
+  focus: [
+    "Frontend Development",
+    "UI/UX & Accessibility",
+    "Modern React / Next.js",
+    "API Integration",
+    "Competitive Project Building",
+  ],
+};
+
 export default function About() {
-  const [about, setAbout] = useState<AboutData>({
-    statement: "",
-    body: "",
-    focus: [],
-  });
-  const [location, setLocation] = useState("");
-  const [projectCount, setProjectCount] = useState(0);
-  const [wins, setWins] = useState(0);
+  const [about, setAbout] = useState<AboutData>(defaultAbout);
+  const [location, setLocation] = useState("Banepa, Nepal");
+  const [projectCount, setProjectCount] = useState(3);
+  const [wins, setWins] = useState(3);
 
   useEffect(() => {
     fetch("/api/settings")

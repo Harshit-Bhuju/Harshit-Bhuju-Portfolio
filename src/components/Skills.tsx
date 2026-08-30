@@ -16,15 +16,15 @@ type SkillGroups = {
   [key: string]: string[];
 };
 
-const empty: SkillGroups = {
-  languages: [],
-  frameworks: [],
-  tools: [],
-  soft: [],
+const defaultSkills: SkillGroups = {
+  languages: ["JavaScript", "TypeScript", "Python", "HTML5", "CSS3"],
+  frameworks: ["React", "Next.js", "Redux Toolkit", "RTK Query", "Tailwind CSS"],
+  tools: ["Git & GitHub", "Supabase", "Prisma", "PostgreSQL", "Docker", "Vercel"],
+  soft: ["Problem Solving", "Team Collaboration", "UI/UX Design"],
 };
 
 export default function Skills() {
-  const [skills, setSkills] = useState<SkillGroups>(empty);
+  const [skills, setSkills] = useState<SkillGroups>(defaultSkills);
   const sectionRef = useRef<HTMLElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
 

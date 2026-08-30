@@ -7,6 +7,23 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+const defaultEducation = [
+  {
+    id: 1,
+    degree: "BTech in Artificial Intelligence",
+    field: "Artificial Intelligence & Computer Science",
+    school: "Kathmandu University (KU)",
+    dateRange: "2025 — Present",
+  },
+  {
+    id: 2,
+    degree: "High School (+2 Science / IT)",
+    field: "Science & Computer Science",
+    school: "NIST College, Banepa",
+    dateRange: "2023 — 2025",
+  },
+];
+
 export default function Education() {
   const [education, setEducation] = useState<Array<{
     id?: number;
@@ -15,7 +32,7 @@ export default function Education() {
     school?: string | null;
     dateRange?: string | null;
     gpa?: string | null;
-  }>>([]);
+  }>>(defaultEducation);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {

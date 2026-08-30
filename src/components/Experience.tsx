@@ -8,6 +8,33 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+const defaultExperience = [
+  {
+    id: 1,
+    role: "Lead Frontend Developer",
+    company: "Antarprerana",
+    location: "Remote / Nepal",
+    dateRange: "07/2026 — 08/2026",
+    points: [
+      "Designed and developed responsive Next.js & React dashboard interfaces for managing women-led entrepreneurship incubation programs.",
+      "Integrated RTK Query and REST APIs, implemented dynamic analytics charts, and managed complex client-side state.",
+      "Built multi-role access controls, Excel data validation, and participant lifecycle tracking.",
+    ],
+  },
+  {
+    id: 2,
+    role: "Frontend Developer",
+    company: "RapiReport",
+    location: "Nepal",
+    dateRange: "02/2026",
+    points: [
+      "Built responsive medical report OCR scanning interface using Tesseract.js and Gemini API.",
+      "Developed interactive health risk visualization charts with Recharts and TensorFlow.js.",
+      "Engineered patient consultation booking flows and family health records interfaces.",
+    ],
+  },
+];
+
 export default function Experience() {
   const [experience, setExperience] = useState<{
     id?: number;
@@ -16,7 +43,7 @@ export default function Experience() {
     location?: string | null;
     dateRange?: string | null;
     points?: string[];
-  }[]>([]);
+  }[]>(defaultExperience);
   useEffect(() => {
     fetch("/api/experience")
       .then((r) => (r.ok ? r.json() : null))

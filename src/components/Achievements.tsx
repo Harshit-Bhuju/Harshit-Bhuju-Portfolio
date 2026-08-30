@@ -23,8 +23,51 @@ type Achievement = {
   galleryUrls?: string[];
 };
 
+const defaultAchievements: Achievement[] = [
+  {
+    id: 1,
+    placement: "1st Position",
+    title: "NIST College Hackathon 2.0",
+    subtitle: "NIST College",
+    year: "2025",
+    description: "Awarded 1st place in NIST College Hackathon 2.0 for engineering an innovative web application under competitive hackathon constraints.",
+  },
+  {
+    id: 2,
+    placement: "1st Position",
+    title: "IT Project Demonstration",
+    subtitle: "NIST IT Exhibition",
+    year: "2025",
+    description: "Secured 1st place in IT Project Demonstration for outstanding application architecture, smooth UI animations, and technical presentation.",
+  },
+  {
+    id: 3,
+    placement: "1st Position",
+    title: "UI/UX Competition",
+    subtitle: "Design Challenge",
+    year: "2025",
+    description: "Won 1st place in UI/UX Design competition for empathetic user research, accessible component patterns, and responsive layout design.",
+  },
+  {
+    id: 4,
+    placement: "Top 10 Finalist",
+    title: "Harvard Health Hackathon",
+    subtitle: "Nepal National Finals",
+    year: "2025",
+    description: "Selected as a Top 10 national finalist in the Harvard Health Hackathon Nepal for AI healthcare technology innovation.",
+  },
+  {
+    id: 5,
+    placement: "Participant",
+    title: "IdeaX Hackathon",
+    subtitle: "Innovation Challenge",
+    year: "2025",
+    description: "Participated in IdeaX Hackathon building web applications and collaborating with interdisciplinary developer teams.",
+  },
+];
+
 export default function Achievements() {
-  const [achievements, setAchievements] = useState<Achievement[]>([]);
+  const [achievements, setAchievements] = useState<Achievement[]>(defaultAchievements);
   const [active, setActive] = useState<Achievement | null>(null);
   const [lightboxPhoto, setLightboxPhoto] = useState<string | null>(null);
   const sectionRef = useRef<HTMLElement>(null);

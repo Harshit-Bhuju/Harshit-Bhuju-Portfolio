@@ -203,10 +203,21 @@ const jsonLd = [
       name: "Harshit Bhuju",
       jobTitle: "Frontend Developer",
       url: siteUrl,
+      sameAs: [
+        "https://github.com/Harshit-Bhuju",
+        "https://www.linkedin.com/in/harshit-bhuju/",
+        "https://www.facebook.com/harshit.bhuju.2025",
+        "https://www.instagram.com/bhujuharshit_5/",
+      ],
       address: {
         "@type": "PostalAddress",
         addressLocality: "Banepa",
+        addressRegion: "Kavrepalanchowk",
         addressCountry: "NP",
+      },
+      alumniOf: {
+        "@type": "EducationalOrganization",
+        name: "Kathmandu University",
       },
     },
   },

@@ -308,54 +308,54 @@ export default async function ProjectPage({ params }: Props) {
                 <h4 className="text-xs uppercase tracking-[0.15em] text-muted mb-3">
                   What I Built &amp; Engineered
                 </h4>
-                <ul className="space-y-2.5">
+                <ul className="space-y-3">
                   {slug === "antarprerana" ? (
                     <>
-                      <li className="text-sm text-secondary flex items-start gap-2.5">
-                        <span className="text-accent shrink-0">✓</span>
-                        Architected responsive multi-role frontend dashboards (Super Admin, Admin, Participant) using Next.js 15 &amp; TypeScript.
+                      <li className="text-sm text-secondary flex items-start gap-3">
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary/60 shrink-0 mt-2" />
+                        <span>Architected responsive multi-role frontend dashboards (Super Admin, Admin, Participant) using Next.js 15 &amp; TypeScript.</span>
                       </li>
-                      <li className="text-sm text-secondary flex items-start gap-2.5">
-                        <span className="text-accent shrink-0">✓</span>
-                        Integrated RTK Query &amp; REST APIs for automated cache invalidation and complex client state.
+                      <li className="text-sm text-secondary flex items-start gap-3">
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary/60 shrink-0 mt-2" />
+                        <span>Integrated RTK Query &amp; REST APIs for automated cache invalidation and complex client state.</span>
                       </li>
-                      <li className="text-sm text-secondary flex items-start gap-2.5">
-                        <span className="text-accent shrink-0">✓</span>
-                        Engineered participant KPI data tables with dynamic filtering, automated reporting, and Excel exports.
+                      <li className="text-sm text-secondary flex items-start gap-3">
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary/60 shrink-0 mt-2" />
+                        <span>Engineered participant KPI data tables with dynamic filtering, automated reporting, and Excel exports.</span>
                       </li>
-                      <li className="text-sm text-secondary flex items-start gap-2.5">
-                        <span className="text-accent shrink-0">✓</span>
-                        Developed cohort lifecycle tracking modules and analytics visualizations.
+                      <li className="text-sm text-secondary flex items-start gap-3">
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary/60 shrink-0 mt-2" />
+                        <span>Developed cohort lifecycle tracking modules and analytics visualizations.</span>
                       </li>
                     </>
                   ) : slug === "rapireport" ? (
                     <>
-                      <li className="text-sm text-secondary flex items-start gap-2.5">
-                        <span className="text-accent shrink-0">✓</span>
-                        Built responsive medical document upload and OCR report analysis interface.
+                      <li className="text-sm text-secondary flex items-start gap-3">
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary/60 shrink-0 mt-2" />
+                        <span>Built responsive medical document upload and OCR report analysis interface.</span>
                       </li>
-                      <li className="text-sm text-secondary flex items-start gap-2.5">
-                        <span className="text-accent shrink-0">✓</span>
-                        Engineered interactive health risk visualization charts and biomarker status indicators using Recharts.
+                      <li className="text-sm text-secondary flex items-start gap-3">
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary/60 shrink-0 mt-2" />
+                        <span>Engineered interactive health risk visualization charts and biomarker status indicators using Recharts.</span>
                       </li>
-                      <li className="text-sm text-secondary flex items-start gap-2.5">
-                        <span className="text-accent shrink-0">✓</span>
-                        Developed patient consultation booking interface and family health records dashboard.
+                      <li className="text-sm text-secondary flex items-start gap-3">
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary/60 shrink-0 mt-2" />
+                        <span>Developed patient consultation booking interface and family health records dashboard.</span>
                       </li>
                     </>
                   ) : (
                     <>
-                      <li className="text-sm text-secondary flex items-start gap-2.5">
-                        <span className="text-accent shrink-0">✓</span>
-                        Built responsive marketplace product showcase and cultural e-learning interface.
+                      <li className="text-sm text-secondary flex items-start gap-3">
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary/60 shrink-0 mt-2" />
+                        <span>Built responsive marketplace product showcase and cultural e-learning interface.</span>
                       </li>
-                      <li className="text-sm text-secondary flex items-start gap-2.5">
-                        <span className="text-accent shrink-0">✓</span>
-                        Implemented client-side shopping cart state, checkout flows, and media player components.
+                      <li className="text-sm text-secondary flex items-start gap-3">
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary/60 shrink-0 mt-2" />
+                        <span>Implemented client-side shopping cart state, checkout flows, and media player components.</span>
                       </li>
-                      <li className="text-sm text-secondary flex items-start gap-2.5">
-                        <span className="text-accent shrink-0">✓</span>
-                        Optimized asset delivery and layout responsiveness across mobile and desktop devices.
+                      <li className="text-sm text-secondary flex items-start gap-3">
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary/60 shrink-0 mt-2" />
+                        <span>Optimized asset delivery and layout responsiveness across mobile and desktop devices.</span>
                       </li>
                     </>
                   )}

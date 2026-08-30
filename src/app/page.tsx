@@ -7,6 +7,7 @@ import Achievements from "@/components/Achievements";
 import Background from "@/components/Background";
 import Education from "@/components/Education";
 import Certification from "@/components/Certification";
+import FAQ from "@/components/FAQ";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import PageTransitions from "@/components/PageTransitions";
@@ -24,6 +25,7 @@ export default function HomePage() {
         <Background />
         <Education />
         <Certification />
+        <FAQ />
         <Contact />
       </main>
       <Footer />

@@ -28,19 +28,23 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
+const pageTitle = "Harshit Bhuju | Full Stack & Web Developer from Nepal";
+const pageDescription = "Harshit Bhuju is a web developer from Banepa, Nepal, building modern React and Next.js applications while studying BTech AI at Kathmandu University.";
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Harshit Bhuju | Web Developer from Nepal",
+    default: pageTitle,
     template: "%s | Harshit Bhuju",
   },
-  description:
-    "Harshit Bhuju — web developer from Banepa, Nepal. Specializing in React, Next.js, TypeScript, and full-stack development. BTech AI student at Kathmandu University building modern, accessible digital experiences.",
+  description: pageDescription,
   keywords: [
     "Harshit Bhuju",
-    "Harshit Bhuju developer",
-    "Harshit Bhuju Nepal",
-    "Harshit Bhuju Banepa",
+    "harshitbhuju",
+    "harsh bhuju",
+    "harshit bhuj",
+    "harshit buju",
+    "best web developer from nepal",
     "web developer from Nepal",
     "web developer from Banepa",
     "developer from Nepal",
@@ -70,9 +74,8 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: siteUrl,
     siteName: "Harshit Bhuju",
-    title: "Harshit Bhuju | Web Developer from Nepal",
-    description:
-      "Harshit Bhuju — web developer from Banepa, Nepal. React, Next.js, TypeScript, full-stack development. BTech AI student at Kathmandu University.",
+    title: pageTitle,
+    description: pageDescription,
     images: [
       {
         url: "/profile.jpg",
@@ -84,9 +87,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Harshit Bhuju | Web Developer from Nepal",
-    description:
-      "Web developer from Banepa, Nepal. React, Next.js, TypeScript, PostgreSQL, Prisma.",
+    title: pageTitle,
+    description: pageDescription,
     images: ["/profile.jpg"],
   },
   robots: {
@@ -106,6 +108,15 @@ export const metadata: Metadata = {
 const jsonLd = [
   {
     "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: pageTitle,
+    description: pageDescription,
+    url: siteUrl,
+    datePublished: "2024-01-01T00:00:00+05:45",
+    dateModified: "2026-08-30T00:00:00+05:45",
+  },
+  {
+    "@context": "https://schema.org",
     "@type": "Person",
     name: "Harshit Bhuju",
     givenName: "Harshit",
@@ -113,8 +124,7 @@ const jsonLd = [
     url: siteUrl,
     image: `${siteUrl}/profile.jpg`,
     jobTitle: "Web Developer",
-    description:
-      "Harshit Bhuju is a web developer from Banepa, Nepal, specializing in React, Next.js, TypeScript, PostgreSQL, and Prisma. He is a first year BTech in Artificial Intelligence student at Kathmandu University.",
+    description: pageDescription,
     email: "harshitbhuju123@gmail.com",
     telephone: "+977-9869372811",
     address: {

@@ -402,17 +402,22 @@ export default function AdminProjectsPage() {
               />
             </div>
             <Field
-              label="Overview (Project Description)"
-              value={editing.longDescription || editing.shortDescription || ""}
+              label="Short Description"
+              value={editing.shortDescription || ""}
               onChange={(v) =>
-                setEditing({
-                  ...editing,
-                  shortDescription: v,
-                  longDescription: v,
-                })
+                setEditing({ ...editing, shortDescription: v })
               }
               multiline
-              hint="Write the project overview, background details, and architecture here."
+              hint="Shown on the homepage project cards. Keep it concise — 1–2 sentences."
+            />
+            <Field
+              label="Long Description"
+              value={editing.longDescription || ""}
+              onChange={(v) =>
+                setEditing({ ...editing, longDescription: v })
+              }
+              multiline
+              hint="Shown inside the project detail page under 'Overview'. Write the full story — background, architecture, what was built."
             />
             <Field
               label="Challenges (Key Problems, Bottlenecks & Constraints)"

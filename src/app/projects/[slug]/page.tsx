@@ -5,6 +5,10 @@ import type { Metadata } from "next";
 import ProjectMedia from "@/components/ProjectMedia";
 import VideoPlayer from "@/components/VideoPlayer";
 
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
+  "https://www.harshitbhuju.com.np";
+
 interface Props {
   params: Promise<{ slug: string }>;
 }
@@ -86,28 +90,46 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const project = await getProject(slug);
   if (!project) return { title: "Project not found" };
-  const title = project.title || "Project";
-  const description = project.shortDescription || undefined;
-  const images = project.thumbnailUrl
-    ? [{ url: project.thumbnailUrl, alt: title }]
-    : undefined;
+  
+  const title = `${project.title || "Project"} | Harshit Bhuju`;
+  const description =
+    project.shortDescription ||
+    (project.longDescription ? project.longDescription.slice(0, 155) + "..." : undefined);
+  const ogImages = project.thumbnailUrl
+    ? [{ url: project.thumbnailUrl, alt: project.title || "Project" }]
+    : [{ url: `${siteUrl}/profile.jpg`, alt: "Harshit Bhuju — Web Developer" }];
+
+  const projectKeywords = [
+    project.title || "",
+    `${project.title} project`,
+    `${project.title} Harshit Bhuju`,
+    `${project.title} web application`,
+    "Harshit Bhuju project",
+    "Harshit Bhuju portfolio",
+    ...(project.tags || []),
+    project.category || "",
+  ].filter(Boolean);
+
   return {
     title,
     description,
+    keywords: projectKeywords,
     openGraph: {
       title,
       description,
       type: "article",
-      images,
+      url: `${siteUrl}/projects/${slug}`,
+      siteName: "Harshit Bhuju",
+      images: ogImages,
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: project.thumbnailUrl ? [project.thumbnailUrl] : undefined,
+      images: project.thumbnailUrl ? [project.thumbnailUrl] : [`${siteUrl}/profile.jpg`],
     },
     alternates: {
-      canonical: `/projects/${slug}`,
+      canonical: `${siteUrl}/projects/${slug}`,
     },
   };
 }
@@ -119,8 +141,31 @@ export default async function ProjectPage({ params }: Props) {
 
   const { prev, next } = await getAdjacent(slug);
 
+  const projectJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: project.title || "Project",
+    description: project.shortDescription || project.longDescription || "",
+    applicationCategory: project.category || "DeveloperApplication",
+    operatingSystem: "Web",
+    datePublished: "2024-01-01T00:00:00+05:45",
+    dateModified: "2026-08-30T00:00:00+05:45",
+    author: {
+      "@type": "Person",
+      name: "Harshit Bhuju",
+      url: siteUrl,
+    },
+    url: `${siteUrl}/projects/${slug}`,
+    ...(project.thumbnailUrl ? { image: project.thumbnailUrl } : {}),
+    ...(project.liveUrl ? { sameAs: project.liveUrl } : {}),
+  };
+
   return (
     <main className="min-h-screen bg-bg text-primary">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(projectJsonLd) }}
+      />
       <div className="container-main pt-28 pb-20">
         <Link
           href="/#work"

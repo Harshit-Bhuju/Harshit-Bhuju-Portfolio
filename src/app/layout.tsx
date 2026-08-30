@@ -14,9 +14,11 @@ const geist = Geist({
   preload: true,
 });
 
+const rawUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "");
 const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-  "https://www.harshitbhuju.com.np";
+  rawUrl && !rawUrl.includes("localhost")
+    ? rawUrl
+    : "https://www.harshitbhuju.com.np";
 
 export const viewport: Viewport = {
   themeColor: [

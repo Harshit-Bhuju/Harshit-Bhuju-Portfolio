@@ -5,9 +5,11 @@ import type { Metadata } from "next";
 import ProjectMedia from "@/components/ProjectMedia";
 import VideoPlayer from "@/components/VideoPlayer";
 
+const rawUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "");
 const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-  "https://www.harshitbhuju.com.np";
+  rawUrl && !rawUrl.includes("localhost")
+    ? rawUrl
+    : "https://www.harshitbhuju.com.np";
 
 interface Props {
   params: Promise<{ slug: string }>;

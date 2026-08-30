@@ -1,10 +1,11 @@
 import type { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = (
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    "https://www.harshitbhuju.com.np"
-  ).replace(/\/$/, "");
+  const raw = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "");
+  const base =
+    raw && !raw.includes("localhost")
+      ? raw
+      : "https://www.harshitbhuju.com.np";
 
   let projectEntries: MetadataRoute.Sitemap = [];
 

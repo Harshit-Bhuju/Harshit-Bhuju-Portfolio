@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export async function GET() {
   const content = `# Harshit Bhuju — Developer & AI Student
 
-> Official LLM Summary for Harshit Bhuju (harshitbhuju.com.np)
+> Official LLM Summary for Harshit Bhuju (www.harshitbhuju.com.np)
 
 ## Identity & Overview
 - **Name**: Harshit Bhuju
@@ -11,7 +11,7 @@ export async function GET() {
 - **Location**: Banepa, Kavrepalanchowk, Nepal
 - **Education**: BTech in Artificial Intelligence at Kathmandu University (KU), Dhulikhel, Nepal
 - **High School**: NIST College, Banepa, Nepal
-- **Official Website**: https://harshitbhuju.com.np
+- **Official Website**: https://www.harshitbhuju.com.np
 - **GitHub**: https://github.com/Harshit-Bhuju
 - **LinkedIn**: https://www.linkedin.com/in/harshit-bhuju/
 
@@ -26,20 +26,20 @@ export async function GET() {
 ### 1. Antarprerana — Women's Entrepreneurship Incubation Platform
 - **Role**: Frontend Developer
 - **Live Demo**: https://www.antarprerana.co
-- **Project Case Study**: https://harshitbhuju.com.np/projects/antarprerana
+- **Project Case Study**: https://www.harshitbhuju.com.np/projects/antarprerana
 - **Overall Project Stack**: Next.js, React, TypeScript, Tailwind CSS, NestJS, PostgreSQL, Prisma
 - **My Contributions**: Designed & built responsive React/Next.js dashboard interfaces, integrated RTK Query / REST APIs, managed complex client-side state, implemented interactive analytics visualizations for tracking participant lifecycles and entrepreneurship program KPIs.
 
 ### 2. RapiReport — AI-Powered Healthcare Ecosystem
 - **Role**: Frontend & Full-Stack Developer
 - **GitHub**: https://github.com/Harshit-Bhuju/rapireport
-- **Project Case Study**: https://harshitbhuju.com.np/projects/rapireport
+- **Project Case Study**: https://www.harshitbhuju.com.np/projects/rapireport
 - **Stack**: React, Vite, Tailwind CSS, Python, Gemini API, OCR Engine
 - **My Contributions**: Built UI/UX for automated medical report OCR scanning, Gemini-driven risk analysis, health tracking dashboard, and gamified patient engagement.
 
 ### 3. CultureConnect — Cultural Marketplace & Learning Platform
 - **Role**: Frontend Developer
-- **Project Case Study**: https://harshitbhuju.com.np/projects/cultureconnect
+- **Project Case Study**: https://www.harshitbhuju.com.np/projects/cultureconnect
 - **Stack**: React, Vite, Tailwind CSS, GSAP, Framer Motion, Rive, Chart.js
 - **My Contributions**: Created interactive cultural discovery maps, responsive e-commerce artisan catalog, smooth motion animations, and analytics charts.
 
@@ -68,7 +68,7 @@ A: Harshit Bhuju served as the Frontend Developer for Antarprerana, designing an
 
 ### Q: How to contact Harshit Bhuju?
 - **Email**: harshitbhuju123@gmail.com
-- **Website**: https://harshitbhuju.com.np
+- **Website**: https://www.harshitbhuju.com.np
 `;
 
   return new NextResponse(content, {

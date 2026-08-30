@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -24,6 +25,7 @@ type Cert = {
 export default function Certification() {
   const [items, setItems] = useState<Cert[]>([]);
   const [active, setActive] = useState<Cert | null>(null);
+  const [lightboxPhoto, setLightboxPhoto] = useState<string | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
   const preloadCertificate = (url?: string | null) => {
@@ -208,44 +210,72 @@ export default function Certification() {
 
             {active.certificateUrl && (
               <div>
-                <h4 className="text-xs uppercase tracking-[0.15em] text-muted mb-3">
-                  Certificate
+                <h4 className="text-xs uppercase tracking-[0.15em] text-muted mb-3 font-medium flex items-center justify-between">
+                  <span>Certificate Document</span>
+                  <span className="text-[11px] font-mono text-muted">Click image to expand</span>
                 </h4>
-                <a
-                  href={active.certificateUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block relative aspect-[4/3] max-w-lg border border-border overflow-hidden hover:border-strong-border transition-colors"
-                >
-                  {/* PDF link fallback if not image */}
-                  {/\.(pdf)(\?|$)/i.test(active.certificateUrl) ? (
-                    <div className="absolute inset-0 flex items-center justify-center text-sm text-secondary">
-                      Open certificate PDF ↗
-                    </div>
-                  ) : (
+                {/\.(pdf)(\?|$)/i.test(active.certificateUrl) ? (
+                  <a
+                    href={active.certificateUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block p-4 border border-border rounded-xl bg-surface hover:border-primary text-center text-xs text-primary transition-colors font-medium"
+                  >
+                    Open Certificate PDF ↗
+                  </a>
+                ) : (
+                  <div
+                    onClick={() => setLightboxPhoto(active.certificateUrl!)}
+                    className="group relative aspect-[4/3] max-w-xl border border-border rounded-xl overflow-hidden cursor-pointer hover:border-primary transition-colors bg-black/80 shadow-lg"
+                  >
                     <Image
                       src={active.certificateUrl}
                       alt={`${active.title} certificate`}
                       fill
                       priority
-                      className="object-contain bg-surface"
+                      className="object-contain p-2 group-hover:scale-[1.02] transition-transform duration-500"
                       sizes="(max-width: 768px) 100vw, 512px"
                     />
-                  )}
-                </a>
-                <a
-                  href={active.certificateUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block mt-3 text-xs font-semibold tracking-wider uppercase text-primary border-b border-strong-border pb-0.5"
-                >
-                  Open full certificate ↗
-                </a>
+                    <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <span className="text-xs font-semibold text-white px-4 py-2 rounded-full bg-black/75 border border-white/20 backdrop-blur-md">
+                        Expand Full Resolution ↗
+                      </span>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
         )}
       </Modal>
+
+      {/* High-Res Lightbox Modal via Portal (z-[250] overlay) */}
+      {lightboxPhoto && typeof window !== "undefined" && createPortal(
+        <div
+          className="fixed inset-0 z-[250] bg-black/95 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 cursor-pointer"
+          onClick={() => setLightboxPhoto(null)}
+        >
+          <button
+            type="button"
+            onClick={() => setLightboxPhoto(null)}
+            className="absolute top-4 right-4 text-white text-xs font-bold uppercase tracking-wider bg-white/10 hover:bg-white/20 border border-white/20 rounded-full px-4 py-2 transition-colors cursor-pointer z-10"
+            aria-label="Close photo preview"
+          >
+            CLOSE ✕
+          </button>
+          <div
+            className="relative max-w-6xl max-h-[90vh] w-full h-full flex items-center justify-center p-2"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={lightboxPhoto}
+              alt="Expanded full resolution preview"
+              className="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl border border-white/10"
+            />
+          </div>
+        </div>,
+        document.body
+      )}
     </section>
   );
 }

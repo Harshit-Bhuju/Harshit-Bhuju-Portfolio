@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -75,22 +76,23 @@ export default function Achievements() {
     return () => ctx.revert();
   }, [achievements]);
 
-  // Collect ordered unique photos for the active modal
-  const activePhotos = useMemo(() => {
-    if (!active) return [];
+  // Separate featured official award certificate from event gallery photos
+  const featuredCertificate = useMemo(() => {
+    if (!active?.certificateUrl) return null;
+    const trimmed = active.certificateUrl.trim();
+    return trimmed ? trimmed : null;
+  }, [active]);
+
+  const galleryPhotos = useMemo(() => {
+    if (!active || !Array.isArray(active.galleryUrls)) return [];
     const list: string[] = [];
-    if (active.certificateUrl && active.certificateUrl.trim()) {
-      list.push(active.certificateUrl.trim());
-    }
-    if (Array.isArray(active.galleryUrls)) {
-      for (const u of active.galleryUrls) {
-        if (u && u.trim() && !list.includes(u.trim())) {
-          list.push(u.trim());
-        }
+    for (const u of active.galleryUrls) {
+      if (u && u.trim() && u.trim() !== featuredCertificate && !list.includes(u.trim())) {
+        list.push(u.trim());
       }
     }
     return list;
-  }, [active]);
+  }, [active, featuredCertificate]);
 
   const openModal = (item: Achievement) => {
     setActive(item);
@@ -154,18 +156,18 @@ export default function Achievements() {
                       )}
                     </div>
 
-                    {/* Action & Mini Preview Strip */}
-                      {hasDetail && (
-                        <div className="mt-4 pt-3 flex items-center justify-end border-t border-border/40">
-                          <button
-                            type="button"
-                            onClick={() => openModal(a)}
-                            className="text-xs font-semibold tracking-[0.12em] uppercase text-primary border-b border-strong-border pb-0.5 hover:opacity-70 transition-opacity"
-                          >
-                            {hasPhotos ? "View Gallery & Certificate ↗" : "View Details ↗"}
-                          </button>
-                        </div>
-                      )}
+                    {/* Action */}
+                    {hasDetail && (
+                      <div className="mt-4 pt-3 flex items-center justify-end border-t border-border/40">
+                        <button
+                          type="button"
+                          onClick={() => openModal(a)}
+                          className="text-xs font-semibold tracking-[0.12em] uppercase text-primary border-b border-strong-border pb-0.5 hover:opacity-70 transition-opacity cursor-pointer"
+                        >
+                          {hasPhotos ? "View Gallery & Certificate ↗" : "View Details ↗"}
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </article>
               );
@@ -174,7 +176,7 @@ export default function Achievements() {
         )}
       </div>
 
-      {/* Interactive Achievement Details & Photo Carousel Modal */}
+      {/* Interactive Achievement Details & Photo Modal */}
       <Modal
         isOpen={!!active}
         onClose={closeModal}
@@ -199,21 +201,64 @@ export default function Achievements() {
               )}
             </div>
 
-            {/* Grid Gallery Section */}
-            {activePhotos.length > 0 && (
-              <div className="space-y-3">
+            {/* Featured Official Award / Certificate (BIG) */}
+            {featuredCertificate && (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs uppercase tracking-[0.15em] text-primary font-semibold flex items-center gap-2">
+                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-primary" />
+                    <span>Official Award / Certificate</span>
+                  </span>
+                  <span className="text-[11px] text-muted font-mono">Click image to expand full resolution</span>
+                </div>
+
+                {/\.(pdf)(\?|$)/i.test(featuredCertificate) ? (
+                  <a
+                    href={featuredCertificate}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="block p-6 rounded-2xl border border-border bg-surface hover:border-primary transition-colors text-center space-y-2"
+                  >
+                    <div className="text-red-400 font-bold text-base">Certificate Document (PDF)</div>
+                    <p className="text-xs text-muted">Click to open and view PDF document ↗</p>
+                  </a>
+                ) : (
+                  <div
+                    onClick={() => setLightboxPhoto(featuredCertificate)}
+                    className="group relative aspect-[16/10] sm:aspect-[16/9] w-full rounded-2xl border border-border bg-black/90 overflow-hidden cursor-pointer hover:border-primary transition-all duration-300 shadow-xl"
+                  >
+                    <Image
+                      src={featuredCertificate}
+                      alt={`${active.title} award certificate`}
+                      fill
+                      priority
+                      className="object-contain p-2 group-hover:scale-[1.02] transition-transform duration-500"
+                      sizes="(max-width: 768px) 100vw, 896px"
+                    />
+                    <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <span className="text-xs font-semibold text-white px-4 py-2 rounded-full bg-black/75 border border-white/20 backdrop-blur-md shadow-lg">
+                        Expand Full Resolution ↗
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Event & Project Photos Gallery Grid */}
+            {galleryPhotos.length > 0 && (
+              <div className="space-y-3 pt-2">
                 <div className="flex items-center justify-between">
                   <span className="text-xs uppercase tracking-[0.15em] text-muted font-medium flex items-center gap-2">
                     <span className="inline-block w-1.5 h-1.5 rounded-full bg-primary" />
-                    <span>Photo Gallery ({activePhotos.length})</span>
+                    <span>Event &amp; Project Photos ({galleryPhotos.length})</span>
                   </span>
                   <span className="text-[11px] text-muted font-mono">Click photo to expand</span>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                  {activePhotos.map((src, i) => {
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+                  {galleryPhotos.map((src, i) => {
                     const isPdf = /\.(pdf)(\?|$)/i.test(src);
-                    const isCertificate = active.certificateUrl === src;
 
                     if (isPdf) {
                       return (
@@ -228,9 +273,9 @@ export default function Achievements() {
                             PDF
                           </div>
                           <span className="text-xs font-semibold text-primary group-hover:underline">
-                            Certificate PDF
+                            Document PDF
                           </span>
-                          <span className="text-[10px] text-muted">Open document ↗</span>
+                          <span className="text-[10px] text-muted">Open ↗</span>
                         </a>
                       );
                     }
@@ -239,23 +284,17 @@ export default function Achievements() {
                       <div
                         key={src}
                         onClick={() => setLightboxPhoto(src)}
-                        className="group relative aspect-[4/3] rounded-xl border border-border bg-black/40 overflow-hidden cursor-pointer hover:border-primary/60 hover:shadow-lg transition-all duration-300"
+                        className="group relative aspect-[4/3] rounded-xl border border-border bg-black/40 overflow-hidden cursor-pointer hover:border-primary hover:shadow-lg transition-all duration-300"
                       >
                         <Image
                           src={src}
                           alt={`${active.title} photo ${i + 1}`}
                           fill
-                          priority={i < 3}
                           className="object-cover group-hover:scale-105 transition-transform duration-500"
                           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         />
-                        {isCertificate && (
-                          <span className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/75 backdrop-blur-md border border-white/20 text-[10px] font-semibold text-primary z-10">
-                            Award Certificate
-                          </span>
-                        )}
                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                          <span className="text-xs font-semibold text-white px-3 py-1.5 rounded-full bg-black/60 border border-white/20 backdrop-blur-sm">
+                          <span className="text-xs font-semibold text-white px-3 py-1.5 rounded-full bg-black/70 border border-white/20 backdrop-blur-md">
                             Expand Photo
                           </span>
                         </div>
@@ -293,31 +332,32 @@ export default function Achievements() {
         )}
       </Modal>
 
-      {/* High-Res Lightbox Modal */}
-      {lightboxPhoto && (
+      {/* High-Res Lightbox Modal via Portal (z-[250] overlay) */}
+      {lightboxPhoto && typeof window !== "undefined" && createPortal(
         <div
-          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4"
+          className="fixed inset-0 z-[250] bg-black/95 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 cursor-pointer"
           onClick={() => setLightboxPhoto(null)}
         >
           <button
             type="button"
             onClick={() => setLightboxPhoto(null)}
-            className="absolute top-4 right-4 text-white text-xl font-bold bg-white/10 hover:bg-white/20 rounded-full w-10 h-10 flex items-center justify-center transition-colors cursor-pointer z-10"
+            className="absolute top-4 right-4 text-white text-xs font-bold uppercase tracking-wider bg-white/10 hover:bg-white/20 border border-white/20 rounded-full px-4 py-2 transition-colors cursor-pointer z-10"
             aria-label="Close photo preview"
           >
-            ✕
+            CLOSE ✕
           </button>
           <div
-            className="relative max-w-5xl max-h-[85vh] w-full h-full flex items-center justify-center p-2"
+            className="relative max-w-6xl max-h-[90vh] w-full h-full flex items-center justify-center p-2"
             onClick={(e) => e.stopPropagation()}
           >
             <img
               src={lightboxPhoto}
-              alt="Expanded high resolution preview"
-              className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl border border-white/10"
+              alt="Expanded full resolution preview"
+              className="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl border border-white/10"
             />
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
     </section>

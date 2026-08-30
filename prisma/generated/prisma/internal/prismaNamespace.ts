@@ -1217,6 +1217,8 @@ export const ProjectScalarFieldEnum = {
   challenges: 'challenges',
   solutions: 'solutions',
   tags: 'tags',
+  myRole: 'myRole',
+  contributions: 'contributions',
   githubUrl: 'githubUrl',
   liveUrl: 'liveUrl',
   videoUrl: 'videoUrl',

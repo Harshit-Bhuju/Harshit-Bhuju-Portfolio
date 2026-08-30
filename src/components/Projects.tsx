@@ -136,17 +136,31 @@ function ProjectBlock({
               {project.shortDescription}
             </p>
 
-            {/* Tags */}
-            <div className="flex flex-wrap gap-2 mb-8">
-              {(project.tags as string[] | undefined)?.map((tag: string) => (
-                <span
-                  key={tag}
-                  className="text-xs px-3 py-1.5 border border-border bg-surface text-secondary hover:border-strong hover:text-primary transition-all duration-200"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
+            {/* My Role — if set in DB */}
+            {project.myRole && (
+              <p className="text-xs text-muted tracking-wider uppercase mb-5">
+                My Role — {project.myRole}
+              </p>
+            )}
+
+            {/* Tags — full project stack, not personal skills */}
+            {((project.tags as string[] | undefined)?.length ?? 0) > 0 && (
+              <div className="mb-8">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-muted mb-2.5">
+                  Project Stack
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {(project.tags as string[]).map((tag: string) => (
+                    <span
+                      key={tag}
+                      className="text-xs px-3 py-1.5 border border-border bg-surface text-secondary hover:border-strong hover:text-primary transition-all duration-200"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Embedded Engineering Challenge Deep-Dive */}
             {(project.challenges || project.solutions) && (

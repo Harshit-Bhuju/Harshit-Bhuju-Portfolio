@@ -47,6 +47,7 @@ export type ProjectMinAggregateOutputType = {
   longDescription: string | null
   challenges: string | null
   solutions: string | null
+  myRole: string | null
   githubUrl: string | null
   liveUrl: string | null
   videoUrl: string | null
@@ -70,6 +71,7 @@ export type ProjectMaxAggregateOutputType = {
   longDescription: string | null
   challenges: string | null
   solutions: string | null
+  myRole: string | null
   githubUrl: string | null
   liveUrl: string | null
   videoUrl: string | null
@@ -94,6 +96,8 @@ export type ProjectCountAggregateOutputType = {
   challenges: number
   solutions: number
   tags: number
+  myRole: number
+  contributions: number
   githubUrl: number
   liveUrl: number
   videoUrl: number
@@ -131,6 +135,7 @@ export type ProjectMinAggregateInputType = {
   longDescription?: true
   challenges?: true
   solutions?: true
+  myRole?: true
   githubUrl?: true
   liveUrl?: true
   videoUrl?: true
@@ -154,6 +159,7 @@ export type ProjectMaxAggregateInputType = {
   longDescription?: true
   challenges?: true
   solutions?: true
+  myRole?: true
   githubUrl?: true
   liveUrl?: true
   videoUrl?: true
@@ -178,6 +184,8 @@ export type ProjectCountAggregateInputType = {
   challenges?: true
   solutions?: true
   tags?: true
+  myRole?: true
+  contributions?: true
   githubUrl?: true
   liveUrl?: true
   videoUrl?: true
@@ -291,6 +299,8 @@ export type ProjectGroupByOutputType = {
   challenges: string | null
   solutions: string | null
   tags: string[]
+  myRole: string | null
+  contributions: string[]
   githubUrl: string | null
   liveUrl: string | null
   videoUrl: string | null
@@ -340,6 +350,8 @@ export type ProjectWhereInput = {
   challenges?: Prisma.StringNullableFilter<"Project"> | string | null
   solutions?: Prisma.StringNullableFilter<"Project"> | string | null
   tags?: Prisma.StringNullableListFilter<"Project">
+  myRole?: Prisma.StringNullableFilter<"Project"> | string | null
+  contributions?: Prisma.StringNullableListFilter<"Project">
   githubUrl?: Prisma.StringNullableFilter<"Project"> | string | null
   liveUrl?: Prisma.StringNullableFilter<"Project"> | string | null
   videoUrl?: Prisma.StringNullableFilter<"Project"> | string | null
@@ -367,6 +379,8 @@ export type ProjectOrderByWithRelationInput = {
   challenges?: Prisma.SortOrderInput | Prisma.SortOrder
   solutions?: Prisma.SortOrderInput | Prisma.SortOrder
   tags?: Prisma.SortOrder
+  myRole?: Prisma.SortOrderInput | Prisma.SortOrder
+  contributions?: Prisma.SortOrder
   githubUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   liveUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   videoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -397,6 +411,8 @@ export type ProjectWhereUniqueInput = Prisma.AtLeast<{
   challenges?: Prisma.StringNullableFilter<"Project"> | string | null
   solutions?: Prisma.StringNullableFilter<"Project"> | string | null
   tags?: Prisma.StringNullableListFilter<"Project">
+  myRole?: Prisma.StringNullableFilter<"Project"> | string | null
+  contributions?: Prisma.StringNullableListFilter<"Project">
   githubUrl?: Prisma.StringNullableFilter<"Project"> | string | null
   liveUrl?: Prisma.StringNullableFilter<"Project"> | string | null
   videoUrl?: Prisma.StringNullableFilter<"Project"> | string | null
@@ -424,6 +440,8 @@ export type ProjectOrderByWithAggregationInput = {
   challenges?: Prisma.SortOrderInput | Prisma.SortOrder
   solutions?: Prisma.SortOrderInput | Prisma.SortOrder
   tags?: Prisma.SortOrder
+  myRole?: Prisma.SortOrderInput | Prisma.SortOrder
+  contributions?: Prisma.SortOrder
   githubUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   liveUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   videoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -458,6 +476,8 @@ export type ProjectScalarWhereWithAggregatesInput = {
   challenges?: Prisma.StringNullableWithAggregatesFilter<"Project"> | string | null
   solutions?: Prisma.StringNullableWithAggregatesFilter<"Project"> | string | null
   tags?: Prisma.StringNullableListFilter<"Project">
+  myRole?: Prisma.StringNullableWithAggregatesFilter<"Project"> | string | null
+  contributions?: Prisma.StringNullableListFilter<"Project">
   githubUrl?: Prisma.StringNullableWithAggregatesFilter<"Project"> | string | null
   liveUrl?: Prisma.StringNullableWithAggregatesFilter<"Project"> | string | null
   videoUrl?: Prisma.StringNullableWithAggregatesFilter<"Project"> | string | null
@@ -483,6 +503,8 @@ export type ProjectCreateInput = {
   challenges?: string | null
   solutions?: string | null
   tags?: Prisma.ProjectCreatetagsInput | string[]
+  myRole?: string | null
+  contributions?: Prisma.ProjectCreatecontributionsInput | string[]
   githubUrl?: string | null
   liveUrl?: string | null
   videoUrl?: string | null
@@ -510,6 +532,8 @@ export type ProjectUncheckedCreateInput = {
   challenges?: string | null
   solutions?: string | null
   tags?: Prisma.ProjectCreatetagsInput | string[]
+  myRole?: string | null
+  contributions?: Prisma.ProjectCreatecontributionsInput | string[]
   githubUrl?: string | null
   liveUrl?: string | null
   videoUrl?: string | null
@@ -536,6 +560,8 @@ export type ProjectUpdateInput = {
   challenges?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   solutions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.ProjectUpdatetagsInput | string[]
+  myRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contributions?: Prisma.ProjectUpdatecontributionsInput | string[]
   githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   liveUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -563,6 +589,8 @@ export type ProjectUncheckedUpdateInput = {
   challenges?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   solutions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.ProjectUpdatetagsInput | string[]
+  myRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contributions?: Prisma.ProjectUpdatecontributionsInput | string[]
   githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   liveUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -590,6 +618,8 @@ export type ProjectCreateManyInput = {
   challenges?: string | null
   solutions?: string | null
   tags?: Prisma.ProjectCreatetagsInput | string[]
+  myRole?: string | null
+  contributions?: Prisma.ProjectCreatecontributionsInput | string[]
   githubUrl?: string | null
   liveUrl?: string | null
   videoUrl?: string | null
@@ -615,6 +645,8 @@ export type ProjectUpdateManyMutationInput = {
   challenges?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   solutions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.ProjectUpdatetagsInput | string[]
+  myRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contributions?: Prisma.ProjectUpdatecontributionsInput | string[]
   githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   liveUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -641,6 +673,8 @@ export type ProjectUncheckedUpdateManyInput = {
   challenges?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   solutions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.ProjectUpdatetagsInput | string[]
+  myRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contributions?: Prisma.ProjectUpdatecontributionsInput | string[]
   githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   liveUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -675,6 +709,8 @@ export type ProjectCountOrderByAggregateInput = {
   challenges?: Prisma.SortOrder
   solutions?: Prisma.SortOrder
   tags?: Prisma.SortOrder
+  myRole?: Prisma.SortOrder
+  contributions?: Prisma.SortOrder
   githubUrl?: Prisma.SortOrder
   liveUrl?: Prisma.SortOrder
   videoUrl?: Prisma.SortOrder
@@ -705,6 +741,7 @@ export type ProjectMaxOrderByAggregateInput = {
   longDescription?: Prisma.SortOrder
   challenges?: Prisma.SortOrder
   solutions?: Prisma.SortOrder
+  myRole?: Prisma.SortOrder
   githubUrl?: Prisma.SortOrder
   liveUrl?: Prisma.SortOrder
   videoUrl?: Prisma.SortOrder
@@ -728,6 +765,7 @@ export type ProjectMinOrderByAggregateInput = {
   longDescription?: Prisma.SortOrder
   challenges?: Prisma.SortOrder
   solutions?: Prisma.SortOrder
+  myRole?: Prisma.SortOrder
   githubUrl?: Prisma.SortOrder
   liveUrl?: Prisma.SortOrder
   videoUrl?: Prisma.SortOrder
@@ -754,6 +792,10 @@ export type ProjectCreatetagsInput = {
   set: string[]
 }
 
+export type ProjectCreatecontributionsInput = {
+  set: string[]
+}
+
 export type ProjectCreategalleryUrlsInput = {
   set: string[]
 }
@@ -771,6 +813,11 @@ export type NullableStringFieldUpdateOperationsInput = {
 }
 
 export type ProjectUpdatetagsInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type ProjectUpdatecontributionsInput = {
   set?: string[]
   push?: string | string[]
 }
@@ -832,6 +879,8 @@ export type ProjectCreateWithoutEngineeringChallengesInput = {
   challenges?: string | null
   solutions?: string | null
   tags?: Prisma.ProjectCreatetagsInput | string[]
+  myRole?: string | null
+  contributions?: Prisma.ProjectCreatecontributionsInput | string[]
   githubUrl?: string | null
   liveUrl?: string | null
   videoUrl?: string | null
@@ -858,6 +907,8 @@ export type ProjectUncheckedCreateWithoutEngineeringChallengesInput = {
   challenges?: string | null
   solutions?: string | null
   tags?: Prisma.ProjectCreatetagsInput | string[]
+  myRole?: string | null
+  contributions?: Prisma.ProjectCreatecontributionsInput | string[]
   githubUrl?: string | null
   liveUrl?: string | null
   videoUrl?: string | null
@@ -899,6 +950,8 @@ export type ProjectUpdateWithoutEngineeringChallengesInput = {
   challenges?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   solutions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.ProjectUpdatetagsInput | string[]
+  myRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contributions?: Prisma.ProjectUpdatecontributionsInput | string[]
   githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   liveUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -925,6 +978,8 @@ export type ProjectUncheckedUpdateWithoutEngineeringChallengesInput = {
   challenges?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   solutions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.ProjectUpdatetagsInput | string[]
+  myRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contributions?: Prisma.ProjectUpdatecontributionsInput | string[]
   githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   liveUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -982,6 +1037,8 @@ export type ProjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   challenges?: boolean
   solutions?: boolean
   tags?: boolean
+  myRole?: boolean
+  contributions?: boolean
   githubUrl?: boolean
   liveUrl?: boolean
   videoUrl?: boolean
@@ -1010,6 +1067,8 @@ export type ProjectSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   challenges?: boolean
   solutions?: boolean
   tags?: boolean
+  myRole?: boolean
+  contributions?: boolean
   githubUrl?: boolean
   liveUrl?: boolean
   videoUrl?: boolean
@@ -1036,6 +1095,8 @@ export type ProjectSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   challenges?: boolean
   solutions?: boolean
   tags?: boolean
+  myRole?: boolean
+  contributions?: boolean
   githubUrl?: boolean
   liveUrl?: boolean
   videoUrl?: boolean
@@ -1062,6 +1123,8 @@ export type ProjectSelectScalar = {
   challenges?: boolean
   solutions?: boolean
   tags?: boolean
+  myRole?: boolean
+  contributions?: boolean
   githubUrl?: boolean
   liveUrl?: boolean
   videoUrl?: boolean
@@ -1076,7 +1139,7 @@ export type ProjectSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ProjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "title" | "number" | "category" | "dateRange" | "shortDescription" | "longDescription" | "challenges" | "solutions" | "tags" | "githubUrl" | "liveUrl" | "videoUrl" | "thumbnailUrl" | "galleryUrls" | "certificateUrls" | "visible" | "displayOrder" | "githubRepoName" | "syncedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
+export type ProjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "title" | "number" | "category" | "dateRange" | "shortDescription" | "longDescription" | "challenges" | "solutions" | "tags" | "myRole" | "contributions" | "githubUrl" | "liveUrl" | "videoUrl" | "thumbnailUrl" | "galleryUrls" | "certificateUrls" | "visible" | "displayOrder" | "githubRepoName" | "syncedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
 export type ProjectInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   engineeringChallenges?: boolean | Prisma.Project$engineeringChallengesArgs<ExtArgs>
   _count?: boolean | Prisma.ProjectCountOutputTypeDefaultArgs<ExtArgs>
@@ -1101,6 +1164,8 @@ export type $ProjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     challenges: string | null
     solutions: string | null
     tags: string[]
+    myRole: string | null
+    contributions: string[]
     githubUrl: string | null
     liveUrl: string | null
     videoUrl: string | null
@@ -1548,6 +1613,8 @@ export interface ProjectFieldRefs {
   readonly challenges: Prisma.FieldRef<"Project", 'String'>
   readonly solutions: Prisma.FieldRef<"Project", 'String'>
   readonly tags: Prisma.FieldRef<"Project", 'String[]'>
+  readonly myRole: Prisma.FieldRef<"Project", 'String'>
+  readonly contributions: Prisma.FieldRef<"Project", 'String[]'>
   readonly githubUrl: Prisma.FieldRef<"Project", 'String'>
   readonly liveUrl: Prisma.FieldRef<"Project", 'String'>
   readonly videoUrl: Prisma.FieldRef<"Project", 'String'>

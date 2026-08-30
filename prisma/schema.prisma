@@ -19,7 +19,9 @@ model Project {
   longDescription String?   @map("long_description") @db.Text
   challenges      String?   @db.Text
   solutions       String?   @db.Text
-  tags            String[]  @default([])
+  tags            String[]  @default([])                          // Full project stack (all technologies)
+  myRole          String?   @map("my_role")                      // Harshit's explicit role title
+  contributions   String[]  @default([]) @map("contributions")   // What Harshit personally built
   githubUrl       String?   @map("github_url")
   liveUrl         String?   @map("live_url")
   videoUrl        String?   @map("video_url")

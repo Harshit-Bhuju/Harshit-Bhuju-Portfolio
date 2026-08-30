@@ -26,7 +26,9 @@ type ProjectRow = {
   longDescription: string | null;
   challenges: string | null;
   solutions: string | null;
-  tags: string[];
+  tags: string[];         // Full project stack (all technologies used)
+  myRole: string | null;  // Harshit's explicit role in the project
+  contributions: string[]; // What Harshit personally built
   githubUrl: string | null;
   liveUrl: string | null;
   videoUrl: string | null;
@@ -57,6 +59,8 @@ async function getProject(slug: string): Promise<ProjectRow | null> {
       challenges: row.challenges,
       solutions: row.solutions,
       tags: row.tags || [],
+      myRole: (row as any).myRole ?? null,
+      contributions: (row as any).contributions ?? [],
       githubUrl: row.githubUrl,
       liveUrl: row.liveUrl,
       videoUrl: row.videoUrl,
@@ -293,75 +297,37 @@ export default async function ProjectPage({ params }: Props) {
               </p>
             </div>
 
-            {/* Explicit Role & Contributions breakdown for recruiter credibility */}
-            <div className="p-6 md:p-8 border border-strong-border bg-surface/40 rounded-lg space-y-6">
-              <div>
-                <span className="text-[10px] uppercase tracking-[0.2em] text-accent font-semibold block mb-1">
-                  Individual Contribution
-                </span>
-                <h3 className="text-xl font-semibold text-primary">
-                  My Role: {slug === "antarprerana" ? "Lead Frontend Developer" : "Frontend Developer"}
-                </h3>
-              </div>
-
-              <div>
-                <h4 className="text-xs uppercase tracking-[0.15em] text-muted mb-3">
-                  What I Built &amp; Engineered
-                </h4>
-                <ul className="space-y-3">
-                  {slug === "antarprerana" ? (
-                    <>
-                      <li className="text-sm text-secondary flex items-start gap-3">
-                        <span className="w-1.5 h-1.5 rounded-full bg-primary/60 shrink-0 mt-2" />
-                        <span>Architected responsive multi-role frontend dashboards (Super Admin, Admin, Participant) using Next.js 15 &amp; TypeScript.</span>
-                      </li>
-                      <li className="text-sm text-secondary flex items-start gap-3">
-                        <span className="w-1.5 h-1.5 rounded-full bg-primary/60 shrink-0 mt-2" />
-                        <span>Integrated RTK Query &amp; REST APIs for automated cache invalidation and complex client state.</span>
-                      </li>
-                      <li className="text-sm text-secondary flex items-start gap-3">
-                        <span className="w-1.5 h-1.5 rounded-full bg-primary/60 shrink-0 mt-2" />
-                        <span>Engineered participant KPI data tables with dynamic filtering, automated reporting, and Excel exports.</span>
-                      </li>
-                      <li className="text-sm text-secondary flex items-start gap-3">
-                        <span className="w-1.5 h-1.5 rounded-full bg-primary/60 shrink-0 mt-2" />
-                        <span>Developed cohort lifecycle tracking modules and analytics visualizations.</span>
-                      </li>
-                    </>
-                  ) : slug === "rapireport" ? (
-                    <>
-                      <li className="text-sm text-secondary flex items-start gap-3">
-                        <span className="w-1.5 h-1.5 rounded-full bg-primary/60 shrink-0 mt-2" />
-                        <span>Built responsive medical document upload and OCR report analysis interface.</span>
-                      </li>
-                      <li className="text-sm text-secondary flex items-start gap-3">
-                        <span className="w-1.5 h-1.5 rounded-full bg-primary/60 shrink-0 mt-2" />
-                        <span>Engineered interactive health risk visualization charts and biomarker status indicators using Recharts.</span>
-                      </li>
-                      <li className="text-sm text-secondary flex items-start gap-3">
-                        <span className="w-1.5 h-1.5 rounded-full bg-primary/60 shrink-0 mt-2" />
-                        <span>Developed patient consultation booking interface and family health records dashboard.</span>
-                      </li>
-                    </>
-                  ) : (
-                    <>
-                      <li className="text-sm text-secondary flex items-start gap-3">
-                        <span className="w-1.5 h-1.5 rounded-full bg-primary/60 shrink-0 mt-2" />
-                        <span>Built responsive marketplace product showcase and cultural e-learning interface.</span>
-                      </li>
-                      <li className="text-sm text-secondary flex items-start gap-3">
-                        <span className="w-1.5 h-1.5 rounded-full bg-primary/60 shrink-0 mt-2" />
-                        <span>Implemented client-side shopping cart state, checkout flows, and media player components.</span>
-                      </li>
-                      <li className="text-sm text-secondary flex items-start gap-3">
-                        <span className="w-1.5 h-1.5 rounded-full bg-primary/60 shrink-0 mt-2" />
-                        <span>Optimized asset delivery and layout responsiveness across mobile and desktop devices.</span>
-                      </li>
-                    </>
+            {/* Role & Contributions — read from DB (myRole + contributions fields) */}
+            {(project.myRole || project.contributions?.length > 0) && (
+              <div className="border border-border p-6 md:p-8 space-y-6">
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-muted mb-2">
+                    Individual Contribution
+                  </p>
+                  {project.myRole && (
+                    <h3 className="text-base font-semibold text-primary">
+                      My Role: {project.myRole}
+                    </h3>
                   )}
-                </ul>
+                </div>
+
+                {project.contributions?.length > 0 && (
+                  <div>
+                    <p className="text-[10px] uppercase tracking-[0.15em] text-muted mb-4">
+                      What I Built
+                    </p>
+                    <ul className="space-y-3">
+                      {project.contributions.map((point: string, i: number) => (
+                        <li key={i} className="text-sm text-secondary flex items-start gap-3">
+                          <span className="w-1 h-1 rounded-full bg-primary/50 shrink-0 mt-2.5" />
+                          <span>{point}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
-            </div>
+            )}
 
             {/* Video below overview */}
             {project.videoUrl && (
@@ -382,7 +348,7 @@ export default async function ProjectPage({ params }: Props) {
             {project.tags?.length > 0 && (
               <div>
                 <h2 className="text-xs uppercase tracking-[0.15em] text-muted mb-4">
-                  Stack
+                  Project Stack
                 </h2>
                 <div className="flex flex-wrap gap-2">
                   {project.tags.map((tag) => (

@@ -124,16 +124,16 @@ export default function Skills() {
       <div className="container-main">
         {/*
           Static skills summary — always in DOM for Google/AI crawlers.
-          The dynamic list below is fetched client-side; this ensures skills
-          are always discoverable even without JS execution.
+          Lists only Harshit's personal skills, NOT project stack technologies.
+          Project-specific stacks (NestJS, NumPy, etc.) are documented on each project page.
         */}
         <div className="sr-only" aria-hidden="true">
           <h2>Technical Skills of Harshit Bhuju</h2>
           <p>
-            Harshit Bhuju&apos;s technical skills include: React, Next.js, TypeScript, JavaScript,
-            HTML, CSS, Tailwind CSS (frontend); Node.js, PostgreSQL, Prisma, FastAPI (backend);
-            Python, NumPy, Pandas, Machine Learning (AI/ML); Git, GitHub, Vercel, Supabase,
-            Docker (tools and infrastructure).
+            Harshit Bhuju&apos;s personal technical skills: JavaScript, TypeScript, Python, HTML5, CSS3 (languages);
+            React, Next.js, Redux Toolkit, RTK Query, Tailwind CSS, Bootstrap (frontend frameworks);
+            Git, GitHub, MySQL, Supabase (tools). He studies Artificial Intelligence at Kathmandu University
+            and works as a Frontend Developer building production-ready web applications.
           </p>
         </div>
 

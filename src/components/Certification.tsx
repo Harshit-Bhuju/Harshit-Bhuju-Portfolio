@@ -25,19 +25,20 @@ type Cert = {
 const defaultCertifications: Cert[] = [
   {
     id: 1,
-    title: "Modern React & Next.js Web Architecture",
-    provider: "Frontend Engineering Specialization",
-    date: "2025",
-    topics: ["React 19", "Next.js App Router", "TypeScript", "Tailwind CSS"],
-    description: "Advanced mastery in SSR, Server Components, State Management, and UI performance optimization.",
-  },
-  {
-    id: 2,
-    title: "Full-Stack Software Engineering & Database Systems",
-    provider: "Kathmandu University Projects",
-    date: "2025",
-    topics: ["Node.js", "PostgreSQL", "Prisma ORM", "REST APIs", "FastAPI"],
-    description: "Built scalable backend API integrations, relational database schemas, and ORM data pipelines.",
+    title: "Web Development Course",
+    provider: "Next Step",
+    date: "July 2024",
+    topics: [
+      "HTML5",
+      "CSS3",
+      "JavaScript",
+      "Responsive Design",
+      "Git",
+      "GitHub",
+      "Bootstrap",
+    ],
+    certificateUrl:
+      "https://kscinrfblgcvrwlpesro.supabase.co/storage/v1/object/public/portfolio/certificates/1787981922265-43fbbs.jpg",
   },
 ];
 

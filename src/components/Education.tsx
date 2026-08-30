@@ -10,17 +10,27 @@ if (typeof window !== "undefined") {
 const defaultEducation = [
   {
     id: 1,
-    degree: "BTech in Artificial Intelligence",
-    field: "Artificial Intelligence & Computer Science",
+    degree: "Bachelor of Technology (B.Tech)",
+    field: "Artificial Intelligence",
     school: "Kathmandu University (KU)",
-    dateRange: "2025 — Present",
+    dateRange: "2026 — Present",
+    gpa: null,
   },
   {
     id: 2,
-    degree: "High School (+2 Science / IT)",
-    field: "Science & Computer Science",
-    school: "NIST College, Banepa",
-    dateRange: "2023 — 2025",
+    degree: "Higher Secondary (+2)",
+    field: "Computer Science",
+    school: "Banepa NIST Secondary School",
+    dateRange: "2024–2026",
+    gpa: "3.81",
+  },
+  {
+    id: 3,
+    degree: "SEE",
+    field: "General Studies",
+    school: "Gyan Sarovar English Secondary School",
+    dateRange: "2024",
+    gpa: "3.84",
   },
 ];
 

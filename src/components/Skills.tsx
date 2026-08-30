@@ -18,9 +18,16 @@ type SkillGroups = {
 
 const defaultSkills: SkillGroups = {
   languages: ["JavaScript", "TypeScript", "Python", "HTML5", "CSS3"],
-  frameworks: ["React", "Next.js", "Redux Toolkit", "RTK Query", "Tailwind CSS"],
-  tools: ["Git & GitHub", "Supabase", "Prisma", "PostgreSQL", "Docker", "Vercel"],
-  soft: ["Problem Solving", "Team Collaboration", "UI/UX Design"],
+  frameworks: [
+    "React.js",
+    "Next.js",
+    "Redux Toolkit",
+    "RTK Query",
+    "Tailwind CSS",
+    "Bootstrap",
+  ],
+  tools: ["Git & GitHub", "MySQL", "Supabase"],
+  soft: ["Problem Solving", "Team Collaboration"],
 };
 
 export default function Skills() {

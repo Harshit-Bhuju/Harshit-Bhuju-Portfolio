@@ -11,26 +11,15 @@ if (typeof window !== "undefined") {
 const defaultExperience = [
   {
     id: 1,
-    role: "Lead Frontend Developer",
-    company: "Antarprerana",
-    location: "Remote / Nepal",
-    dateRange: "07/2026 — 08/2026",
+    role: "Frontend Developer Intern",
+    company: "Next Step",
+    location: "Banepa, Nepal",
+    dateRange: "07/2026 — Present",
     points: [
-      "Designed and developed responsive Next.js & React dashboard interfaces for managing women-led entrepreneurship incubation programs.",
-      "Integrated RTK Query and REST APIs, implemented dynamic analytics charts, and managed complex client-side state.",
-      "Built multi-role access controls, Excel data validation, and participant lifecycle tracking.",
-    ],
-  },
-  {
-    id: 2,
-    role: "Frontend Developer",
-    company: "RapiReport",
-    location: "Nepal",
-    dateRange: "02/2026",
-    points: [
-      "Built responsive medical report OCR scanning interface using Tesseract.js and Gemini API.",
-      "Developed interactive health risk visualization charts with Recharts and TensorFlow.js.",
-      "Engineered patient consultation booking flows and family health records interfaces.",
+      "Architected a scalable multi-role frontend (Super Admin, Admin, User) using Next.js, TypeScript, and NestJS REST APIs.",
+      "Implemented RTK Query for automatic cache invalidation, reducing redundant network requests and optimizing data fetching performance.",
+      "Engineered complex data table workflows with automated report generation and Excel export capabilities for participant KPI tracking.",
+      "Developed cohort management modules, dashboard visualizations, and role-scoped access control for an end-to-end incubation platform.",
     ],
   },
 ];

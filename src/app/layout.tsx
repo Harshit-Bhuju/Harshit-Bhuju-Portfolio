@@ -80,9 +80,9 @@ export const metadata: Metadata = {
     description: pageDescription,
     images: [
       {
-        url: `${siteUrl}/og-image.jpg`,
-        width: 1200,
-        height: 630,
+        url: `${siteUrl}/profile.jpg`,
+        width: 800,
+        height: 1000,
         alt: "Harshit Bhuju — Frontend Developer from Banepa, Nepal",
         type: "image/jpeg",
       },
@@ -92,7 +92,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: pageTitle,
     description: pageDescription,
-    images: [`${siteUrl}/og-image.jpg`],
+    images: [`${siteUrl}/profile.jpg`],
     creator: "@harshitbhuju",
   },
   robots: {

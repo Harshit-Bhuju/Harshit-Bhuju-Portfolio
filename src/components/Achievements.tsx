@@ -232,7 +232,7 @@ export default function Achievements() {
                       alt={`${active.title} award certificate`}
                       fill
                       priority
-                      className="object-contain p-2 group-hover:scale-[1.02] transition-transform duration-500"
+                      className="object-contain p-2"
                       sizes="(max-width: 768px) 100vw, 896px"
                     />
                     <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -290,7 +290,7 @@ export default function Achievements() {
                           src={src}
                           alt={`${active.title} photo ${i + 1}`}
                           fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
+                          className="object-cover"
                           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         />
                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">

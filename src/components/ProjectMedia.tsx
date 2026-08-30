@@ -305,7 +305,7 @@ export default function ProjectMedia({
                       onClick={() => setPlaying(true)}
                       className="w-full aspect-video bg-surface border border-border/60 flex flex-col items-center justify-center gap-2 text-sm text-secondary hover:text-primary transition-all group cursor-pointer"
                     >
-                      <div className="w-11 h-11 rounded-full border border-border group-hover:border-strong-border group-hover:scale-105 transition-all flex items-center justify-center text-primary bg-bg/80">
+                      <div className="w-11 h-11 rounded-full border border-border group-hover:border-strong-border transition-all flex items-center justify-center text-primary bg-bg/80">
                         ▶
                       </div>
                       <span className="text-xs font-medium tracking-wide">Play Walkthrough Video</span>

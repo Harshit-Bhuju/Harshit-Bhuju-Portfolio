@@ -233,7 +233,7 @@ export default function Certification() {
                       alt={`${active.title} certificate`}
                       fill
                       priority
-                      className="object-contain p-2 group-hover:scale-[1.02] transition-transform duration-500"
+                      className="object-contain p-2"
                       sizes="(max-width: 768px) 100vw, 512px"
                     />
                     <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">

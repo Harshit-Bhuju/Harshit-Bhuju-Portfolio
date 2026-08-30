@@ -69,15 +69,29 @@ export default function ProjectMedia({
 
   // Unique ordered slides: thumbnail first, then gallery (skip duplicates)
   const slides = useMemo(() => {
-    const urls: string[] = [];
-    const push = (u?: string | null) => {
-      if (!u || !u.trim()) return;
-      if (!urls.includes(u)) urls.push(u);
-    };
-    push(thumbnailUrl);
-    for (const g of galleryUrls || []) push(g);
-    return urls;
+    const list: string[] = [];
+    if (thumbnailUrl && thumbnailUrl.trim()) list.push(thumbnailUrl.trim());
+    if (Array.isArray(galleryUrls)) {
+      for (const u of galleryUrls) {
+        if (u && u.trim() && !list.includes(u.trim())) {
+          list.push(u.trim());
+        }
+      }
+    }
+    return list;
   }, [thumbnailUrl, galleryUrls]);
+
+  // Preload all certificate and gallery images immediately into browser cache
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const allImages = [...slides, ...(certificateUrls || [])].filter(
+      (url): url is string => Boolean(url && url.trim() && !/\.(pdf)(\?|$)/i.test(url.trim()))
+    );
+    allImages.forEach((url) => {
+      const img = new window.Image();
+      img.src = url;
+    });
+  }, [slides, certificateUrls]);
 
   const count = slides.length;
   const current = count > 0 ? slides[Math.min(index, count - 1)] : null;

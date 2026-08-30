@@ -674,7 +674,7 @@ export default function AdminProjectsPage() {
                 {preview.challenges && (
                   <div className="p-3 border border-border bg-surface/50 text-xs">
                     <span className="font-semibold text-primary block mb-1">
-                      ⚡ Challenges & Constraints
+                      Challenges &amp; Constraints
                     </span>
                     <p className="text-secondary whitespace-pre-wrap">
                       {preview.challenges}
@@ -684,7 +684,7 @@ export default function AdminProjectsPage() {
                 {preview.solutions && (
                   <div className="p-3 border border-border bg-surface/50 text-xs">
                     <span className="font-semibold text-primary block mb-1">
-                      💡 Solutions & Architecture
+                      Solutions &amp; Architecture
                     </span>
                     <p className="text-secondary whitespace-pre-wrap">
                       {preview.solutions}
@@ -835,7 +835,6 @@ function MultiUploadButton({
           </span>
         ) : (
           <>
-            <span>📁</span>
             <span>{label}</span>
           </>
         )}

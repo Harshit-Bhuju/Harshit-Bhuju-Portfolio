@@ -25,16 +25,31 @@ type Achievement = {
 export default function Achievements() {
   const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [active, setActive] = useState<Achievement | null>(null);
-  const [slideIndex, setSlideIndex] = useState(0);
-  const [loadedSlides, setLoadedSlides] = useState<Set<string>>(new Set());
+  const [lightboxPhoto, setLightboxPhoto] = useState<string | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
-  const touchStartX = useRef<number | null>(null);
+
+  const preloadPhoto = (url?: string | null) => {
+    if (!url || typeof window === "undefined" || /\.(pdf)(\?|$)/i.test(url)) return;
+    const img = new window.Image();
+    img.src = url;
+  };
+
+  const preloadAchievementPhotos = (item: Achievement) => {
+    if (item.certificateUrl) preloadPhoto(item.certificateUrl);
+    if (Array.isArray(item.galleryUrls)) {
+      item.galleryUrls.forEach((u) => preloadPhoto(u));
+    }
+  };
 
   useEffect(() => {
     fetch("/api/achievements")
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
-        if (Array.isArray(data)) setAchievements(data);
+        if (Array.isArray(data)) {
+          setAchievements(data);
+          // Preload all certificate & gallery photos into browser cache immediately
+          data.forEach((item: Achievement) => preloadAchievementPhotos(item));
+        }
       })
       .catch(() => {});
   }, []);
@@ -77,45 +92,14 @@ export default function Achievements() {
     return list;
   }, [active]);
 
-  const photoCount = activePhotos.length;
-  const currentPhoto = photoCount > 0 ? activePhotos[Math.min(slideIndex, photoCount - 1)] : null;
-
-  const nextSlide = useCallback(() => {
-    if (photoCount <= 1) return;
-    setSlideIndex((i) => (i + 1) % photoCount);
-  }, [photoCount]);
-
-  const prevSlide = useCallback(() => {
-    if (photoCount <= 1) return;
-    setSlideIndex((i) => (i - 1 + photoCount) % photoCount);
-  }, [photoCount]);
-
-  // Reset slide index when opening a new modal
   const openModal = (item: Achievement) => {
     setActive(item);
-    setSlideIndex(0);
-    setLoadedSlides(new Set());
   };
 
   const closeModal = () => {
     setActive(null);
+    setLightboxPhoto(null);
   };
-
-  // Keyboard navigation for active modal carousel
-  useEffect(() => {
-    if (!active || photoCount <= 1) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "ArrowRight") {
-        e.preventDefault();
-        setSlideIndex((i) => (i + 1) % photoCount);
-      } else if (e.key === "ArrowLeft") {
-        e.preventDefault();
-        setSlideIndex((i) => (i - 1 + photoCount) % photoCount);
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [active, photoCount]);
 
   return (
     <section
@@ -143,6 +127,7 @@ export default function Achievements() {
               return (
                 <article
                   key={a.id}
+                  onMouseEnter={() => preloadAchievementPhotos(a)}
                   className="ach-item group grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 py-6 md:py-8 border-b border-border hover:bg-surface/30 transition-colors"
                 >
                   <div className="md:col-span-3 lg:col-span-2">
@@ -170,59 +155,17 @@ export default function Achievements() {
                     </div>
 
                     {/* Action & Mini Preview Strip */}
-                    <div className="mt-4 pt-3 flex flex-wrap items-center justify-between gap-3 border-t border-border/40">
-                      {hasPhotos && (
-                        <div className="flex items-center gap-2">
-                          <span className="text-[11px] text-muted flex items-center gap-1.5 font-mono">
-                            <span>📸</span>
-                            <span>{allPhotos.length} photo{allPhotos.length > 1 ? "s" : ""}</span>
-                          </span>
-                          <div className="flex items-center gap-1">
-                            {allPhotos.slice(0, 3).map((url, idx) => (
-                              <button
-                                key={idx}
-                                type="button"
-                                onClick={() => {
-                                  openModal(a);
-                                  setSlideIndex(idx);
-                                }}
-                                className="relative w-7 h-7 rounded border border-border overflow-hidden hover:scale-110 transition-transform bg-surface"
-                                title="Click to view full photo"
-                              >
-                                {/\.(pdf)(\?|$)/i.test(url) ? (
-                                  <span className="text-[8px] font-bold text-red-400 flex items-center justify-center h-full">
-                                    PDF
-                                  </span>
-                                ) : (
-                                  <Image
-                                    src={url}
-                                    alt=""
-                                    fill
-                                    className="object-cover"
-                                    sizes="28px"
-                                  />
-                                )}
-                              </button>
-                            ))}
-                            {allPhotos.length > 3 && (
-                              <span className="text-[10px] text-muted font-mono pl-0.5">
-                                +{allPhotos.length - 3}
-                              </span>
-                            )}
-                          </div>
+                      {hasDetail && (
+                        <div className="mt-4 pt-3 flex items-center justify-end border-t border-border/40">
+                          <button
+                            type="button"
+                            onClick={() => openModal(a)}
+                            className="text-xs font-semibold tracking-[0.12em] uppercase text-primary border-b border-strong-border pb-0.5 hover:opacity-70 transition-opacity"
+                          >
+                            {hasPhotos ? "View Gallery & Certificate ↗" : "View Details ↗"}
+                          </button>
                         </div>
                       )}
-
-                      {hasDetail && (
-                        <button
-                          type="button"
-                          onClick={() => openModal(a)}
-                          className="text-xs font-semibold tracking-[0.12em] uppercase text-primary border-b border-strong-border pb-0.5 hover:opacity-70 transition-opacity ml-auto"
-                        >
-                          {hasPhotos ? "View Gallery & Certificate ↗" : "View Details ↗"}
-                        </button>
-                      )}
-                    </div>
                   </div>
                 </article>
               );
@@ -256,150 +199,70 @@ export default function Achievements() {
               )}
             </div>
 
-            {/* Photo Carousel & Gallery Section */}
-            {photoCount > 0 && currentPhoto && (
+            {/* Grid Gallery Section */}
+            {activePhotos.length > 0 && (
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs uppercase tracking-[0.15em] text-muted font-medium flex items-center gap-2">
                     <span className="inline-block w-1.5 h-1.5 rounded-full bg-primary" />
-                    {slideIndex === 0 && active.certificateUrl === currentPhoto
-                      ? "Official Award / Certificate"
-                      : `Event Photo (${slideIndex + 1} of ${photoCount})`}
+                    <span>Photo Gallery ({activePhotos.length})</span>
                   </span>
-                  <span className="text-[11px] font-mono text-muted tracking-wider">
-                    {slideIndex + 1} / {photoCount}
-                  </span>
+                  <span className="text-[11px] text-muted font-mono">Click photo to expand</span>
                 </div>
 
-                {/* Main Carousel Display Box */}
-                <div
-                  className="relative w-full aspect-[16/10] sm:aspect-[16/9] bg-black/90 rounded-lg border border-border overflow-hidden select-none group"
-                  onTouchStart={(e) => {
-                    touchStartX.current = e.touches[0].clientX;
-                  }}
-                  onTouchEnd={(e) => {
-                    if (touchStartX.current === null) return;
-                    const diff = touchStartX.current - e.changedTouches[0].clientX;
-                    if (Math.abs(diff) > 40) {
-                      if (diff > 0) nextSlide();
-                      else prevSlide();
-                    }
-                    touchStartX.current = null;
-                  }}
-                >
-                  {/* Render all slides hidden — preloads all simultaneously */}
-                  {activePhotos.map((src, i) =>
-                    /\.(pdf)(\?|$)/i.test(src) ? (
-                      <div
-                        key={src}
-                        className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-6 text-center bg-surface"
-                        style={{ display: i === slideIndex ? "flex" : "none" }}
-                      >
-                        <div className="w-14 h-14 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 font-bold text-base">
-                          PDF
-                        </div>
-                        <div>
-                          <p className="text-sm font-semibold text-primary">
-                            Certificate Document (PDF)
-                          </p>
-                          <p className="text-xs text-muted mt-1">
-                            Click below to open and inspect in full resolution
-                          </p>
-                        </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                  {activePhotos.map((src, i) => {
+                    const isPdf = /\.(pdf)(\?|$)/i.test(src);
+                    const isCertificate = active.certificateUrl === src;
+
+                    if (isPdf) {
+                      return (
                         <a
+                          key={src}
                           href={src}
                           target="_blank"
                           rel="noreferrer"
-                          className="px-4 py-2 bg-primary text-bg text-xs font-semibold rounded hover:opacity-90 transition-opacity"
+                          className="relative aspect-[4/3] rounded-xl border border-border bg-surface hover:border-primary/60 transition-all p-4 flex flex-col items-center justify-center text-center gap-2 group"
                         >
-                          Open Certificate PDF ↗
+                          <div className="w-10 h-10 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 font-bold text-xs">
+                            PDF
+                          </div>
+                          <span className="text-xs font-semibold text-primary group-hover:underline">
+                            Certificate PDF
+                          </span>
+                          <span className="text-[10px] text-muted">Open document ↗</span>
                         </a>
-                      </div>
-                    ) : (
+                      );
+                    }
+
+                    return (
                       <div
                         key={src}
-                        className="absolute inset-0"
-                        style={{ display: i === slideIndex ? "block" : "none" }}
+                        onClick={() => setLightboxPhoto(src)}
+                        className="group relative aspect-[4/3] rounded-xl border border-border bg-black/40 overflow-hidden cursor-pointer hover:border-primary/60 hover:shadow-lg transition-all duration-300"
                       >
                         <Image
                           src={src}
                           alt={`${active.title} photo ${i + 1}`}
                           fill
-                          className={`object-contain transition-opacity duration-500 ${
-                            loadedSlides.has(src) ? "opacity-100" : "opacity-0"
-                          }`}
-                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 896px"
-                          priority={i === 0}
-                          onLoad={() => setLoadedSlides((prev) => new Set(prev).add(src))}
+                          priority={i < 3}
+                          className="object-cover group-hover:scale-105 transition-transform duration-500"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         />
+                        {isCertificate && (
+                          <span className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/75 backdrop-blur-md border border-white/20 text-[10px] font-semibold text-primary z-10">
+                            Award Certificate
+                          </span>
+                        )}
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                          <span className="text-xs font-semibold text-white px-3 py-1.5 rounded-full bg-black/60 border border-white/20 backdrop-blur-sm">
+                            Expand Photo
+                          </span>
+                        </div>
                       </div>
-                    )
-                  )}
-
-
-                  {/* Carousel Left / Right Navigation Buttons */}
-                  {photoCount > 1 && (
-                    <>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          prevSlide();
-                        }}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full border border-white/20 bg-black/60 hover:bg-black/90 text-white flex items-center justify-center text-base transition-all opacity-80 hover:opacity-100 z-10 cursor-pointer"
-                        aria-label="Previous photo"
-                      >
-                        ←
-                      </button>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          nextSlide();
-                        }}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full border border-white/20 bg-black/60 hover:bg-black/90 text-white flex items-center justify-center text-base transition-all opacity-80 hover:opacity-100 z-10 cursor-pointer"
-                        aria-label="Next photo"
-                      >
-                        →
-                      </button>
-                    </>
-                  )}
+                    );
+                  })}
                 </div>
-
-                {/* Thumbnails Navigation Strip */}
-                {photoCount > 1 && (
-                  <div className="flex items-center gap-2 overflow-x-auto py-2 px-1">
-                    {activePhotos.map((url, idx) => {
-                      const isSelected = idx === slideIndex;
-                      return (
-                        <button
-                          key={idx}
-                          type="button"
-                          onClick={() => setSlideIndex(idx)}
-                          className={`relative shrink-0 w-16 h-12 rounded border transition-all overflow-hidden cursor-pointer ${
-                            isSelected
-                              ? "border-primary ring-2 ring-primary/40 scale-105"
-                              : "border-border opacity-60 hover:opacity-100"
-                          }`}
-                        >
-                          {/\.(pdf)(\?|$)/i.test(url) ? (
-                            <span className="text-[9px] font-bold text-red-400 flex items-center justify-center h-full bg-surface">
-                              PDF
-                            </span>
-                          ) : (
-                            <Image
-                              src={url}
-                              alt={`Thumbnail ${idx + 1}`}
-                              fill
-                              className="object-cover"
-                              sizes="64px"
-                            />
-                          )}
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
               </div>
             )}
 
@@ -418,9 +281,8 @@ export default function Achievements() {
             {/* Detailed Story / Journey (if present) */}
             {active.story && (
               <div className="p-5 rounded-xl border border-border/80 bg-surface/50 space-y-2">
-                <h4 className="text-xs uppercase tracking-[0.15em] text-primary font-semibold flex items-center gap-2">
-                  <span>✨</span>
-                  <span>The Journey &amp; Story</span>
+                <h4 className="text-xs uppercase tracking-[0.15em] text-primary font-semibold">
+                  The Journey &amp; Story
                 </h4>
                 <p className="text-sm text-secondary leading-relaxed whitespace-pre-line">
                   {active.story}
@@ -430,6 +292,33 @@ export default function Achievements() {
           </div>
         )}
       </Modal>
+
+      {/* High-Res Lightbox Modal */}
+      {lightboxPhoto && (
+        <div
+          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4"
+          onClick={() => setLightboxPhoto(null)}
+        >
+          <button
+            type="button"
+            onClick={() => setLightboxPhoto(null)}
+            className="absolute top-4 right-4 text-white text-xl font-bold bg-white/10 hover:bg-white/20 rounded-full w-10 h-10 flex items-center justify-center transition-colors cursor-pointer z-10"
+            aria-label="Close photo preview"
+          >
+            ✕
+          </button>
+          <div
+            className="relative max-w-5xl max-h-[85vh] w-full h-full flex items-center justify-center p-2"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={lightboxPhoto}
+              alt="Expanded high resolution preview"
+              className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl border border-white/10"
+            />
+          </div>
+        </div>
+      )}
 
     </section>
   );

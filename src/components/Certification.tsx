@@ -26,12 +26,23 @@ export default function Certification() {
   const [active, setActive] = useState<Cert | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
+  const preloadCertificate = (url?: string | null) => {
+    if (!url || typeof window === "undefined" || /\.(pdf)(\?|$)/i.test(url)) return;
+    const img = new window.Image();
+    img.src = url;
+  };
+
   useEffect(() => {
     fetch("/api/certifications")
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
-        if (Array.isArray(data) && data.length) setItems(data);
-        else if (data && !Array.isArray(data) && data.title) setItems([data]);
+        let certs: Cert[] = [];
+        if (Array.isArray(data) && data.length) certs = data;
+        else if (data && !Array.isArray(data) && data.title) certs = [data];
+        setItems(certs);
+
+        // Preload certificate images into browser cache immediately
+        certs.forEach((c) => preloadCertificate(c.certificateUrl));
       })
       .catch(() => {});
   }, []);
@@ -83,6 +94,7 @@ export default function Certification() {
               return (
                 <article
                   key={c.id ?? i}
+                  onMouseEnter={() => preloadCertificate(c.certificateUrl)}
                   className="cert-card border border-border p-6 md:p-8 hover:border-strong-border transition-colors duration-300 flex flex-col"
                 >
                   <div className="flex flex-wrap items-baseline justify-between gap-2 mb-3">
@@ -215,6 +227,7 @@ export default function Certification() {
                       src={active.certificateUrl}
                       alt={`${active.title} certificate`}
                       fill
+                      priority
                       className="object-contain bg-surface"
                       sizes="(max-width: 768px) 100vw, 512px"
                     />

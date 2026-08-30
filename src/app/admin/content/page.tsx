@@ -141,6 +141,32 @@ export default function AdminContentPage() {
     }
   };
 
+  const handleMultipleUpload = async (
+    files: File[],
+    folder: string,
+    onSuccess: (urls: string[]) => void,
+    fieldKey: string
+  ) => {
+    if (!files || files.length === 0) return;
+    setUploadingField(fieldKey);
+    try {
+      const uploadedUrls: string[] = [];
+      for (const file of files) {
+        const publicUrl = await uploadClientFile(file, folder);
+        uploadedUrls.push(publicUrl);
+      }
+      onSuccess(uploadedUrls);
+      addToast(`${uploadedUrls.length} photo(s) uploaded successfully!`, "success");
+    } catch (err: unknown) {
+      addToast(
+        err instanceof Error ? err.message : "Upload failed",
+        "error"
+      );
+    } finally {
+      setUploadingField(null);
+    }
+  };
+
   const saveSettings = async () => {
     setSaving(true);
     try {
@@ -487,7 +513,6 @@ export default function AdminContentPage() {
                 {/* 1. Identity Card */}
                 <div className="p-6 rounded-2xl border border-border bg-surface/40 space-y-6">
                   <div className="flex items-center gap-2 border-b border-border/60 pb-3">
-                    <span className="text-sm">👤</span>
                     <h3 className="text-sm font-semibold tracking-wide uppercase text-primary">
                       Identity & Header Info
                     </h3>
@@ -544,7 +569,6 @@ export default function AdminContentPage() {
                 {/* 2. Media & Uploads Card */}
                 <div className="p-6 rounded-2xl border border-border bg-surface/40 space-y-6">
                   <div className="flex items-center gap-2 border-b border-border/60 pb-3">
-                    <span className="text-sm">🖼️</span>
                     <h3 className="text-sm font-semibold tracking-wide uppercase text-primary">
                       Profile Image & Resume
                     </h3>
@@ -669,7 +693,6 @@ export default function AdminContentPage() {
                 {/* 3. About & Bio Card */}
                 <div className="p-6 rounded-2xl border border-border bg-surface/40 space-y-6">
                   <div className="flex items-center gap-2 border-b border-border/60 pb-3">
-                    <span className="text-sm">📝</span>
                     <h3 className="text-sm font-semibold tracking-wide uppercase text-primary">
                       About Section & Focus
                     </h3>
@@ -763,7 +786,6 @@ export default function AdminContentPage() {
                 {/* 4. Contact & Socials Card */}
                 <div className="p-6 rounded-2xl border border-border bg-surface/40 space-y-6">
                   <div className="flex items-center gap-2 border-b border-border/60 pb-3">
-                    <span className="text-sm">📬</span>
                     <h3 className="text-sm font-semibold tracking-wide uppercase text-primary">
                       Contact & Social Links
                     </h3>
@@ -838,15 +860,12 @@ export default function AdminContentPage() {
               <div className="flex flex-wrap items-center gap-3">
                 {/* Search Bar */}
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-muted">
-                    🔍
-                  </span>
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder={`Search ${tab}…`}
-                    className="pl-8 pr-4 py-2 rounded-xl bg-surface border border-border text-xs text-primary placeholder:text-muted focus:border-text focus:outline-none w-56 sm:w-64"
+                    className="px-4 py-2 rounded-xl bg-surface border border-border text-xs text-primary placeholder:text-muted focus:border-text focus:outline-none w-56 sm:w-64"
                   />
                   {searchQuery && (
                     <button
@@ -1241,19 +1260,19 @@ export default function AdminContentPage() {
                         </label>
                       </div>
 
-                      <SingleFileDropzone
+                      <FileDropzone
                         accept="image/*"
-                        label="Upload Event / Achievement Gallery Photo"
+                        multiple
+                        label="Upload Event / Achievement Gallery Photos (Select multiple photos at once)"
                         isUploading={uploadingField === "galleryUrls"}
-                        onFileSelected={(file) =>
-                          handleUpload(
-                            file,
+                        onFilesSelected={(files) =>
+                          handleMultipleUpload(
+                            files,
                             "achievements",
-                            (url) =>
+                            (newUrls) =>
                               setEditing((s) => {
                                 const list = Array.isArray(s?.galleryUrls) ? [...(s.galleryUrls as string[])] : [];
-                                list.push(url);
-                                return { ...s, galleryUrls: list };
+                                return { ...s, galleryUrls: [...list, ...newUrls] };
                               }),
                             "galleryUrls"
                           )
@@ -1678,7 +1697,6 @@ export default function AdminContentPage() {
                                 rel="noreferrer"
                                 className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-bg border border-border hover:border-strong-border text-[11px] text-primary transition-colors"
                               >
-                                <span>📜</span>
                                 <span>Certificate Attached</span>
                                 <span className="text-[10px] text-muted">↗</span>
                               </a>
@@ -1686,7 +1704,6 @@ export default function AdminContentPage() {
 
                             {Array.isArray(item.galleryUrls) && item.galleryUrls.length > 0 ? (
                               <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-bg border border-border text-[11px] text-secondary">
-                                <span>📸</span>
                                 <span>{item.galleryUrls.length} Photo{item.galleryUrls.length > 1 ? "s" : ""}</span>
                               </span>
                             ) : null}
@@ -1775,16 +1792,18 @@ function FieldTextarea({
   );
 }
 
-function SingleFileDropzone({
+function FileDropzone({
   accept,
   label,
   isUploading,
-  onFileSelected,
+  multiple = false,
+  onFilesSelected,
 }: {
   accept: string;
   label: string;
   isUploading: boolean;
-  onFileSelected: (file: File) => void;
+  multiple?: boolean;
+  onFilesSelected: (files: File[]) => void;
 }) {
   const [isDragOver, setIsDragOver] = useState(false);
 
@@ -1798,8 +1817,8 @@ function SingleFileDropzone({
       onDrop={(e) => {
         e.preventDefault();
         setIsDragOver(false);
-        const file = e.dataTransfer.files?.[0];
-        if (file) onFileSelected(file);
+        const files = Array.from(e.dataTransfer.files || []);
+        if (files.length) onFilesSelected(files);
       }}
       className={`group relative flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-xl cursor-pointer transition-all ${
         isDragOver
@@ -1810,10 +1829,11 @@ function SingleFileDropzone({
       <input
         type="file"
         accept={accept}
+        multiple={multiple}
         disabled={isUploading}
         onChange={(e) => {
-          const file = e.target.files?.[0];
-          if (file) onFileSelected(file);
+          const files = Array.from(e.target.files || []);
+          if (files.length) onFilesSelected(files);
           e.target.value = "";
         }}
         className="sr-only"
@@ -1825,13 +1845,36 @@ function SingleFileDropzone({
         </div>
       ) : (
         <div className="flex flex-col items-center gap-1.5 text-center">
-          <span className="text-xl">📁</span>
           <p className="text-xs font-semibold text-primary">{label}</p>
           <p className="text-[11px] text-muted">
-            Drag and drop or <span className="underline text-secondary">browse file</span>
+            Drag and drop {multiple ? "photos" : "file"} or <span className="underline text-secondary">browse {multiple ? "files" : "file"}</span>
           </p>
         </div>
       )}
     </label>
+  );
+}
+
+function SingleFileDropzone({
+  accept,
+  label,
+  isUploading,
+  onFileSelected,
+}: {
+  accept: string;
+  label: string;
+  isUploading: boolean;
+  onFileSelected: (file: File) => void;
+}) {
+  return (
+    <FileDropzone
+      accept={accept}
+      label={label}
+      isUploading={isUploading}
+      multiple={false}
+      onFilesSelected={(files) => {
+        if (files[0]) onFileSelected(files[0]);
+      }}
+    />
   );
 }

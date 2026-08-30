@@ -168,7 +168,7 @@ export default async function ProjectPage({ params }: Props) {
       />
       <div className="container-main pt-28 pb-20">
         <Link
-          href="/#work"
+          href="/"
           className="inline-flex items-center gap-2 text-sm text-secondary hover:text-primary transition-colors mb-12 group"
         >
           <span className="group-hover:-translate-x-0.5 transition-transform">←</span>

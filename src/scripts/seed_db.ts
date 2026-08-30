@@ -20,6 +20,10 @@ async function main() {
         "Developed cohort lifecycle tracking modules, milestone forms, and analytics data visualizations.",
         "Implemented role-scoped access control and protected route architecture across all user roles.",
       ],
+      stackFrontend: ["Next.js 15", "React 19", "TypeScript", "Tailwind CSS", "Redux Toolkit", "RTK Query"],
+      stackBackend: ["NestJS", "REST APIs"],
+      stackDatabase: ["PostgreSQL", "Prisma ORM"],
+      stackTools: ["Git", "Vercel"],
     },
   });
 
@@ -34,6 +38,10 @@ async function main() {
         "Developed patient consultation booking flow and family health records dashboard.",
         "Integrated Gemini API response rendering with structured medical data display components.",
       ],
+      stackFrontend: ["Next.js 15", "React 19", "TypeScript", "Tailwind CSS", "Recharts"],
+      stackBackend: ["Node.js", "REST APIs"],
+      stackDatabase: ["PostgreSQL", "Supabase"],
+      stackTools: ["Tesseract.js OCR", "Gemini API"],
     },
   });
 
@@ -48,13 +56,25 @@ async function main() {
         "Developed e-learning course module with video player, progress tracking, and enrollment components.",
         "Optimized layout responsiveness and asset delivery across mobile and desktop breakpoints.",
       ],
+      stackFrontend: ["Next.js 15", "React 19", "TypeScript", "Tailwind CSS", "Redux Toolkit"],
+      stackBackend: ["Node.js", "Express"],
+      stackDatabase: ["MongoDB", "Prisma ORM"],
+      stackTools: ["Git", "Vercel"],
     },
   });
 
-  // ── Verify ───────────────────────────────────────────────────────────────────
+  console.log("✓ Updated categorized stacks (Frontend, Backend, Database, Tools) in PostgreSQL DB.");
+
   const updated = await prisma.project.findMany({
     where: { slug: { in: ["antarprerana", "rapireport", "cultureconnect"] } },
-    select: { slug: true, myRole: true, contributions: true },
+    select: {
+      slug: true,
+      myRole: true,
+      stackFrontend: true,
+      stackBackend: true,
+      stackDatabase: true,
+      stackTools: true,
+    },
   });
   console.log("Verification:", JSON.stringify(updated, null, 2));
 }

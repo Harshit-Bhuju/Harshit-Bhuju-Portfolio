@@ -22,6 +22,10 @@ model Project {
   tags            String[]  @default([])                          // Full project stack (all technologies)
   myRole          String?   @map("my_role")                      // Harshit's explicit role title
   contributions   String[]  @default([]) @map("contributions")   // What Harshit personally built
+  stackFrontend   String[]  @default([]) @map("stack_frontend")
+  stackBackend    String[]  @default([]) @map("stack_backend")
+  stackDatabase   String[]  @default([]) @map("stack_database")
+  stackTools      String[]  @default([]) @map("stack_tools")
   githubUrl       String?   @map("github_url")
   liveUrl         String?   @map("live_url")
   videoUrl        String?   @map("video_url")

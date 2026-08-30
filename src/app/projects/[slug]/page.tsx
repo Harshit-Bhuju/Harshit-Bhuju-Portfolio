@@ -29,6 +29,10 @@ type ProjectRow = {
   tags: string[];         // Full project stack (all technologies used)
   myRole: string | null;  // Harshit's explicit role in the project
   contributions: string[]; // What Harshit personally built
+  stackFrontend: string[];
+  stackBackend: string[];
+  stackDatabase: string[];
+  stackTools: string[];
   githubUrl: string | null;
   liveUrl: string | null;
   videoUrl: string | null;
@@ -61,6 +65,10 @@ async function getProject(slug: string): Promise<ProjectRow | null> {
       tags: row.tags || [],
       myRole: (row as any).myRole ?? null,
       contributions: (row as any).contributions ?? [],
+      stackFrontend: (row as any).stackFrontend || [],
+      stackBackend: (row as any).stackBackend || [],
+      stackDatabase: (row as any).stackDatabase || [],
+      stackTools: (row as any).stackTools || [],
       githubUrl: row.githubUrl,
       liveUrl: row.liveUrl,
       videoUrl: row.videoUrl,
@@ -345,7 +353,77 @@ export default async function ProjectPage({ params }: Props) {
           </div>
 
           <aside className="lg:col-span-4 space-y-8">
-            {project.tags?.length > 0 && (
+            {/* Categorized Project Stack */}
+            {(project.stackFrontend?.length > 0 ||
+              project.stackBackend?.length > 0 ||
+              project.stackDatabase?.length > 0 ||
+              project.stackTools?.length > 0) ? (
+              <div className="space-y-6">
+                <h2 className="text-xs uppercase tracking-[0.15em] text-muted border-b border-border pb-2">
+                  Project Technology Stack
+                </h2>
+
+                {project.stackFrontend?.length > 0 && (
+                  <div>
+                    <h3 className="text-[11px] uppercase tracking-[0.15em] text-primary font-semibold mb-2">
+                      Frontend
+                    </h3>
+                    <div className="flex flex-wrap gap-1.5">
+                      {project.stackFrontend.map((item) => (
+                        <span key={item} className="text-xs px-2.5 py-1 border border-border rounded text-secondary bg-surface/50">
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {project.stackBackend?.length > 0 && (
+                  <div>
+                    <h3 className="text-[11px] uppercase tracking-[0.15em] text-primary font-semibold mb-2">
+                      Backend
+                    </h3>
+                    <div className="flex flex-wrap gap-1.5">
+                      {project.stackBackend.map((item) => (
+                        <span key={item} className="text-xs px-2.5 py-1 border border-border rounded text-secondary bg-surface/50">
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {project.stackDatabase?.length > 0 && (
+                  <div>
+                    <h3 className="text-[11px] uppercase tracking-[0.15em] text-primary font-semibold mb-2">
+                      Database
+                    </h3>
+                    <div className="flex flex-wrap gap-1.5">
+                      {project.stackDatabase.map((item) => (
+                        <span key={item} className="text-xs px-2.5 py-1 border border-border rounded text-secondary bg-surface/50">
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {project.stackTools?.length > 0 && (
+                  <div>
+                    <h3 className="text-[11px] uppercase tracking-[0.15em] text-primary font-semibold mb-2">
+                      Tools &amp; APIs
+                    </h3>
+                    <div className="flex flex-wrap gap-1.5">
+                      {project.stackTools.map((item) => (
+                        <span key={item} className="text-xs px-2.5 py-1 border border-border rounded text-secondary bg-surface/50">
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : project.tags?.length > 0 ? (
               <div>
                 <h2 className="text-xs uppercase tracking-[0.15em] text-muted mb-4">
                   Project Stack
@@ -361,7 +439,7 @@ export default async function ProjectPage({ params }: Props) {
                   ))}
                 </div>
               </div>
-            )}
+            ) : null}
 
             <div className="flex flex-col gap-3">
               {project.liveUrl && (

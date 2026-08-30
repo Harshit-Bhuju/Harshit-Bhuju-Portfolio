@@ -135,11 +135,7 @@ export default function Skills({
       aria-label="Skills and technical capabilities of Harshit Bhuju"
     >
       <div className="container-main">
-        {/*
-          Static skills summary — always in DOM for Google/AI crawlers.
-          Lists only Harshit's personal skills, NOT project stack technologies.
-          Project-specific stacks (NestJS, NumPy, etc.) are documented on each project page.
-        */}
+      
         <div className="sr-only" aria-hidden="true">
           <h2>Technical Skills of Harshit Bhuju</h2>
           <p>

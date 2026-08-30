@@ -102,7 +102,7 @@ export async function GET() {
   } else {
     markdown += `- **Frontend Development**: React, Next.js, TypeScript, JavaScript, HTML5, CSS3, Tailwind CSS, GSAP, Framer Motion, Redux Toolkit, RTK Query, Context API, Rive
 - **Backend & Data Integration**: Node.js, REST APIs, PostgreSQL, Prisma ORM, NestJS (Frontend Integration), Supabase
-- **Artificial Intelligence & Tools**: Python, NumPy, Pandas, Machine Learning fundamentals, Git, GitHub, Vercel, Figma (UI/UX)
+- **Artificial Intelligence & Tools**: Python, Machine Learning fundamentals, Git, GitHub, Vercel, Figma (UI/UX)
 `;
   }
 

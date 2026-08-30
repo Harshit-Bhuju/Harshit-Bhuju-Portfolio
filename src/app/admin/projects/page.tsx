@@ -18,6 +18,12 @@ type Project = {
   challenges: string | null;
   solutions: string | null;
   tags: string[];
+  myRole?: string | null;
+  contributions?: string[];
+  stackFrontend?: string[];
+  stackBackend?: string[];
+  stackDatabase?: string[];
+  stackTools?: string[];
   githubUrl: string | null;
   liveUrl: string | null;
   videoUrl: string | null;
@@ -41,6 +47,12 @@ const emptyProject = (): Project => ({
   challenges: "",
   solutions: "",
   tags: [],
+  myRole: "",
+  contributions: [],
+  stackFrontend: [],
+  stackBackend: [],
+  stackDatabase: [],
+  stackTools: [],
   githubUrl: "",
   liveUrl: "",
   videoUrl: "",
@@ -106,6 +118,11 @@ export default function AdminProjectsPage() {
       galleryUrls: [...(p.galleryUrls || [])],
       certificateUrls: [...(p.certificateUrls || [])],
       tags: [...(p.tags || [])],
+      contributions: [...(p.contributions || [])],
+      stackFrontend: [...(p.stackFrontend || [])],
+      stackBackend: [...(p.stackBackend || [])],
+      stackDatabase: [...(p.stackDatabase || [])],
+      stackTools: [...(p.stackTools || [])],
     });
     setMessage("");
   };
@@ -434,7 +451,7 @@ export default function AdminProjectsPage() {
               hint="Describe how the challenges were solved, architectural decisions, results"
             />
             <Field
-              label="Tags (comma-separated)"
+              label="Overall Project Stack / Tags (comma-separated for homepage card)"
               value={(editing.tags || []).join(", ")}
               onChange={(v) =>
                 setEditing({
@@ -445,7 +462,87 @@ export default function AdminProjectsPage() {
                     .filter(Boolean),
                 })
               }
+              hint="Shown on homepage project card"
             />
+            <Field
+              label="My Role (e.g. Lead Frontend Developer)"
+              value={editing.myRole || ""}
+              onChange={(v) => setEditing({ ...editing, myRole: v })}
+            />
+            <Field
+              label="My Contributions (one bullet point per line)"
+              value={(editing.contributions || []).join("\n")}
+              onChange={(v) =>
+                setEditing({
+                  ...editing,
+                  contributions: v
+                    .split("\n")
+                    .map((s) => s.trim())
+                    .filter(Boolean),
+                })
+              }
+              multiline
+              hint="What you personally built and engineered on this project"
+            />
+
+            {/* Categorized Project Stack Section */}
+            <div className="p-4 border border-border/80 bg-surface/30 space-y-4 rounded">
+              <p className="text-xs uppercase tracking-[0.15em] text-primary font-semibold">
+                Categorized Project Stack (Detail Page)
+              </p>
+              <Field
+                label="Frontend Stack (comma-separated)"
+                value={(editing.stackFrontend || []).join(", ")}
+                onChange={(v) =>
+                  setEditing({
+                    ...editing,
+                    stackFrontend: v
+                      .split(",")
+                      .map((t) => t.trim())
+                      .filter(Boolean),
+                  })
+                }
+              />
+              <Field
+                label="Backend Stack (comma-separated)"
+                value={(editing.stackBackend || []).join(", ")}
+                onChange={(v) =>
+                  setEditing({
+                    ...editing,
+                    stackBackend: v
+                      .split(",")
+                      .map((t) => t.trim())
+                      .filter(Boolean),
+                  })
+                }
+              />
+              <Field
+                label="Database Stack (comma-separated)"
+                value={(editing.stackDatabase || []).join(", ")}
+                onChange={(v) =>
+                  setEditing({
+                    ...editing,
+                    stackDatabase: v
+                      .split(",")
+                      .map((t) => t.trim())
+                      .filter(Boolean),
+                  })
+                }
+              />
+              <Field
+                label="Tools & APIs Stack (comma-separated)"
+                value={(editing.stackTools || []).join(", ")}
+                onChange={(v) =>
+                  setEditing({
+                    ...editing,
+                    stackTools: v
+                      .split(",")
+                      .map((t) => t.trim())
+                      .filter(Boolean),
+                  })
+                }
+              />
+            </div>
             <Field
               label="Thumbnail URL"
               value={editing.thumbnailUrl || ""}

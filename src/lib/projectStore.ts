@@ -11,6 +11,12 @@ export type ProjectRecord = {
   challenges?: string | null;
   solutions?: string | null;
   tags: string[];
+  myRole?: string | null;
+  contributions?: string[];
+  stackFrontend?: string[];
+  stackBackend?: string[];
+  stackDatabase?: string[];
+  stackTools?: string[];
   githubUrl: string | null;
   liveUrl: string | null;
   videoUrl: string | null;

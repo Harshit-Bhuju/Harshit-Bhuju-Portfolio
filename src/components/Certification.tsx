@@ -42,8 +42,16 @@ const defaultCertifications: Cert[] = [
   },
 ];
 
-export default function Certification() {
-  const [items, setItems] = useState<Cert[]>(defaultCertifications);
+export default function Certification({
+  initialCertifications,
+}: {
+  initialCertifications?: Cert[];
+} = {}) {
+  const [items, setItems] = useState<Cert[]>(
+    initialCertifications && initialCertifications.length
+      ? initialCertifications
+      : defaultCertifications
+  );
   const [active, setActive] = useState<Cert | null>(null);
   const [lightboxPhoto, setLightboxPhoto] = useState<string | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
@@ -100,7 +108,7 @@ export default function Certification() {
         <div className="sr-only" aria-hidden="true">
           <h2>Certifications of Harshit Bhuju</h2>
           <p>
-            Harshit Bhuju holds certifications in web development, frontend frameworks, algorithms, and artificial intelligence course completions.
+            Harshit Bhuju holds professional certifications in modern web development, responsive frontend engineering, and software development practices.
           </p>
         </div>
         <p className="text-xs uppercase tracking-[0.2em] text-muted mb-3">

@@ -6,6 +6,7 @@ import Skills from "@/components/Skills";
 import Achievements from "@/components/Achievements";
 import Background from "@/components/Background";
 import Education from "@/components/Education";
+import Experience from "@/components/Experience";
 import Certification from "@/components/Certification";
 import FAQ from "@/components/FAQ";
 import Contact from "@/components/Contact";
@@ -15,24 +16,48 @@ import { getMemoryProjects } from "@/lib/projectStore";
 
 export const revalidate = 60; // revalidate homepage every 60s
 
-async function getInitialProjects() {
+async function getInitialData() {
   if (process.env.DATABASE_URL) {
     try {
       const { prisma } = await import("@/lib/prisma");
-      const rows = await prisma.project.findMany({
-        where: { visible: true },
-        orderBy: { displayOrder: "asc" },
-      });
-      return JSON.parse(JSON.stringify(rows));
+      const [projects, experiences, educations, certifications] = await Promise.all([
+        prisma.project.findMany({
+          where: { visible: true },
+          orderBy: { displayOrder: "asc" },
+        }),
+        prisma.experience.findMany({
+          where: { visible: true },
+          orderBy: { displayOrder: "asc" },
+        }),
+        prisma.education.findMany({
+          where: { visible: true },
+          orderBy: { displayOrder: "asc" },
+        }),
+        prisma.certification.findMany({
+          where: { visible: true },
+          orderBy: { displayOrder: "asc" },
+        }),
+      ]);
+      return {
+        projects: JSON.parse(JSON.stringify(projects)),
+        experiences: JSON.parse(JSON.stringify(experiences)),
+        educations: JSON.parse(JSON.stringify(educations)),
+        certifications: JSON.parse(JSON.stringify(certifications)),
+      };
     } catch {
-      /* fallback to memory store below */
+      /* fallback below */
     }
   }
-  return getMemoryProjects().filter((p) => p.visible).sort((a, b) => a.displayOrder - b.displayOrder);
+  return {
+    projects: getMemoryProjects().filter((p) => p.visible).sort((a, b) => a.displayOrder - b.displayOrder),
+    experiences: [],
+    educations: [],
+    certifications: [],
+  };
 }
 
 export default async function HomePage() {
-  const projects = await getInitialProjects();
+  const { projects, experiences, educations, certifications } = await getInitialData();
 
   return (
     <>
@@ -44,8 +69,9 @@ export default async function HomePage() {
         <Skills />
         <Achievements />
         <Background />
-        <Education />
-        <Certification />
+        <Education initialEducation={educations} />
+        <Experience initialExperience={experiences} />
+        <Certification initialCertifications={certifications} />
         <FAQ />
         <Contact />
       </main>

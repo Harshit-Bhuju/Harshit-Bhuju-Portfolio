@@ -34,7 +34,11 @@ const defaultEducation = [
   },
 ];
 
-export default function Education() {
+export default function Education({
+  initialEducation,
+}: {
+  initialEducation?: any[];
+} = {}) {
   const [education, setEducation] = useState<Array<{
     id?: number;
     degree: string;
@@ -42,7 +46,11 @@ export default function Education() {
     school?: string | null;
     dateRange?: string | null;
     gpa?: string | null;
-  }>>(defaultEducation);
+  }>>(
+    initialEducation && initialEducation.length
+      ? initialEducation
+      : defaultEducation
+  );
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {

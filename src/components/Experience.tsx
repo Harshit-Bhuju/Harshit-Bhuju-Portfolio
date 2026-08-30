@@ -24,15 +24,25 @@ const defaultExperience = [
   },
 ];
 
-export default function Experience() {
-  const [experience, setExperience] = useState<{
-    id?: number;
-    role: string;
-    company: string;
-    location?: string | null;
-    dateRange?: string | null;
-    points?: string[];
-  }[]>(defaultExperience);
+export default function Experience({
+  initialExperience,
+}: {
+  initialExperience?: any[];
+} = {}) {
+  const [experience, setExperience] = useState<
+    {
+      id?: number;
+      role: string;
+      company: string;
+      location?: string | null;
+      dateRange?: string | null;
+      points?: string[];
+    }[]
+  >(
+    initialExperience && initialExperience.length
+      ? initialExperience
+      : defaultExperience
+  );
   useEffect(() => {
     fetch("/api/experience")
       .then((r) => (r.ok ? r.json() : null))

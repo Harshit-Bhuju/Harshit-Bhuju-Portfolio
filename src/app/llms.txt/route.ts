@@ -113,15 +113,21 @@ export async function GET() {
     const pCategory = p.category ? ` (${p.category})` : "";
     const pSlug = p.slug;
     const pTags = Array.isArray(p.tags) && p.tags.length ? p.tags.join(" · ") : "";
-    const pRole = "Frontend Developer"; // Explicitly state frontend role for all projects
+    const pRole = (p as any).myRole || "Frontend Developer";
 
     markdown += `\n### ${idx + 1}. ${pTitle}${pCategory}\n`;
-    markdown += `- **Role**: ${pRole}\n`;
+    markdown += `- **My Role**: ${pRole}\n`;
     markdown += `- **Project Page**: ${base}/projects/${pSlug}\n`;
     if (p.liveUrl) markdown += `- **Live Demo**: ${p.liveUrl}\n`;
     if (p.githubUrl && p.githubUrl !== "null") markdown += `- **GitHub Repository**: ${p.githubUrl}\n`;
-    if (pTags) markdown += `- **Technology Stack**: ${pTags}\n`;
+    if (pTags) markdown += `- **Full Technology Stack**: ${pTags}\n`;
     if (p.shortDescription) markdown += `- **Overview**: ${p.shortDescription}\n`;
+    if (Array.isArray((p as any).contributions) && (p as any).contributions.length) {
+      markdown += `- **My Frontend Contributions**:\n`;
+      ((p as any).contributions as string[]).forEach((c: string) => {
+        markdown += `  - ${c}\n`;
+      });
+    }
     if (p.challenges) markdown += `- **Key Technical Challenges**: ${p.challenges}\n`;
     if (p.solutions) markdown += `- **Architectural & Frontend Solutions**: ${p.solutions}\n`;
   });

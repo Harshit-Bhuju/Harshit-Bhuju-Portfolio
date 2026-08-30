@@ -293,6 +293,76 @@ export default async function ProjectPage({ params }: Props) {
               </p>
             </div>
 
+            {/* Explicit Role & Contributions breakdown for recruiter credibility */}
+            <div className="p-6 md:p-8 border border-strong-border bg-surface/40 rounded-lg space-y-6">
+              <div>
+                <span className="text-[10px] uppercase tracking-[0.2em] text-accent font-semibold block mb-1">
+                  Individual Contribution
+                </span>
+                <h3 className="text-xl font-semibold text-primary">
+                  My Role: {slug === "antarprerana" ? "Lead Frontend Developer" : "Frontend Developer"}
+                </h3>
+              </div>
+
+              <div>
+                <h4 className="text-xs uppercase tracking-[0.15em] text-muted mb-3">
+                  What I Built &amp; Engineered
+                </h4>
+                <ul className="space-y-2.5">
+                  {slug === "antarprerana" ? (
+                    <>
+                      <li className="text-sm text-secondary flex items-start gap-2.5">
+                        <span className="text-accent shrink-0">✓</span>
+                        Architected responsive multi-role frontend dashboards (Super Admin, Admin, Participant) using Next.js 15 &amp; TypeScript.
+                      </li>
+                      <li className="text-sm text-secondary flex items-start gap-2.5">
+                        <span className="text-accent shrink-0">✓</span>
+                        Integrated RTK Query &amp; REST APIs for automated cache invalidation and complex client state.
+                      </li>
+                      <li className="text-sm text-secondary flex items-start gap-2.5">
+                        <span className="text-accent shrink-0">✓</span>
+                        Engineered participant KPI data tables with dynamic filtering, automated reporting, and Excel exports.
+                      </li>
+                      <li className="text-sm text-secondary flex items-start gap-2.5">
+                        <span className="text-accent shrink-0">✓</span>
+                        Developed cohort lifecycle tracking modules and analytics visualizations.
+                      </li>
+                    </>
+                  ) : slug === "rapireport" ? (
+                    <>
+                      <li className="text-sm text-secondary flex items-start gap-2.5">
+                        <span className="text-accent shrink-0">✓</span>
+                        Built responsive medical document upload and OCR report analysis interface.
+                      </li>
+                      <li className="text-sm text-secondary flex items-start gap-2.5">
+                        <span className="text-accent shrink-0">✓</span>
+                        Engineered interactive health risk visualization charts and biomarker status indicators using Recharts.
+                      </li>
+                      <li className="text-sm text-secondary flex items-start gap-2.5">
+                        <span className="text-accent shrink-0">✓</span>
+                        Developed patient consultation booking interface and family health records dashboard.
+                      </li>
+                    </>
+                  ) : (
+                    <>
+                      <li className="text-sm text-secondary flex items-start gap-2.5">
+                        <span className="text-accent shrink-0">✓</span>
+                        Built responsive marketplace product showcase and cultural e-learning interface.
+                      </li>
+                      <li className="text-sm text-secondary flex items-start gap-2.5">
+                        <span className="text-accent shrink-0">✓</span>
+                        Implemented client-side shopping cart state, checkout flows, and media player components.
+                      </li>
+                      <li className="text-sm text-secondary flex items-start gap-2.5">
+                        <span className="text-accent shrink-0">✓</span>
+                        Optimized asset delivery and layout responsiveness across mobile and desktop devices.
+                      </li>
+                    </>
+                  )}
+                </ul>
+              </div>
+            </div>
+
             {/* Video below overview */}
             {project.videoUrl && (
               <div>

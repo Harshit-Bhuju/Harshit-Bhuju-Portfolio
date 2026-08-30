@@ -105,25 +105,25 @@ const faqs = [
     question: "How do you ensure performance and web accessibility standards?",
     answer: (
       <>
-        All applications are developed following{" "}
+        Applications are developed following accessibility best practices based on{" "}
         <a
           href="https://www.w3.org/TR/WCAG21/"
           target="_blank"
           rel="noopener noreferrer"
           className="underline text-primary hover:text-secondary transition-colors"
         >
-          W3C WCAG 2.1
+          WCAG guidance
         </a>{" "}
-        accessibility guidelines and optimized for{" "}
+        and optimized for responsive layout performance and{" "}
         <a
           href="https://web.dev/vitals/"
           target="_blank"
           rel="noopener noreferrer"
           className="underline text-primary hover:text-secondary transition-colors"
         >
-          Google Web Vitals
+          Core Web Vitals
         </a>
-        . This guarantees fast page load speeds, screen reader compatibility, and seamless mobile responsiveness across all devices.
+        .
       </>
     ),
   },
@@ -209,7 +209,7 @@ export default function FAQ() {
         name: "How do you ensure performance and web accessibility standards?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "All applications are developed following W3C WCAG 2.1 accessibility guidelines and optimized for Google Web Vitals. This guarantees fast page load speeds, screen reader compatibility, and seamless mobile responsiveness across all devices.",
+          text: "Applications are developed following accessibility best practices based on WCAG guidance and optimized for responsive layout performance and Core Web Vitals.",
         },
       },
     ],

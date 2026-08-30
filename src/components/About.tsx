@@ -135,7 +135,7 @@ export default function About() {
       value: String(Math.max(projectCount, 0)).padStart(2, "0"),
     },
     {
-      label: "Hackathon wins",
+      label: "1st Place Wins",
       value: String(Math.max(wins, 0)).padStart(2, "0"),
     },
     {

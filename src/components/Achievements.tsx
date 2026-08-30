@@ -95,8 +95,16 @@ const defaultAchievements: Achievement[] = [
   },
 ];
 
-export default function Achievements() {
-  const [achievements, setAchievements] = useState<Achievement[]>(defaultAchievements);
+export default function Achievements({
+  initialAchievements,
+}: {
+  initialAchievements?: Achievement[];
+} = {}) {
+  const [achievements, setAchievements] = useState<Achievement[]>(
+    Array.isArray(initialAchievements) && initialAchievements.length
+      ? initialAchievements
+      : defaultAchievements
+  );
   const [active, setActive] = useState<Achievement | null>(null);
   const [lightboxPhoto, setLightboxPhoto] = useState<string | null>(null);
   const sectionRef = useRef<HTMLElement>(null);

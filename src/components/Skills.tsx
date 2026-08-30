@@ -30,8 +30,34 @@ const defaultSkills: SkillGroups = {
   soft: ["Problem Solving", "Team Collaboration"],
 };
 
-export default function Skills() {
-  const [skills, setSkills] = useState<SkillGroups>(defaultSkills);
+function groupSkills(data: any[]): SkillGroups {
+  const grouped: SkillGroups = {
+    languages: [],
+    frameworks: [],
+    tools: [],
+    soft: [],
+  };
+  for (const row of data) {
+    if (row.name && row.category) {
+      const cat = String(row.category);
+      if (!grouped[cat]) grouped[cat] = [];
+      grouped[cat].push(row.name);
+    }
+  }
+  return grouped;
+}
+
+export default function Skills({
+  initialSkills,
+}: {
+  initialSkills?: any[];
+} = {}) {
+  const [skills, setSkills] = useState<SkillGroups>(() => {
+    if (Array.isArray(initialSkills) && initialSkills.length) {
+      return groupSkills(initialSkills);
+    }
+    return defaultSkills;
+  });
   const sectionRef = useRef<HTMLElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
 
@@ -40,20 +66,7 @@ export default function Skills() {
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         if (!Array.isArray(data) || !data.length) return;
-        const grouped: SkillGroups = {
-          languages: [],
-          frameworks: [],
-          tools: [],
-          soft: [],
-        };
-        for (const row of data) {
-          if (row.name && row.category) {
-            const cat = String(row.category);
-            if (!grouped[cat]) grouped[cat] = [];
-            grouped[cat].push(row.name);
-          }
-        }
-        setSkills(grouped);
+        setSkills(groupSkills(data));
       })
       .catch(() => {});
   }, []);

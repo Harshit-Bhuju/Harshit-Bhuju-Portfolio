@@ -26,11 +26,34 @@ const defaultAbout: AboutData = {
   ],
 };
 
-export default function About() {
-  const [about, setAbout] = useState<AboutData>(defaultAbout);
-  const [location, setLocation] = useState("Banepa, Nepal");
-  const [projectCount, setProjectCount] = useState(3);
-  const [wins, setWins] = useState(3);
+export default function About({
+  initialSettings,
+  initialProjectCount,
+  initialWins,
+}: {
+  initialSettings?: any;
+  initialProjectCount?: number;
+  initialWins?: number;
+} = {}) {
+  const [about, setAbout] = useState<AboutData>(() => {
+    if (initialSettings?.aboutStatement || initialSettings?.aboutBody) {
+      return {
+        statement: initialSettings.aboutStatement || defaultAbout.statement,
+        body: initialSettings.aboutBody || defaultAbout.body,
+        focus: Array.isArray(initialSettings.aboutFocus) && initialSettings.aboutFocus.length
+          ? initialSettings.aboutFocus
+          : defaultAbout.focus,
+      };
+    }
+    return defaultAbout;
+  });
+  const [location, setLocation] = useState(
+    initialSettings?.location || "Banepa, Nepal"
+  );
+  const [projectCount, setProjectCount] = useState(
+    initialProjectCount ?? 3
+  );
+  const [wins, setWins] = useState(initialWins ?? 3);
 
   useEffect(() => {
     fetch("/api/settings")
@@ -38,9 +61,9 @@ export default function About() {
       .then((data) => {
         if (!data) return;
         setAbout({
-          statement: data.aboutStatement || "",
-          body: data.aboutBody || "",
-          focus: Array.isArray(data.aboutFocus) ? data.aboutFocus : [],
+          statement: data.aboutStatement || defaultAbout.statement,
+          body: data.aboutBody || defaultAbout.body,
+          focus: Array.isArray(data.aboutFocus) && data.aboutFocus.length ? data.aboutFocus : defaultAbout.focus,
         });
         if (data.location) setLocation(data.location);
       })

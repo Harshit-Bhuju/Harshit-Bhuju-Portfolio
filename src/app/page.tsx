@@ -20,7 +20,15 @@ async function getInitialData() {
   if (process.env.DATABASE_URL) {
     try {
       const { prisma } = await import("@/lib/prisma");
-      const [projects, experiences, educations, certifications] = await Promise.all([
+      const [
+        projects,
+        experiences,
+        educations,
+        certifications,
+        skills,
+        achievements,
+        settings,
+      ] = await Promise.all([
         prisma.project.findMany({
           where: { visible: true },
           orderBy: { displayOrder: "asc" },
@@ -37,37 +45,81 @@ async function getInitialData() {
           where: { visible: true },
           orderBy: { displayOrder: "asc" },
         }),
+        prisma.skill.findMany({
+          where: { visible: true },
+          orderBy: [{ category: "asc" }, { displayOrder: "asc" }],
+        }),
+        prisma.achievement.findMany({
+          where: { visible: true },
+          orderBy: { displayOrder: "asc" },
+        }),
+        prisma.siteSettings.findUnique({
+          where: { id: 1 },
+        }),
       ]);
+
+      const winsCount = achievements.filter((a) =>
+        String(a.placement || "").toUpperCase().includes("1ST")
+      ).length;
+
       return {
         projects: JSON.parse(JSON.stringify(projects)),
         experiences: JSON.parse(JSON.stringify(experiences)),
         educations: JSON.parse(JSON.stringify(educations)),
         certifications: JSON.parse(JSON.stringify(certifications)),
+        skills: JSON.parse(JSON.stringify(skills)),
+        achievements: JSON.parse(JSON.stringify(achievements)),
+        settings: settings ? JSON.parse(JSON.stringify(settings)) : null,
+        projectCount: projects.length,
+        winsCount,
       };
     } catch {
       /* fallback below */
     }
   }
+  const fallbackProjects = getMemoryProjects()
+    .filter((p) => p.visible)
+    .sort((a, b) => a.displayOrder - b.displayOrder);
+
   return {
-    projects: getMemoryProjects().filter((p) => p.visible).sort((a, b) => a.displayOrder - b.displayOrder),
+    projects: fallbackProjects,
     experiences: [],
     educations: [],
     certifications: [],
+    skills: [],
+    achievements: [],
+    settings: null,
+    projectCount: fallbackProjects.length,
+    winsCount: 3,
   };
 }
 
 export default async function HomePage() {
-  const { projects, experiences, educations, certifications } = await getInitialData();
+  const {
+    projects,
+    experiences,
+    educations,
+    certifications,
+    skills,
+    achievements,
+    settings,
+    projectCount,
+    winsCount,
+  } = await getInitialData();
 
   return (
     <>
       <Navbar />
       <main id="main-content">
         <Hero />
-        <About />
+        <About
+          initialSettings={settings}
+          initialProjectCount={projectCount}
+          initialWins={winsCount}
+        />
         <Projects initialProjects={projects} />
-        <Skills />
-        <Achievements />
+        <Skills initialSkills={skills} />
+        <Achievements initialAchievements={achievements} />
         <Background />
         <Education initialEducation={educations} />
         <Experience initialExperience={experiences} />

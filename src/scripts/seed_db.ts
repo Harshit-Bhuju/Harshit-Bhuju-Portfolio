@@ -51,8 +51,6 @@ async function main() {
     },
   });
 
-  console.log("✓ Updated myRole and contributions for all 3 featured projects.");
-
   // ── Verify ───────────────────────────────────────────────────────────────────
   const updated = await prisma.project.findMany({
     where: { slug: { in: ["antarprerana", "rapireport", "cultureconnect"] } },

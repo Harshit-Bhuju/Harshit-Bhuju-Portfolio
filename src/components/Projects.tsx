@@ -136,11 +136,30 @@ function ProjectBlock({
               {project.shortDescription}
             </p>
 
-            {/* My Role — if set in DB */}
-            {project.myRole && (
-              <p className="text-xs text-muted tracking-wider uppercase mb-5">
-                My Role — {project.myRole}
-              </p>
+            {/* Role & Contributions breakdown */}
+            {(project.myRole || ((project.contributions as string[] | undefined)?.length ?? 0) > 0) && (
+              <div className="mb-6 p-4 border border-border/80 bg-surface/30 space-y-3">
+                {project.myRole && (
+                  <p className="text-xs font-medium text-primary tracking-wide uppercase">
+                    Role: <span className="text-secondary font-normal">{project.myRole}</span>
+                  </p>
+                )}
+                {((project.contributions as string[] | undefined)?.length ?? 0) > 0 && (
+                  <div>
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-muted mb-2">
+                      My Contributions
+                    </p>
+                    <ul className="space-y-1.5">
+                      {(project.contributions as string[]).slice(0, 3).map((item: string, i: number) => (
+                        <li key={i} className="text-xs text-secondary flex items-start gap-2.5">
+                          <span className="w-1 h-1 rounded-full bg-primary/50 shrink-0 mt-1.5" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
             )}
 
             {/* Tags — full project stack, not personal skills */}

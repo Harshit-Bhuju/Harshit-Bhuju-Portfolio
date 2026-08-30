@@ -43,46 +43,61 @@ export async function uploadClientFile(
   let contentType = MIME_MAP[ext] || file.type || "application/octet-stream";
   if (contentType === "image/jpg") contentType = "image/jpeg";
 
-  // Step 1: Request signed upload URL from Next.js backend (< 1KB payload)
-  const signRes = await fetch("/api/upload", {
+  // Step 1: Attempt direct upload to Supabase Storage via signed URL
+  try {
+    const signRes = await fetch("/api/upload", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        filename: file.name,
+        folder,
+        contentType,
+      }),
+    });
+
+    const signData = await signRes.json().catch(() => ({}));
+    if (signRes.ok && signData.signedUrl && signData.publicUrl) {
+      const { signedUrl, publicUrl } = signData;
+
+      const uploadRes = await fetch(signedUrl, {
+        method: "PUT",
+        headers: {
+          "Content-Type": contentType,
+        },
+        body: file,
+      });
+
+      if (uploadRes.ok) {
+        return publicUrl as string;
+      }
+
+      console.warn(
+        `Direct Supabase Storage upload failed with status ${uploadRes.status}. Falling back to server upload route...`
+      );
+    }
+  } catch (err) {
+    console.warn(
+      "Direct Supabase Storage upload network error. Falling back to server upload route:",
+      err
+    );
+  }
+
+  // Step 2: Automatic Server Fallback — Upload via FormData to /api/upload
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("folder", folder);
+
+  const fallbackRes = await fetch("/api/upload", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      filename: file.name,
-      folder,
-      contentType,
-    }),
+    body: formData,
   });
 
-  const signData = await signRes.json().catch(() => ({}));
-  if (!signRes.ok) {
+  const fallbackData = await fallbackRes.json().catch(() => ({}));
+  if (!fallbackRes.ok || !fallbackData.url) {
     throw new Error(
-      signData.error || "Failed to obtain upload authorization from server."
+      fallbackData.error || "Upload failed via server fallback route."
     );
   }
 
-  const { signedUrl, publicUrl } = signData;
-  if (!signedUrl || !publicUrl) {
-    throw new Error("Invalid signed URL returned from server.");
-  }
-
-  // Step 2: Stream file directly from browser to Supabase Storage
-  const uploadRes = await fetch(signedUrl, {
-    method: "PUT",
-    headers: {
-      "Content-Type": contentType,
-    },
-    body: file,
-  });
-
-  if (!uploadRes.ok) {
-    const errorText = await uploadRes.text().catch(() => "");
-    throw new Error(
-      `Direct upload to Supabase failed (${uploadRes.status}): ${
-        errorText || "Storage upload error"
-      }`
-    );
-  }
-
-  return publicUrl as string;
+  return fallbackData.url as string;
 }

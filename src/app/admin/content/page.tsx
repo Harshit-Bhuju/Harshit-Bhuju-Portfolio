@@ -421,9 +421,7 @@ export default function AdminContentPage() {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-base font-semibold tracking-tight">Content Management</h1>
-                <span className="inline-flex items-center rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-400">
-                  Live DB
-                </span>
+
               </div>
               <p className="text-xs text-secondary">
                 Signed in as <span className="text-primary font-mono">{session.user?.name || session.user?.email}</span>

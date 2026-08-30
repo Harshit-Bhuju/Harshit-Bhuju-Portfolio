@@ -222,14 +222,6 @@ export default function RootLayout({
         {/* Preconnect to Google Fonts CDN for font loading speed */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* Preload the LCP hero image — browser starts fetching before JS runs */}
-        <link
-          rel="preload"
-          as="image"
-          href="/profile.jpg"
-          // @ts-expect-error fetchpriority is valid but not yet in TS types
-          fetchpriority="high"
-        />
         {jsonLd.map((schema, i) => (
           <script
             key={i}

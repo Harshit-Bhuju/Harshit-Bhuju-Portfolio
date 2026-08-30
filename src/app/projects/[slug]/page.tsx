@@ -103,8 +103,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     project.shortDescription ||
     (project.longDescription ? project.longDescription.slice(0, 155) + "..." : undefined);
   const ogImages = project.thumbnailUrl
-    ? [{ url: project.thumbnailUrl, alt: rawTitle }]
-    : [{ url: `${siteUrl}/profile.jpg`, alt: "Harshit Bhuju — Frontend Developer" }];
+    ? [
+        {
+          url: project.thumbnailUrl,
+          width: 1200,
+          height: 630,
+          alt: rawTitle,
+        },
+      ]
+    : [
+        {
+          url: `${siteUrl}/profile.jpg`,
+          width: 1200,
+          height: 630,
+          alt: "Harshit Bhuju — Frontend Developer",
+        },
+      ];
 
   const projectKeywords = [
     rawTitle,
@@ -117,6 +131,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     project.category || "",
   ].filter(Boolean);
 
+  const publishedTime = project.createdAt
+    ? new Date(project.createdAt).toISOString()
+    : undefined;
+  const modifiedTime = project.updatedAt
+    ? new Date(project.updatedAt).toISOString()
+    : undefined;
+
   return {
     title: rawTitle,
     description,
@@ -126,14 +147,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
       type: "article",
       url: `${siteUrl}/projects/${slug}`,
-      siteName: "Harshit Bhuju",
+      siteName: "Harshit Bhuju — Portfolio",
       images: ogImages,
+      publishedTime,
+      modifiedTime,
+      authors: [siteUrl],
+      section: project.category || "Web Development",
+      tags: project.tags || [],
     },
     twitter: {
       card: "summary_large_image",
       title: fullTitle,
       description,
       images: project.thumbnailUrl ? [project.thumbnailUrl] : [`${siteUrl}/profile.jpg`],
+      creator: "@harshitbhuju",
     },
     alternates: {
       canonical: `${siteUrl}/projects/${slug}`,

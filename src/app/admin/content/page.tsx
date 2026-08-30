@@ -1030,6 +1030,78 @@ export default function AdminContentPage() {
                       />
                     </div>
 
+                    {/* Certificate Photo / Document Upload */}
+                    <div className="border-t border-border/80 pt-5 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-secondary">
+                          Certificate Photo / Document (Image or PDF)
+                        </label>
+                        {editing.certificateUrl ? (
+                          <button
+                            type="button"
+                            onClick={() => setEditing((s) => ({ ...s, certificateUrl: "" }))}
+                            className="text-xs text-red-400 hover:underline cursor-pointer"
+                          >
+                            Remove Certificate
+                          </button>
+                        ) : null}
+                      </div>
+
+                      {editing.certificateUrl ? (
+                        <div className="flex items-start gap-4 p-3.5 bg-bg border border-border rounded-xl">
+                          <div className="relative w-28 h-20 bg-surface border border-border rounded-lg overflow-hidden shrink-0 flex items-center justify-center">
+                            {/\.(pdf)(\?|$)/i.test(String(editing.certificateUrl)) ? (
+                              <div className="flex flex-col items-center justify-center p-2 text-center text-red-400">
+                                <span className="text-xs font-bold">PDF</span>
+                                <span className="text-[10px] text-muted truncate max-w-[90px]">Document</span>
+                              </div>
+                            ) : (
+                              <img
+                                src={String(editing.certificateUrl)}
+                                alt="Certificate Preview"
+                                className="w-full h-full object-contain"
+                              />
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0 space-y-1.5 pt-1">
+                            <p className="text-xs text-secondary truncate font-mono bg-elevated/40 px-2 py-1 rounded">
+                              {String(editing.certificateUrl)}
+                            </p>
+                            <a
+                              href={String(editing.certificateUrl)}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center gap-1 text-xs text-primary underline hover:opacity-80 font-medium"
+                            >
+                              <span>View certificate file</span>
+                              <span>↗</span>
+                            </a>
+                          </div>
+                        </div>
+                      ) : (
+                        <SingleFileDropzone
+                          accept="image/*,.pdf"
+                          label="Upload Certificate Photo or PDF"
+                          isUploading={uploadingField === "certificateUrl"}
+                          onFileSelected={(file) =>
+                            handleUpload(
+                              file,
+                              "certifications",
+                              (url) => setEditing((s) => ({ ...s, certificateUrl: url })),
+                              "certificateUrl"
+                            )
+                          }
+                        />
+                      )}
+
+                      <Field
+                        label="Or Direct Certificate URL"
+                        value={String(editing.certificateUrl ?? "")}
+                        onChange={(v) => setEditing((s) => ({ ...s, certificateUrl: v }))}
+                        placeholder="https://..."
+                      />
+                    </div>
+
                   </div>
                 )}
 
@@ -1088,6 +1160,153 @@ export default function AdminContentPage() {
                       rows={3}
                       placeholder="Behind the scenes story, team collaboration, technical challenges overcome..."
                     />
+
+                    {/* Official Award / Certificate Photo Section */}
+                    <div className="border-t border-border/80 pt-5 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-secondary">
+                          Official Award / Certificate Photo (Image or PDF)
+                        </label>
+                        {editing.certificateUrl ? (
+                          <button
+                            type="button"
+                            onClick={() => setEditing((s) => ({ ...s, certificateUrl: "" }))}
+                            className="text-xs text-red-400 hover:underline cursor-pointer"
+                          >
+                            Remove Certificate
+                          </button>
+                        ) : null}
+                      </div>
+
+                      {editing.certificateUrl ? (
+                        <div className="flex items-start gap-4 p-3.5 bg-bg border border-border rounded-xl">
+                          <div className="relative w-28 h-20 bg-surface border border-border rounded-lg overflow-hidden shrink-0 flex items-center justify-center">
+                            {/\.(pdf)(\?|$)/i.test(String(editing.certificateUrl)) ? (
+                              <div className="flex flex-col items-center justify-center p-2 text-center text-red-400">
+                                <span className="text-xs font-bold">PDF</span>
+                                <span className="text-[10px] text-muted truncate max-w-[90px]">Document</span>
+                              </div>
+                            ) : (
+                              <img
+                                src={String(editing.certificateUrl)}
+                                alt="Award Certificate Preview"
+                                className="w-full h-full object-contain"
+                              />
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0 space-y-1.5 pt-1">
+                            <p className="text-xs text-secondary truncate font-mono bg-elevated/40 px-2 py-1 rounded">
+                              {String(editing.certificateUrl)}
+                            </p>
+                            <a
+                              href={String(editing.certificateUrl)}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center gap-1 text-xs text-primary underline hover:opacity-80 font-medium"
+                            >
+                              <span>View award photo / document</span>
+                              <span>↗</span>
+                            </a>
+                          </div>
+                        </div>
+                      ) : (
+                        <SingleFileDropzone
+                          accept="image/*,.pdf"
+                          label="Upload Official Award / Certificate Photo"
+                          isUploading={uploadingField === "certificateUrl"}
+                          onFileSelected={(file) =>
+                            handleUpload(
+                              file,
+                              "achievements",
+                              (url) => setEditing((s) => ({ ...s, certificateUrl: url })),
+                              "certificateUrl"
+                            )
+                          }
+                        />
+                      )}
+
+                      <Field
+                        label="Or Direct Certificate URL"
+                        value={String(editing.certificateUrl ?? "")}
+                        onChange={(v) => setEditing((s) => ({ ...s, certificateUrl: v }))}
+                        placeholder="https://..."
+                      />
+                    </div>
+
+                    {/* Achievement Gallery Photos Section */}
+                    <div className="border-t border-border/80 pt-5 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-secondary">
+                          Event &amp; Achievement Gallery Photos ({Array.isArray(editing.galleryUrls) ? (editing.galleryUrls as string[]).length : 0} attached)
+                        </label>
+                      </div>
+
+                      <SingleFileDropzone
+                        accept="image/*"
+                        label="Upload Event / Achievement Gallery Photo"
+                        isUploading={uploadingField === "galleryUrls"}
+                        onFileSelected={(file) =>
+                          handleUpload(
+                            file,
+                            "achievements",
+                            (url) =>
+                              setEditing((s) => {
+                                const list = Array.isArray(s?.galleryUrls) ? [...(s.galleryUrls as string[])] : [];
+                                list.push(url);
+                                return { ...s, galleryUrls: list };
+                              }),
+                            "galleryUrls"
+                          )
+                        }
+                      />
+
+                      {Array.isArray(editing.galleryUrls) && (editing.galleryUrls as string[]).length > 0 && (
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 pt-2">
+                          {(editing.galleryUrls as string[]).map((url, idx) => (
+                            <div
+                              key={idx}
+                              className="group relative aspect-video bg-bg border border-border rounded-lg overflow-hidden flex flex-col justify-between"
+                            >
+                              <img
+                                src={url}
+                                alt={`Gallery photo ${idx + 1}`}
+                                className="w-full h-full object-cover"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const list = Array.isArray(editing.galleryUrls)
+                                    ? [...(editing.galleryUrls as string[])]
+                                    : [];
+                                  list.splice(idx, 1);
+                                  setEditing((s) => ({ ...s, galleryUrls: list }));
+                                }}
+                                className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-black/80 text-white hover:bg-red-500 flex items-center justify-center text-xs transition-colors shadow cursor-pointer"
+                                title="Remove photo"
+                              >
+                                ✕
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      <FieldTextarea
+                        label="Or Edit Gallery Image URLs (one per line or comma-separated)"
+                        value={Array.isArray(editing.galleryUrls) ? (editing.galleryUrls as string[]).join("\n") : ""}
+                        onChange={(v) =>
+                          setEditing((s) => ({
+                            ...s,
+                            galleryUrls: v
+                              .split(/[\n,]/)
+                              .map((str) => str.trim())
+                              .filter(Boolean),
+                          }))
+                        }
+                        placeholder="https://...&#10;https://..."
+                        rows={2}
+                      />
+                    </div>
 
                   </div>
                 )}
@@ -1449,24 +1668,28 @@ export default function AdminContentPage() {
                           </div>
                         ) : null}
 
-                        {/* Certificate document link preview if available */}
-                        {item.certificateUrl ? (
-                          <div className="flex items-center gap-2 pt-1 text-[11px] text-secondary">
-                            <a
-                              href={String(item.certificateUrl)}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="hover:text-primary underline truncate"
-                            >
-                              View certificate ↗
-                            </a>
-                          </div>
-                        ) : null}
+                        {/* Certificate & Gallery previews */}
+                        {(item.certificateUrl || (Array.isArray(item.galleryUrls) && item.galleryUrls.length > 0)) ? (
+                          <div className="flex flex-wrap items-center gap-2 pt-2">
+                            {item.certificateUrl ? (
+                              <a
+                                href={String(item.certificateUrl)}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-bg border border-border hover:border-strong-border text-[11px] text-primary transition-colors"
+                              >
+                                <span>📜</span>
+                                <span>Certificate Attached</span>
+                                <span className="text-[10px] text-muted">↗</span>
+                              </a>
+                            ) : null}
 
-                        {/* Gallery photos count */}
-                        {Array.isArray(item.galleryUrls) && item.galleryUrls.length > 0 ? (
-                          <div className="pt-1">
-                            <span className="text-[11px] text-muted">{item.galleryUrls.length} photo{item.galleryUrls.length > 1 ? "s" : ""}</span>
+                            {Array.isArray(item.galleryUrls) && item.galleryUrls.length > 0 ? (
+                              <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-bg border border-border text-[11px] text-secondary">
+                                <span>📸</span>
+                                <span>{item.galleryUrls.length} Photo{item.galleryUrls.length > 1 ? "s" : ""}</span>
+                              </span>
+                            ) : null}
                           </div>
                         ) : null}
                       </div>

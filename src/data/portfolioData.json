@@ -360,7 +360,7 @@
       "id": 14,
       "slug": "harshit-bhuju-portfolio",
       "title": "Harshit-Bhuju-Portfolio",
-      "number": null,
+      "number": null, 
       "category": "TypeScript",
       "dateRange": null,
       "shortDescription": "Full-stack personal portfolio with a modern UI, secure authentication, dynamic content management, and an admin dashboard powered by Next.js and Prisma.",

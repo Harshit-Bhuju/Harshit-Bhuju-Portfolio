@@ -113,6 +113,9 @@ export default function Experience({
     return () => ctx.revert();
   }, []);
 
+  const listToRender = experience.length > 0 ? experience : defaultExperience;
+  if (listToRender.length === 0) return null;
+
   return (
     <section
       ref={sectionRef}
@@ -140,7 +143,7 @@ export default function Experience({
             aria-hidden
           />
 
-          {experience.map((job) => (
+          {listToRender.map((job) => (
             <article
               key={job.id}
               className="exp-item grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12"

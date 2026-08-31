@@ -177,6 +177,29 @@ export default function About({
     focus: about.focus?.length ? about.focus : defaultAbout.focus,
   };
 
+  if (!activeAbout.statement && !activeAbout.body) {
+    return (
+      <section id="about" className="section-padding border-t border-border" aria-label="About Harshit Bhuju">
+        <div className="container-main">
+          <div className="h-3 w-16 bg-neutral-800 animate-pulse rounded mb-8" />
+          <div className="h-10 w-3/4 max-w-3xl bg-neutral-800 animate-pulse rounded mb-12" />
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-14">
+            <div className="lg:col-span-7 space-y-3">
+              <div className="h-4 w-full bg-neutral-800 animate-pulse rounded" />
+              <div className="h-4 w-11/12 bg-neutral-800 animate-pulse rounded" />
+              <div className="h-4 w-4/5 bg-neutral-800 animate-pulse rounded" />
+            </div>
+            <div className="lg:col-span-5 space-y-2">
+              <div className="h-3 w-20 bg-neutral-800 animate-pulse rounded mb-4" />
+              <div className="h-4 w-40 bg-neutral-800 animate-pulse rounded" />
+              <div className="h-4 w-44 bg-neutral-800 animate-pulse rounded" />
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section
       ref={sectionRef}

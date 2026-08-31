@@ -83,6 +83,7 @@ export default function Certification({
   }, [items]);
 
   const listToRender = items.length > 0 ? items : defaultCertifications;
+  if (listToRender.length === 0) return null;
 
   return (
     <section

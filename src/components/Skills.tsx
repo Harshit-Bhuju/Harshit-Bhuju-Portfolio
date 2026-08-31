@@ -120,6 +120,8 @@ export default function Skills({
     }
   }
 
+  if (categories.length === 0) return null;
+
   return (
     <section
       ref={sectionRef}
@@ -146,9 +148,7 @@ export default function Skills({
           <h2 className="heading-section">Capabilities</h2>
         </div>
 
-        {categories.length === 0 ? (
-          <p className="text-sm text-muted">No skills yet — add them in admin.</p>
-        ) : (
+        {categories.length === 0 ? null : (
           <div
             ref={gridRef}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5"

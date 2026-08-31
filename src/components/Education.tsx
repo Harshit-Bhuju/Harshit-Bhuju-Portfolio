@@ -61,6 +61,9 @@ export default function Education({
     return () => ctx.revert();
   }, [education]);
 
+  const listToRender = education.length > 0 ? education : defaultEducation;
+  if (listToRender.length === 0) return null;
+
   return (
     <section
       ref={sectionRef}
@@ -81,7 +84,7 @@ export default function Education({
         <h2 className="heading-section mb-10 md:mb-14">Academic Background</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-          {education.map((item, i) => (
+          {listToRender.map((item, i) => (
             <article
               key={item.id ?? i}
               className="edu-item border border-border p-6 md:p-7 hover:border-strong-border transition-colors duration-300 flex flex-col"

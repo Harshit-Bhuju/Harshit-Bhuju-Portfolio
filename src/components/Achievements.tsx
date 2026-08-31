@@ -114,6 +114,9 @@ export default function Achievements({
     setLightboxPhoto(null);
   };
 
+  const listToRender = achievements.length > 0 ? achievements : defaultAchievements;
+  if (listToRender.length === 0) return null;
+
   return (
     <section
       ref={sectionRef}
@@ -136,6 +139,7 @@ export default function Achievements({
 
         {(() => {
           const listToRender = achievements.length > 0 ? achievements : defaultAchievements;
+          if (listToRender.length === 0) return null;
           return (
             <div className="space-y-0 border-t border-border">
               {listToRender.map((a) => {

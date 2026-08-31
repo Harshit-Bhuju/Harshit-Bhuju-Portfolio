@@ -4,25 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+import { DEFAULT_EXPERIENCES } from "@/lib/portfolioFallback";
+
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const defaultExperience = [
-  {
-    id: 1,
-    role: "Frontend Developer Intern",
-    company: "Next Step",
-    location: "Banepa, Nepal",
-    dateRange: "07/2026 — Present",
-    points: [
-      "Architected a scalable multi-role frontend (Super Admin, Admin, User) using Next.js, TypeScript, and NestJS REST APIs.",
-      "Implemented RTK Query for automatic cache invalidation, reducing redundant network requests and optimizing data fetching performance.",
-      "Engineered complex data table workflows with automated report generation and Excel export capabilities for participant KPI tracking.",
-      "Developed cohort management modules, dashboard visualizations, and role-scoped access control for an end-to-end incubation platform.",
-    ],
-  },
-];
+const defaultExperience = DEFAULT_EXPERIENCES;
 
 export default function Experience({
   initialExperience,

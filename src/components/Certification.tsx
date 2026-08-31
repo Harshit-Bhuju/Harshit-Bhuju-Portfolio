@@ -7,6 +7,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Modal from "./Modal";
 
+import { DEFAULT_CERTIFICATIONS } from "@/lib/portfolioFallback";
+
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
@@ -22,25 +24,7 @@ type Cert = {
   certificateUrl?: string | null;
 };
 
-const defaultCertifications: Cert[] = [
-  {
-    id: 1,
-    title: "Web Development Course",
-    provider: "Next Step",
-    date: "July 2024",
-    topics: [
-      "HTML5",
-      "CSS3",
-      "JavaScript",
-      "Responsive Design",
-      "Git",
-      "GitHub",
-      "Bootstrap",
-    ],
-    certificateUrl:
-      "https://kscinrfblgcvrwlpesro.supabase.co/storage/v1/object/public/portfolio/certificates/1787981922265-43fbbs.jpg",
-  },
-];
+const defaultCertifications: Cert[] = DEFAULT_CERTIFICATIONS as Cert[];
 
 export default function Certification({
   initialCertifications,
@@ -69,10 +53,10 @@ export default function Certification({
         let certs: Cert[] = [];
         if (Array.isArray(data) && data.length) certs = data;
         else if (data && !Array.isArray(data) && data.title) certs = [data];
-        setItems(certs);
-
-        // Preload certificate images into browser cache immediately
-        certs.forEach((c) => preloadCertificate(c.certificateUrl));
+        if (certs.length > 0) {
+          setItems(certs);
+          certs.forEach((c) => preloadCertificate(c.certificateUrl));
+        }
       })
       .catch(() => {});
   }, []);
@@ -98,6 +82,8 @@ export default function Certification({
     return () => ctx.revert();
   }, [items]);
 
+  const listToRender = items.length > 0 ? items : defaultCertifications;
+
   return (
     <section
       ref={sectionRef}
@@ -116,11 +102,8 @@ export default function Certification({
         </p>
         <h2 className="heading-section mb-10 md:mb-14">Courses & Certificates</h2>
 
-        {items.length === 0 ? (
-          <p className="text-sm text-muted">No certifications yet.</p>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
-            {items.map((c, i) => {
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+          {listToRender.map((c, i) => {
               const hasDetail =
                 Boolean(c.story) ||
                 Boolean(c.description) ||
@@ -182,7 +165,6 @@ export default function Certification({
               );
             })}
           </div>
-        )}
       </div>
 
       <Modal

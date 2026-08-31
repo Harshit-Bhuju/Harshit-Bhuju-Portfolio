@@ -7,6 +7,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Modal from "./Modal";
 
+import { DEFAULT_ACHIEVEMENTS } from "@/lib/portfolioFallback";
+
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
@@ -23,77 +25,7 @@ type Achievement = {
   galleryUrls?: string[];
 };
 
-const defaultAchievements: Achievement[] = [
-  {
-    id: 1,
-    placement: "TOP 10",
-    title: "Harvard HSIL Hackathon",
-    subtitle: "7th Edition — Harvard T.H. Chan School of Public Health",
-    year: "2026",
-    description: "Selected as a Top 10 global venture for an AI-driven healthcare solution, evaluated by international investors and domain experts.",
-    certificateUrl: "https://kscinrfblgcvrwlpesro.supabase.co/storage/v1/object/public/portfolio/achievements/1788070329205-mb0fhf.jpg",
-    galleryUrls: [
-      "https://kscinrfblgcvrwlpesro.supabase.co/storage/v1/object/public/portfolio/achievements/1788072154918-q4o0mp.jpeg",
-      "https://kscinrfblgcvrwlpesro.supabase.co/storage/v1/object/public/portfolio/achievements/1788072157013-9kx929.jpeg"
-    ],
-  },
-  {
-    id: 2,
-    placement: "1ST",
-    title: "NIST College Hackathon 2.0",
-    subtitle: "NIST College",
-    year: "2026",
-    description: "Secured 1st place out of 15+ competing teams (including university-level participants) in an intensive 28-hour build.",
-    certificateUrl: "https://kscinrfblgcvrwlpesro.supabase.co/storage/v1/object/public/portfolio/achievements/1788070498953-ovocuz.jpg",
-    galleryUrls: [
-      "https://kscinrfblgcvrwlpesro.supabase.co/storage/v1/object/public/portfolio/achievements/1788072206939-ajmzen.jpeg",
-      "https://kscinrfblgcvrwlpesro.supabase.co/storage/v1/object/public/portfolio/achievements/1788072211297-0jymem.jpeg",
-      "https://kscinrfblgcvrwlpesro.supabase.co/storage/v1/object/public/portfolio/achievements/1788072213222-csh5wo.jpeg"
-    ],
-  },
-  {
-    id: 3,
-    placement: "1ST",
-    title: "IT Project Demo — ECA/CCA 2082",
-    subtitle: "Banepa NIST Sec. School",
-    year: "2026",
-    description: "Awarded 1st place for exceptional technical architecture and functional implementation in the Class XII annual project showcase.",
-    certificateUrl: "https://kscinrfblgcvrwlpesro.supabase.co/storage/v1/object/public/portfolio/achievements/1788070405895-79e9vu.jpg",
-    galleryUrls: [],
-  },
-  {
-    id: 4,
-    placement: "1ST",
-    title: "UI/UX Competition — ECA/CCA 2082",
-    subtitle: "Banepa NIST Sec. School",
-    year: "2026",
-    description: "Won 1st place by designing user-centered UI/UX wireframes and high-fidelity prototypes focusing on accessibility.",
-    certificateUrl: "https://kscinrfblgcvrwlpesro.supabase.co/storage/v1/object/public/portfolio/achievements/1788070429389-9jysex.jpg",
-    galleryUrls: [],
-  },
-  {
-    id: 5,
-    placement: "TOP 19",
-    title: "IdeaX Hackathon 2025",
-    subtitle: "Madan Bhandari Memorial College",
-    year: "2025",
-    description: "Shortlisted among the Top 19 finalist teams out of 120+ applicants nationwide to pitch in the final on-site round.",
-    certificateUrl: "https://kscinrfblgcvrwlpesro.supabase.co/storage/v1/object/public/portfolio/achievements/1788070443879-btsntr.jpg",
-    galleryUrls: [
-      "https://kscinrfblgcvrwlpesro.supabase.co/storage/v1/object/public/portfolio/achievements/1788072260090-zepsez.jpeg"
-    ],
-  },
-  {
-    id: 6,
-    placement: "2ND",
-    title: "IT Project Demo — ECA/CCA 2081",
-    subtitle: "Banepa NIST Sec. School",
-    year: "2024",
-    description: "Placed 2nd overall in the Class XI annual technical project demonstration competition.",
-    certificateUrl: "https://kscinrfblgcvrwlpesro.supabase.co/storage/v1/object/public/portfolio/achievements/1788070479277-zbon1i.jpg",
-    galleryUrls: [],
-  },
-];
+const defaultAchievements: Achievement[] = DEFAULT_ACHIEVEMENTS as Achievement[];
 
 export default function Achievements({
   initialAchievements,
@@ -126,9 +58,8 @@ export default function Achievements({
     fetch("/api/achievements")
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
-        if (Array.isArray(data)) {
+        if (Array.isArray(data) && data.length > 0) {
           setAchievements(data);
-          // Preload all certificate & gallery photos into browser cache immediately
           data.forEach((item: Achievement) => preloadAchievementPhotos(item));
         }
       })
@@ -203,20 +134,20 @@ export default function Achievements({
         </p>
         <h2 className="heading-section mb-10 md:mb-14">Achievements</h2>
 
-        {achievements.length === 0 ? (
-          <p className="text-sm text-muted">No achievements yet.</p>
-        ) : (
-          <div className="space-y-0 border-t border-border">
-            {achievements.map((a) => {
-              const allPhotos = [a.certificateUrl, ...(a.galleryUrls || [])].filter(
-                (x): x is string => Boolean(x && x.trim())
-              );
-              const hasPhotos = allPhotos.length > 0;
-              const hasDetail = hasPhotos || Boolean(a.story) || Boolean(a.description);
+        {(() => {
+          const listToRender = achievements.length > 0 ? achievements : defaultAchievements;
+          return (
+            <div className="space-y-0 border-t border-border">
+              {listToRender.map((a) => {
+                const allPhotos = [a.certificateUrl, ...(a.galleryUrls || [])].filter(
+                  (x): x is string => Boolean(x && x.trim())
+                );
+                const hasPhotos = allPhotos.length > 0;
+                const hasDetail = hasPhotos || Boolean(a.story) || Boolean(a.description);
 
-              return (
-                <article
-                  key={a.id}
+                return (
+                  <article
+                    key={a.id}
                   onMouseEnter={() => preloadAchievementPhotos(a)}
                   className="ach-item group grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 py-6 md:py-8 border-b border-border hover:bg-surface/30 transition-colors"
                 >
@@ -261,7 +192,8 @@ export default function Achievements({
               );
             })}
           </div>
-        )}
+          );
+        })()}
       </div>
 
       {/* Interactive Achievement Details & Photo Modal */}

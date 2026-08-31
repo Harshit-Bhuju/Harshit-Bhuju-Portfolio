@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+import { DEFAULT_SETTINGS } from "@/lib/portfolioFallback";
+
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
@@ -15,15 +17,17 @@ type AboutData = {
 };
 
 const defaultAbout: AboutData = {
-  statement: "I build interfaces where design and engineering meet.",
-  body: "Frontend developer focused on crafting performant, accessible interfaces with modern React and Next.js. I care equally about visual quality, interaction design, and clean engineering — from thoughtful component architecture to efficient data fetching and optimistic UI updates.",
-  focus: [
-    "Frontend Development",
-    "UI/UX & Accessibility",
-    "Modern React / Next.js",
-    "API Integration",
-    "Competitive Project Building",
-  ],
+  statement: DEFAULT_SETTINGS.aboutStatement || "I build interfaces where design and engineering meet.",
+  body: DEFAULT_SETTINGS.aboutBody || "Frontend developer focused on crafting performant, accessible interfaces with modern React and Next.js.",
+  focus: Array.isArray(DEFAULT_SETTINGS.aboutFocus) && DEFAULT_SETTINGS.aboutFocus.length
+    ? DEFAULT_SETTINGS.aboutFocus
+    : [
+        "Frontend Development",
+        "UI/UX & Accessibility",
+        "Modern React / Next.js",
+        "API Integration",
+        "Competitive Project Building",
+      ],
 };
 
 export default function About({
@@ -36,19 +40,17 @@ export default function About({
   initialWins?: number;
 } = {}) {
   const [about, setAbout] = useState<AboutData>(() => {
-    if (initialSettings?.aboutStatement || initialSettings?.aboutBody) {
-      return {
-        statement: initialSettings.aboutStatement || defaultAbout.statement,
-        body: initialSettings.aboutBody || defaultAbout.body,
-        focus: Array.isArray(initialSettings.aboutFocus) && initialSettings.aboutFocus.length
-          ? initialSettings.aboutFocus
-          : defaultAbout.focus,
-      };
-    }
-    return defaultAbout;
+    const s = initialSettings || DEFAULT_SETTINGS;
+    return {
+      statement: s?.aboutStatement || defaultAbout.statement,
+      body: s?.aboutBody || defaultAbout.body,
+      focus: Array.isArray(s?.aboutFocus) && s.aboutFocus.length
+        ? s.aboutFocus
+        : defaultAbout.focus,
+    };
   });
   const [location, setLocation] = useState(
-    initialSettings?.location || "Banepa, Nepal"
+    initialSettings?.location || DEFAULT_SETTINGS.location || "Banepa, Nepal"
   );
   const [projectCount, setProjectCount] = useState(
     initialProjectCount ?? 3
@@ -71,7 +73,7 @@ export default function About({
     fetch("/api/achievements")
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
-        if (!Array.isArray(data)) return;
+        if (!Array.isArray(data) || !data.length) return;
         setWins(
           data.filter((a: { placement?: string }) =>
             String(a.placement || "").toUpperCase().includes("1ST")
@@ -82,7 +84,7 @@ export default function About({
     fetch("/api/projects")
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
-        if (Array.isArray(data)) setProjectCount(data.length);
+        if (Array.isArray(data) && data.length) setProjectCount(data.length);
       })
       .catch(() => {});
   }, []);
@@ -165,30 +167,15 @@ export default function About({
       label: "Location",
       value: location
         ? location.split(",")[0]?.trim() || location
-        : "—",
+        : "Banepa",
     },
   ];
 
-  if (!about.statement && !about.body) {
-    return (
-      <section id="about" className="section-padding border-t border-border" aria-label="About Harshit Bhuju">
-        <div className="container-main">
-          {/* Static SEO entity description — always in DOM for crawlers */}
-          <div className="sr-only">
-            <h2>About Harshit Bhuju</h2>
-            <p>
-              Harshit Bhuju is a frontend developer from Banepa, Nepal.
-              He specializes in building modern, accessible web applications using React,
-              Next.js, TypeScript, PostgreSQL, Prisma, and Tailwind CSS. Harshit is a
-              first year, first semester BTech in Artificial Intelligence student at
-              Kathmandu University.
-            </p>
-          </div>
-          <p className="text-sm text-muted">Loading about…</p>
-        </div>
-      </section>
-    );
-  }
+  const activeAbout = {
+    statement: about.statement || defaultAbout.statement,
+    body: about.body || defaultAbout.body,
+    focus: about.focus?.length ? about.focus : defaultAbout.focus,
+  };
 
   return (
     <section
@@ -221,7 +208,7 @@ export default function About({
           ref={statementRef}
           className="heading-section max-w-4xl mb-10 md:mb-16"
         >
-          {about.statement}
+          {activeAbout.statement}
         </h2>
 
         <div
@@ -229,7 +216,7 @@ export default function About({
           className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 mb-14 md:mb-20"
         >
           <div className="lg:col-span-7">
-            <p className="body-text max-w-xl">{about.body}</p>
+            <p className="body-text max-w-xl">{activeAbout.body}</p>
           </div>
 
           <div className="lg:col-span-5">
@@ -237,7 +224,7 @@ export default function About({
               Focus
             </p>
             <ul className="space-y-2.5">
-              {about.focus.map((item) => (
+              {activeAbout.focus.map((item) => (
                 <li
                   key={item}
                   className="text-primary text-sm md:text-base flex items-center gap-3"

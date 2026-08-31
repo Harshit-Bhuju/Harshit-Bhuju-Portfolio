@@ -62,14 +62,15 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: siteUrl,
-    siteName: "Harshit Bhuju — Portfolio",
+    siteName: "Harshit Bhuju — Frontend Developer & BTech AI Student",
     title: pageTitle,
     description: pageDescription,
     images: [
       {
         url: `${siteUrl}/profile.jpg`,
-        width: 800,
-        height: 1000,
+        secureUrl: `${siteUrl}/profile.jpg`,
+        width: 1200,
+        height: 630,
         alt: "Harshit Bhuju — Frontend Developer from Banepa, Nepal",
         type: "image/jpeg",
       },
@@ -81,6 +82,7 @@ export const metadata: Metadata = {
     description: pageDescription,
     images: [`${siteUrl}/profile.jpg`],
     creator: "@harshitbhuju",
+    site: "@harshitbhuju",
   },
   robots: {
     index: true,

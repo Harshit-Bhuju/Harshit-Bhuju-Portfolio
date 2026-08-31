@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
 import Image from "next/image";
+import { DEFAULT_PROJECTS } from "@/lib/portfolioFallback";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -282,7 +283,11 @@ export default function Projects({
   initialProjects?: any[];
 } = {}) {
   const headerRef = useRef<HTMLDivElement>(null);
-  const [list, setList] = useState<any[]>(initialProjects || []);
+  const [list, setList] = useState<any[]>(
+    Array.isArray(initialProjects) && initialProjects.length
+      ? initialProjects
+      : DEFAULT_PROJECTS
+  );
   const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {

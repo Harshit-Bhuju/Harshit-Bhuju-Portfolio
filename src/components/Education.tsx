@@ -3,36 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { DEFAULT_EDUCATIONS } from "@/lib/portfolioFallback";
+
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const defaultEducation = [
-  {
-    id: 1,
-    degree: "Bachelor of Technology (B.Tech)",
-    field: "Artificial Intelligence",
-    school: "Kathmandu University (KU)",
-    dateRange: "2026 — Present",
-    gpa: null,
-  },
-  {
-    id: 2,
-    degree: "Higher Secondary (+2)",
-    field: "Computer Science",
-    school: "Banepa NIST Secondary School",
-    dateRange: "2024–2026",
-    gpa: "3.81",
-  },
-  {
-    id: 3,
-    degree: "SEE",
-    field: "General Studies",
-    school: "Gyan Sarovar English Secondary School",
-    dateRange: "2024",
-    gpa: "3.84",
-  },
-];
+const defaultEducation = DEFAULT_EDUCATIONS;
 
 export default function Education({
   initialEducation,

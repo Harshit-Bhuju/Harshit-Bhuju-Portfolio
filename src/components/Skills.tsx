@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+import { DEFAULT_SKILLS } from "@/lib/portfolioFallback";
+
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
@@ -14,20 +16,6 @@ type SkillGroups = {
   tools: string[];
   soft: string[];
   [key: string]: string[];
-};
-
-const defaultSkills: SkillGroups = {
-  languages: ["JavaScript", "TypeScript", "Python", "HTML5", "CSS3"],
-  frameworks: [
-    "React.js",
-    "Next.js",
-    "Redux Toolkit",
-    "RTK Query",
-    "Tailwind CSS",
-    "Bootstrap",
-  ],
-  tools: ["Git & GitHub", "MySQL", "Supabase"],
-  soft: ["Problem Solving", "Team Collaboration"],
 };
 
 function groupSkills(data: any[]): SkillGroups {
@@ -47,6 +35,8 @@ function groupSkills(data: any[]): SkillGroups {
   return grouped;
 }
 
+const defaultGroupedSkills: SkillGroups = groupSkills(DEFAULT_SKILLS);
+
 export default function Skills({
   initialSkills,
 }: {
@@ -56,7 +46,7 @@ export default function Skills({
     if (Array.isArray(initialSkills) && initialSkills.length) {
       return groupSkills(initialSkills);
     }
-    return defaultSkills;
+    return defaultGroupedSkills;
   });
   const sectionRef = useRef<HTMLElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
@@ -113,16 +103,19 @@ export default function Skills({
     return () => ctx.revert();
   }, [skills]);
 
+  const activeSkills =
+    Object.values(skills).some((arr) => arr.length > 0) ? skills : defaultGroupedSkills;
+
   const categories = [
     { key: "languages", label: "Languages" },
     { key: "frameworks", label: "Frameworks" },
     { key: "tools", label: "Tools" },
     { key: "soft", label: "Soft skills" },
-  ].filter((c) => (skills[c.key] || []).length > 0);
+  ].filter((c) => (activeSkills[c.key] || []).length > 0);
 
   // Also show any extra categories from DB
-  for (const key of Object.keys(skills)) {
-    if (!categories.find((c) => c.key === key) && skills[key]?.length) {
+  for (const key of Object.keys(activeSkills)) {
+    if (!categories.find((c) => c.key === key) && activeSkills[key]?.length) {
       categories.push({ key, label: key });
     }
   }
@@ -169,7 +162,7 @@ export default function Skills({
                   {cat.label}
                 </p>
                 <ul className="space-y-2">
-                  {(skills[cat.key] || []).map((name) => (
+                  {(activeSkills[cat.key] || []).map((name) => (
                     <li key={name} className="text-sm text-primary">
                       {name}
                     </li>

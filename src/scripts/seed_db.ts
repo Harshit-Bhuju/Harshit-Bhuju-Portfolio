@@ -8,7 +8,7 @@ const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  // ── Antarprerana ─────────────────────────────────────────────────────────────
+  // ── 1. Projects ──────────────────────────────────────────────────────────────
   await prisma.project.update({
     where: { slug: "antarprerana" },
     data: {
@@ -27,11 +27,15 @@ async function main() {
     },
   });
 
-  // ── RapiReport ───────────────────────────────────────────────────────────────
   await prisma.project.update({
     where: { slug: "rapireport" },
     data: {
       myRole: "Frontend Developer",
+      longDescription: `RapiReport is an AI-powered healthcare platform designed to make medical information more accessible and actionable. It uses OCR and AI to extract and interpret information from physical and handwritten medical reports, transforming complex clinical data into understandable health insights.
+
+The platform combines automated medical report analysis with personalized health monitoring, risk assessment, medication planning, telemedicine, and family health management. Users can track health metrics, receive personalized recommendations, book doctor consultations, manage health records for family members, and interact with AI-powered healthcare features.
+
+My primary contribution focused on designing and building the frontend user interface using React, Next.js, TypeScript, and Tailwind CSS, integrating REST APIs, and building interactive health data visualization components.`,
       contributions: [
         "Designed and built the responsive medical document upload and OCR report analysis interface.",
         "Engineered interactive health risk visualization charts and biomarker status indicators using Recharts.",
@@ -45,7 +49,6 @@ async function main() {
     },
   });
 
-  // ── CultureConnect ───────────────────────────────────────────────────────────
   await prisma.project.update({
     where: { slug: "cultureconnect" },
     data: {
@@ -63,20 +66,37 @@ async function main() {
     },
   });
 
-  console.log("✓ Updated categorized stacks (Frontend, Backend, Database, Tools) in PostgreSQL DB.");
+  // ── 2. Experience ─────────────────────────────────────────────────────────────
+  const exp = await prisma.experience.findFirst();
+  if (exp) {
+    await prisma.experience.update({
+      where: { id: exp.id },
+      data: {
+        points: [
+          "Architected a scalable multi-role frontend (Super Admin, Admin, User) using Next.js and TypeScript while integrating with NestJS REST APIs.",
+          "Implemented RTK Query for automatic cache invalidation, reducing redundant network requests and optimizing data fetching performance.",
+          "Engineered complex data table workflows with automated report generation and Excel export capabilities for participant KPI tracking.",
+          "Developed cohort management modules, dashboard visualizations, and role-scoped access control for an end-to-end incubation platform.",
+        ],
+      },
+    });
+  }
 
-  const updated = await prisma.project.findMany({
-    where: { slug: { in: ["antarprerana", "rapireport", "cultureconnect"] } },
-    select: {
-      slug: true,
-      myRole: true,
-      stackFrontend: true,
-      stackBackend: true,
-      stackDatabase: true,
-      stackTools: true,
-    },
+  // ── 3. Skills ─────────────────────────────────────────────────────────────────
+  // Remove MySQL, Supabase & PHP from skills if present
+  await prisma.skill.deleteMany({
+    where: { name: { in: ["MySQL", "Supabase", "PHP"] } },
   });
-  console.log("Verification:", JSON.stringify(updated, null, 2));
+
+  // Add C to skills if not present
+  const cSkill = await prisma.skill.findFirst({ where: { name: "C" } });
+  if (!cSkill) {
+    await prisma.skill.create({
+      data: { category: "languages", name: "C", visible: true, displayOrder: 3 },
+    });
+  }
+
+  console.log("✓ Updated Projects, Experience, and Skills in PostgreSQL DB.");
 }
 
 main().catch(console.error).finally(() => process.exit(0));

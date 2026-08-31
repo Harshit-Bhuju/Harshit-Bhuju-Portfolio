@@ -115,7 +115,7 @@
       "category": "AI-Powered Healthcare Ecosystem",
       "dateRange": "02/2026",
       "shortDescription": "AI-powered medical report analysis scanner with real-time health risk charts and patient consultation management.",
-      "longDescription": "RapiReport is an AI-powered healthcare platform designed to make medical information more accessible and actionable. It uses OCR and AI to extract and interpret information from physical and handwritten medical reports, transforming complex clinical data into understandable health insights.\n\nThe platform combines automated medical report analysis with personalized health monitoring, risk assessment, medication planning, telemedicine, and family health management. Users can track health metrics, receive personalized recommendations, book doctor consultations, manage health records for family members, and interact with AI-powered healthcare features.\n\nThe platform also incorporates gamification through health quests, XP, and rewards to encourage consistent healthy habits, along with TensorFlow.js-based pose detection for exercise and physical-therapy tracking. The system is built around a React frontend, PHP REST APIs, MySQL, Gemini AI, Tesseract OCR, and TensorFlow.js.\n",
+      "longDescription": "RapiReport is an AI-powered healthcare platform designed to make medical information more accessible and actionable. It uses OCR and AI to extract and interpret information from physical and handwritten medical reports, transforming complex clinical data into understandable health insights.\n\nThe platform combines automated medical report analysis with personalized health monitoring, risk assessment, medication planning, telemedicine, and family health management. Users can track health metrics, receive personalized recommendations, book doctor consultations, manage health records for family members, and interact with AI-powered healthcare features.\n\nMy primary contribution focused on designing and building the frontend user interface using React, Next.js, TypeScript, and Tailwind CSS, integrating REST APIs, and building interactive health data visualization components.\n",
       "challenges": "The major challenge was combining multiple complex healthcare features into one reliable platform while keeping the experience simple for users. Processing handwritten and physical medical reports required a hybrid OCR approach using both client-side and server-side processing. We also had to integrate AI-generated insights, health-risk analysis, real-time data visualization, role-based dashboards, authentication, and sensitive medical data handling while maintaining a modular and responsive frontend.\n",
       "solutions": "RapiReport provides a unified healthcare ecosystem that converts difficult-to-understand medical documents into accessible health information using OCR and AI. It combines report analysis, personalized risk monitoring, medication planning, doctor consultations, family health records, and wellness features in a single platform, giving users a more convenient way to understand and manage their health.\n",
       "tags": [
@@ -794,7 +794,7 @@
       "location": "Banepa, Nepal",
       "dateRange": "07/2026 — Present",
       "points": [
-        "Architected a scalable multi-role frontend (Super Admin, Admin, User) using Next.js, TypeScript, and NestJS REST APIs.",
+        "Architected a scalable multi-role frontend (Super Admin, Admin, User) using Next.js and TypeScript while integrating with NestJS REST APIs.",
         "Implemented RTK Query for automatic cache invalidation, reducing redundant network requests and optimizing data fetching performance.",
         "Engineered complex data table workflows with automated report generation and Excel export capabilities for participant KPI tracking.",
         "Developed cohort management modules, dashboard visualizations, and role-scoped access control for an end-to-end incubation platform."
@@ -950,11 +950,20 @@
       "updatedAt": "2026-08-27T06:21:05.079Z"
     },
     {
+      "id": 17,
+      "category": "languages",
+      "name": "C",
+      "visible": true,
+      "displayOrder": 3,
+      "createdAt": "2026-08-31T09:10:00.000Z",
+      "updatedAt": "2026-08-31T09:10:00.000Z"
+    },
+    {
       "id": 4,
       "category": "languages",
       "name": "HTML5",
       "visible": true,
-      "displayOrder": 3,
+      "displayOrder": 5,
       "createdAt": "2026-08-27T06:21:05.372Z",
       "updatedAt": "2026-08-27T06:21:05.372Z"
     },
@@ -963,7 +972,7 @@
       "category": "languages",
       "name": "CSS3",
       "visible": true,
-      "displayOrder": 4,
+      "displayOrder": 6,
       "createdAt": "2026-08-27T06:21:05.593Z",
       "updatedAt": "2026-08-27T06:21:05.593Z"
     },
@@ -993,24 +1002,6 @@
       "displayOrder": 11,
       "createdAt": "2026-08-27T06:21:06.927Z",
       "updatedAt": "2026-08-27T06:21:06.927Z"
-    },
-    {
-      "id": 13,
-      "category": "tools",
-      "name": "MySQL",
-      "visible": true,
-      "displayOrder": 12,
-      "createdAt": "2026-08-27T06:21:07.076Z",
-      "updatedAt": "2026-08-27T06:21:07.076Z"
-    },
-    {
-      "id": 14,
-      "category": "tools",
-      "name": "Supabase",
-      "visible": true,
-      "displayOrder": 13,
-      "createdAt": "2026-08-27T06:21:07.223Z",
-      "updatedAt": "2026-08-27T06:21:07.223Z"
     }
   ],
   "settings": {

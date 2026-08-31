@@ -274,14 +274,31 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Bottom row: Description only */}
+        {/* Bottom row: Description + CTAs */}
         <div
           ref={descRef}
-          className="relative z-20"
+          className="relative z-20 space-y-6"
         >
           <p className="text-sm md:text-base text-secondary leading-relaxed max-w-lg uppercase tracking-[0.05em]">
             {tagline}
           </p>
+          <div className="flex flex-wrap items-center gap-4 pt-2">
+            <a
+              href="#work"
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.15em] bg-primary text-bg hover:opacity-90 transition-opacity"
+            >
+              <span>View Projects</span>
+              <span aria-hidden>→</span>
+            </a>
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.15em] border border-border text-primary hover:border-strong-border transition-colors"
+            >
+              View Resume
+            </a>
+          </div>
         </div>
 
         {/* Scroll Down — true viewport bottom-right, outside all boxes */}

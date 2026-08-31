@@ -10,70 +10,43 @@ if (typeof window !== "undefined") {
 
 const faqs = [
   {
-    question: "What web development services does Harshit Bhuju provide?",
+    question: "Who is Harshit Bhuju?",
     answer: (
       <>
-        Harshit Bhuju specializes in building modern frontend web applications, interactive user interfaces, and responsive digital products. With core expertise in React, Next.js, and TypeScript alongside full-stack API integration, he delivers scalable software tailored for businesses and clients worldwide.
+        Harshit Bhuju is a frontend developer and BTech Artificial Intelligence student at{" "}
+        <a
+          href="https://ku.edu.np"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline text-primary hover:text-secondary transition-colors"
+        >
+          Kathmandu University
+        </a>
+        , based in Banepa, Nepal. He specializes in building modern React and Next.js web applications and has real internship and hackathon project experience.
       </>
     ),
   },
   {
-    question: "What major web applications has Harshit Bhuju built?",
+    question: "What technologies does Harshit personally use?",
     answer: (
       <>
-        Harshit has built major web applications including Antarprerana (an enterprise entrepreneurship incubation platform), RapiReport (an AI-powered healthcare report scanner & health tracking dashboard), and CultureConnect (a cultural e-commerce marketplace & EdTech platform).
+        Harshit&apos;s personal technical stack is centered on frontend engineering: React, Next.js, TypeScript, JavaScript, Tailwind CSS, Redux Toolkit, and RTK Query. He also writes Python and C, and has used Bootstrap, HTML, and CSS extensively. He integrates with REST APIs and works with tools like Git, GitHub, and Supabase.
       </>
     ),
   },
   {
-    question: "What technology stack and frameworks do you use for web development?",
+    question: "What major projects has Harshit built?",
     answer: (
       <>
-        Harshit primarily builds applications using{" "}
-        <a
-          href="https://nextjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="underline text-primary hover:text-secondary transition-colors"
-        >
-          Next.js
-        </a>
-        ,{" "}
-        <a
-          href="https://react.dev"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="underline text-primary hover:text-secondary transition-colors"
-        >
-          React
-        </a>
-        , and{" "}
-        <a
-          href="https://www.typescriptlang.org"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="underline text-primary hover:text-secondary transition-colors"
-        >
-          TypeScript
-        </a>
-        . For data storage and management, he utilizes{" "}
-        <a
-          href="https://www.postgresql.org"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="underline text-primary hover:text-secondary transition-colors"
-        >
-          PostgreSQL
-        </a>{" "}
-        and Prisma ORM along with modern CSS frameworks like Tailwind CSS.
+        Harshit has contributed to major projects including Antarprerana (an enterprise incubation management dashboard where he served as Lead Frontend Developer), RapiReport (an AI-powered healthcare platform where he built the frontend and integrated the Gemini API), and CultureConnect (a cultural e-commerce and EdTech platform where he built the responsive marketplace UI).
       </>
     ),
   },
   {
-    question: "Is Harshit Bhuju available for freelance, internships, or engineering roles?",
+    question: "Is Harshit available for freelance, internships, or engineering roles?",
     answer: (
       <>
-        Yes, Harshit Bhuju is available for freelance projects, frontend engineering roles, internships, and technical collaborations. You can get in touch directly via email at{" "}
+        Yes, Harshit is available for freelance projects, frontend engineering internships, and technical collaborations. You can reach him directly at{" "}
         <a
           href="mailto:harshitbhuju123@gmail.com"
           className="underline text-primary hover:text-secondary transition-colors"
@@ -85,10 +58,10 @@ const faqs = [
     ),
   },
   {
-    question: "Where is Harshit Bhuju based and how can I collaborate?",
+    question: "Where is Harshit based and how can I collaborate?",
     answer: (
       <>
-        Harshit is based in Banepa, Nepal, and is currently pursuing his BTech in Artificial Intelligence at{" "}
+        Harshit is based in Banepa, Nepal, and is currently studying BTech in Artificial Intelligence at{" "}
         <a
           href="https://ku.edu.np"
           target="_blank"
@@ -97,24 +70,15 @@ const faqs = [
         >
           Kathmandu University
         </a>
-        . He collaborates with remote teams and international clients. You can get in touch via email or through LinkedIn and GitHub.
+        . He works with remote teams and is open to international collaboration. Get in touch via email, LinkedIn, or GitHub.
       </>
     ),
   },
   {
-    question: "How do you ensure performance and web accessibility standards?",
+    question: "How does Harshit approach performance and accessibility?",
     answer: (
       <>
-        Applications are developed following accessibility best practices based on{" "}
-        <a
-          href="https://www.w3.org/TR/WCAG21/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="underline text-primary hover:text-secondary transition-colors"
-        >
-          WCAG guidance
-        </a>{" "}
-        and optimized for responsive layout performance and{" "}
+        He builds with semantic HTML, proper heading hierarchy, keyboard navigation, and ARIA best practices. Performance is addressed through Next.js server components, optimized image delivery, efficient data fetching patterns with RTK Query, and following{" "}
         <a
           href="https://web.dev/vitals/"
           target="_blank"
@@ -123,7 +87,7 @@ const faqs = [
         >
           Core Web Vitals
         </a>
-        .
+        {" "}guidelines.
       </>
     ),
   },

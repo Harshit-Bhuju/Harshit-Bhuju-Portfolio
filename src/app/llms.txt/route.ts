@@ -101,8 +101,8 @@ export async function GET() {
     }
   } else {
     markdown += `- **Frontend Development**: React.js, Next.js, TypeScript, JavaScript, HTML5, CSS3, Tailwind CSS, Redux Toolkit, RTK Query, Bootstrap
-- **Tools & Platforms**: Git & GitHub, MySQL, Supabase, Vercel
-- **AI & CS Background**: Python, Problem Solving, BTech Artificial Intelligence Student at Kathmandu University
+- **Tools & Platforms**: Git & GitHub, Vercel
+- **Programming & Academic Focus**: Python, C, Problem Solving, BTech Artificial Intelligence Student at Kathmandu University
 `;
   }
 

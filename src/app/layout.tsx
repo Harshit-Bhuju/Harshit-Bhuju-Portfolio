@@ -150,7 +150,7 @@ const jsonLd = [
         name: "Nepal",
       },
       skills:
-        "React, Next.js, TypeScript, JavaScript, PostgreSQL, Prisma, Tailwind CSS, Node.js, Python",
+        "React, Next.js, TypeScript, JavaScript, Tailwind CSS, Redux Toolkit, RTK Query, Python, HTML, CSS",
     },
     sameAs: [
       "https://github.com/Harshit-Bhuju",
@@ -165,15 +165,14 @@ const jsonLd = [
       "Next.js",
       "TypeScript",
       "JavaScript",
-      "PostgreSQL",
-      "Prisma",
       "Tailwind CSS",
-      "Node.js",
+      "Redux Toolkit",
+      "RTK Query",
       "UI/UX Design",
       "Artificial Intelligence",
-      "Machine Learning",
       "Python",
       "Accessibility",
+      "Responsive Design",
     ],
   },
   {
